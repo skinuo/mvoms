@@ -141,7 +141,8 @@ class _MvLoginState extends State<MvLogin> {
   void login(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
       var user = newUser(userId: _id, userNm: "테스터", instt: "mvst");
-      var userJson = jsonEncode(user);
+      var userJson = json.encode(user);
+      userJson.replaceAll("\\""", "");
       await _storage.write(key: "user", value: userJson);
       goToHome();
     } else {
@@ -168,9 +169,9 @@ class _MvLoginState extends State<MvLogin> {
     required String instt})
   {
     return {
-      "usreId": userId,
-      "userNm": userNm,
-      "instt": instt
+      'userId': userId,
+      'userNm': userNm,
+      'instt': instt
     };
   }
 }

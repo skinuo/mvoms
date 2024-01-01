@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'incidentDialog.dart';
 import 'login.dart';
 
@@ -11,6 +14,7 @@ void main() {
       useMaterial3: true,
     ),
     //home: const MvHome()));
+    debugShowCheckedModeBanner: false,
     home: const MvLogin()));
 }
 
@@ -22,6 +26,42 @@ class MvHome extends StatefulWidget {
 }
 
 class _MvHomeState extends State<MvHome> {
+  // 세션 스토리지
+  static final _storage = new FlutterSecureStorage();
+  // 사용자 정보
+  Map<String, dynamic> _userMap = {};
+  // 사용자 정보 출력 텍스트
+  String _userInfoValue = "...";
+  // 인시던스 목록
+  List<TableRow> _rows = [];
+  // 인시던스 목록 개수 표시
+  String _incidentCountValue = "...";
+  int _newIncidentCount = 0;
+  int _notCompleteIncidentCount = 0;
+
+  // 최초 한번 실행
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    // 사용자 정보 로드
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      String? userJson = await _storage.read(key: "user");
+      if (userJson != null) {
+        _userMap = json.decode(userJson);
+        _userInfoValue = "${_userMap["userNm"]}(${_userMap["userId"]}), ${_userMap["instt"]}";
+      }
+    });
+
+    // 인시던스 목록 불러오기
+    _rows = getRow();
+    // 개수 표시
+    _incidentCountValue = "전체 ${_rows.length} 건";
+    _newIncidentCount = 0;
+    _notCompleteIncidentCount = 0;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -38,7 +78,18 @@ class _MvHomeState extends State<MvHome> {
               Tab(text: "incident"),
               Tab(icon: Icon(Icons.star))
             ]),
-            title: const Text("MVOMS", style: TextStyle(fontSize: 20)),
+            title: Row(
+              children: [
+                Flexible(fit: FlexFit.tight, child: Center(child: new Text(""))),
+                Flexible(fit: FlexFit.tight, child: Center(child: new Text("MVOMS"))),
+                // 사용자 정보 출력
+                Flexible(fit: FlexFit.tight,
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Text(_userInfoValue, style: const TextStyle(fontSize: 12)),
+                  ))
+              ],
+            )
           ),
           body: Container(
             padding: const EdgeInsets.fromLTRB(15, 0, 15, 15),
@@ -47,32 +98,40 @@ class _MvHomeState extends State<MvHome> {
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(Radius.circular(5))),
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(Radius.circular(5))),
                 child: Column(
                   children: [
                     Row(
                       children: [
-                        const Expanded(
-                          child: Text(""),
+                        Expanded(
+                          child: Row(
+                            children: [
+                              const Text("신규", style: TextStyle(fontSize: 12)),
+                              Text("$_newIncidentCount", style:
+                                const TextStyle(fontSize: 12, color: Colors.red, fontWeight: FontWeight.bold)),
+                              const Text("건/", style: TextStyle(fontSize: 12)),
+                              const Text("미완료", style: TextStyle(fontSize: 12)),
+                              Text("$_notCompleteIncidentCount", style:
+                                const TextStyle(fontSize: 12, color: Colors.red, fontWeight: FontWeight.bold)),
+                              const Text("건/", style: TextStyle(fontSize: 12)),
+                              Text(_incidentCountValue, style: const TextStyle(fontSize: 12)),
+                            ],
+                          )
                         ),
                         SizedBox(
-                            width: 150,
-                            child: TextButton(
-                                onPressed: () {
-                                  showIncidentPop(context);
-                                },
-                                child: const Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(Icons.add),
-                                    Text(
-                                      "인시던스 추가",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    )
-                                  ],
-                                ))),
+                          width: 150,
+                          child: TextButton(
+                            onPressed: () {
+                              showIncidentPop(context);
+                            },
+                            child: const Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.add),
+                                Text("인시던스 추가", style: TextStyle(fontWeight: FontWeight.bold))
+                              ],
+                            ))),
                       ],
                     ),
                     // 간격
@@ -83,21 +142,20 @@ class _MvHomeState extends State<MvHome> {
                     Row(
                       children: [
                         Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Table(
-                              columnWidths: getIncidentColumnWidths(),
-                              children: [
-                                TableRow(children: [
-                                  makeIncidentHeaderCell("요약"),
-                                  makeIncidentHeaderCell("의뢰자"),
-                                  makeIncidentHeaderCell("의뢰자부서"),
-                                  makeIncidentHeaderCell("의뢰일시"),
-                                  makeIncidentHeaderCell("처리자"),
-                                  makeIncidentHeaderCell("상태")
-                                ])
-                              ],
-                            ),
+                          child: Table(
+                            border: const TableBorder(bottom:
+                              BorderSide(color: Color.fromRGBO(235, 235, 235, 1), width: 2)),
+                            columnWidths: getIncidentColumnWidths(),
+                            children: [
+                              TableRow(children: [
+                                makeIncidentHeaderCell("요약"),
+                                makeIncidentHeaderCell("의뢰자"),
+                                makeIncidentHeaderCell("의뢰자부서"),
+                                makeIncidentHeaderCell("의뢰일시"),
+                                makeIncidentHeaderCell("처리자"),
+                                makeIncidentHeaderCell("상태")
+                              ])
+                            ],
                           ),
                         ),
                       ],
@@ -105,18 +163,15 @@ class _MvHomeState extends State<MvHome> {
                     // 인시던스 테이블 목록
                     Expanded(
                       child: SingleChildScrollView(
-                          scrollDirection: Axis.vertical,
-                          child: Table(
-                            //border: TableBorder.all(color: Colors.black12),
-                            border: const TableBorder(
-                                top: BorderSide(color: Colors.black12),
-                                verticalInside:
-                                    BorderSide(color: Colors.black12),
-                                horizontalInside:
-                                    BorderSide(color: Colors.black12)),
-                            columnWidths: getIncidentColumnWidths(),
-                            children: getRow(),
-                          )),
+                        scrollDirection: Axis.vertical,
+                        child: Table(
+                          border: const TableBorder(
+                            verticalInside: BorderSide(color: Colors.black12),
+                            horizontalInside: BorderSide(color: Colors.black12)),
+                          columnWidths: getIncidentColumnWidths(),
+                          children: _rows,
+                        )
+                      ),
                     ),
                   ],
                 ),
@@ -159,7 +214,7 @@ class _MvHomeState extends State<MvHome> {
   /// @since 2023.12.30.
   List<TableRow> getRow() {
     List<TableRow> row = [];
-    for (var i = 0; i < 40; i++) {
+    for (var i = 0; i < 1000; i++) {
       row.add(TableRow(children: [
         makeIncidentBodyCell("aa ${i.toString()}", TextAlign.left),
         makeIncidentBodyCell("bb ${i.toString()}"),
@@ -191,9 +246,12 @@ class _MvHomeState extends State<MvHome> {
   TableCell makeIncidentHeaderCell(String label) {
     return TableCell(
         verticalAlignment: TableCellVerticalAlignment.middle,
-        child: Text(label,
-            textAlign: TextAlign.center,
-            style: const TextStyle(fontWeight: FontWeight.bold)));
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 8),
+          child: Text(label,
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontWeight: FontWeight.bold)),
+        ));
   }
 
   /// 인시던스 테이블 컬럼 너비 반환
