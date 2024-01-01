@@ -6,12 +6,12 @@ import 'login.dart';
 /// @since 2023.12.30.
 void main() {
   runApp(MaterialApp(
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent),
-        useMaterial3: true,
-      ),
-      //home: const MvHome()));
-      home: const MvLogin()));
+    theme: ThemeData(
+      colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent),
+      useMaterial3: true,
+    ),
+    //home: const MvHome()));
+    home: const MvLogin()));
 }
 
 class MvHome extends StatefulWidget {
@@ -22,7 +22,6 @@ class MvHome extends StatefulWidget {
 }
 
 class _MvHomeState extends State<MvHome> {
-  // 인시던스 요청시간 위젯 컨트롤러
   @override
   Widget build(BuildContext context) {
     return Container(

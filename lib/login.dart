@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:mvoms/main.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 /// 로그인 화면 구현
 /// @since 2024.01.01
@@ -17,6 +19,22 @@ class _MvLoginState extends State<MvLogin> {
   String _password = "";
   // 폼 유효성 검사를 위한 키
   final _formKey = GlobalKey<FormState>();
+  // 세션 스토리지
+  static final _storage = new FlutterSecureStorage();
+
+  /// 최초 한번 실행
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      var user = await _storage.read(key: "user");
+      if (user != null) {
+        // 세션 정보가 있으면, 메인페이지로 바로 이동
+        goToHome();
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +74,7 @@ class _MvLoginState extends State<MvLogin> {
                         validator: (value) {
                           return validValue("아이디", value);
                         },
-                        onSaved: (value) => _id = value as String),
+                        onChanged: (value) => _id = value.toString()),
                       ),
                     ],
                   )
@@ -81,7 +99,7 @@ class _MvLoginState extends State<MvLogin> {
                           validator: (value) {
                             return validValue("비밀번호", value);
                           },
-                          onSaved: (value) => _password = value as String))
+                          onChanged: (value) => _password = value.toString()))
                       ],
                     )
                 ),
@@ -112,17 +130,47 @@ class _MvLoginState extends State<MvLogin> {
   String? validValue(String label, String? value) {
     if (value == null || value.isEmpty || value.contains(" ")) {
       return '$label는 공백을 포함할 수 없습니다.';
-    } else return null;
+    } else {
+      return null;
+    }
   }
 
   /// 로그인 수행
   /// @context context
   /// @since 2024.01.01.
-  void login(BuildContext context) {
+  void login(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
-      Navigator.push(context, MaterialPageRoute(builder: (context) => const MvHome()));
+      var user = newUser(userId: _id, userNm: "테스터", instt: "mvst");
+      var userJson = jsonEncode(user);
+      await _storage.write(key: "user", value: userJson);
+      goToHome();
     } else {
       print("오류");
     }
+  }
+
+  /// 메인 페이지로 이동
+  /// @since 2024.01.01.
+  void goToHome() {
+    // 모든 페이지 제거 하고 이동
+    Navigator.pushAndRemoveUntil(context, 
+        MaterialPageRoute(builder: (context)=> const MvHome()), (route) => false);
+  }
+
+  /// 유저생성
+  /// @param userId
+  /// @param userNm
+  /// @param instt
+  /// @reutrn 사용자객체
+  Map<String, String> newUser({
+    required String userId,
+    required String userNm,
+    required String instt})
+  {
+    return {
+      "usreId": userId,
+      "userNm": userNm,
+      "instt": instt
+    };
   }
 }
