@@ -16,16 +16,20 @@ class MvIncidentDialog extends StatefulWidget {
 class _MvIncidentDialogState extends State<MvIncidentDialog> {
   // 요청 시간 위젯 값
   String _reqDatetimeValue = "";
+
   // 분류 콤보박스 아이템
   final List<String> _divDropdownItem = ["정보", "정보2", "정보3"];
   String _divDropDownVal = "";
+
   // 서비스 채널 아이템
   final List<String> _chanelDropdownItem = ["채널1", "채널2", "채널3"];
   String _chanelDropDownVal = "";
+
   // 처리 유형 아이템
   final List<String> _processTypeDropdownItem = ["유형1", "유형2", "유형3"];
   String _processTypeDropdownVal = "";
 
+  // 최초 한번 실행
   @override
   void initState() {
     // TODO: implement initState
@@ -42,294 +46,240 @@ class _MvIncidentDialogState extends State<MvIncidentDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 550,
-      child: Column(
-        children: [
-          const Row(
-            children: [
-              Expanded(
-                  flex: 1,
-                  child: Row(
-                    children: [Icon(Icons.add), Text("의뢰자 정보")],
-                  )),
-              Expanded(
-                  flex: 1,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text("*", style: TextStyle(color: Colors.red)),
-                      Text("필수입력 항목 입니다.")
-                    ],
-                  ))
-            ],
-          ),
-          SizedBox(
+    return Container(
+        width: 550,
+        color: Colors.white,
+        child: Column(
+          children: [
+            Container(
               width: double.infinity,
-              child: Table(
-                border: const TableBorder(
-                  top: BorderSide(color: Colors.black12),
-                  bottom: BorderSide(color: Colors.black12),
-                  horizontalInside: BorderSide(color: Colors.black12),
-                  verticalInside: BorderSide(color: Colors.black12),
-                ),
-                columnWidths: const <int, TableColumnWidth>{
-                  0: FixedColumnWidth(100),
-                  1: FlexColumnWidth(1),
-                  2: FixedColumnWidth(100),
-                  3: FlexColumnWidth(1)
-                },
-                children: [
-                  TableRow(
-                      children: [
-                        makeHeaderCell("이름", true),
-                        makeBodyCell("이름", 10),
-                        makeHeaderCell("소속", true),
-                        makeBodyCell("소속"),
-                      ],
-                      decoration: const BoxDecoration(
-                          color: Color.fromRGBO(235, 235, 235, 1))),
-                  TableRow(
-                      children: [
-                        makeHeaderCell("전화번호"),
-                        makeBodyCell("전화번호", 11, true),
-                        makeHeaderCell("e-mail"),
-                        makeBodyCell("e-mail", 50),
-                      ],
-                      decoration: const BoxDecoration(
-                          color: Color.fromRGBO(235, 235, 235, 1)))
-                ],
-              )),
-          const Row(
-            children: [
-              Icon(Icons.add),
-              Text("의뢰 정보"),
-            ],
-          ),
-          SizedBox(
-              width: double.infinity,
+              padding: const EdgeInsets.all(5),
+              color: Colors.black26,
+              child: const Text("의뢰자 정보"),
+            ),
+            Container(
+              padding: const EdgeInsets.all(10),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Table(
-                    border: const TableBorder(
-                      top: BorderSide(color: Colors.black12),
-                      bottom: BorderSide(color: Colors.black12),
-                      horizontalInside: BorderSide(color: Colors.black12),
-                      verticalInside: BorderSide(color: Colors.black12),
-                    ),
-                    columnWidths: const <int, TableColumnWidth>{
-                      0: FixedColumnWidth(100),
-                      1: FlexColumnWidth(1),
-                    },
+                  Row(
                     children: [
-                      TableRow(
-                          children: [
-                            makeHeaderCell("의뢰일시", true),
-                            // 의뢰일시 타임 피커
-                            makeReqTimedateCell(),
-                          ],
-                          decoration: const BoxDecoration(
-                              color: Color.fromRGBO(235, 235, 235, 1)))
+                      Flexible(child: Row(
+                        children: [
+                            Flexible(child: makeCell(labelText: "이름", required: true)),
+                            SizedBox(child: ElevatedButton(onPressed: () { showGetUserPop(); },
+                            child: const Text("조회"))),
+                          ]
+                        )
+                      ),
+                      const SizedBox(width: 10),
+                      Flexible(child: makeCell(labelText: "소속", required: true))
                     ],
                   ),
-                  Table(
-                    border: const TableBorder(
-                      //top: BorderSide(color: Colors.black12),
-                      bottom: BorderSide(color: Colors.black12),
-                      horizontalInside: BorderSide(color: Colors.black12),
-                      verticalInside: BorderSide(color: Colors.black12),
-                    ),
-                    columnWidths: const <int, TableColumnWidth>{
-                      0: FixedColumnWidth(100),
-                      1: FlexColumnWidth(1),
-                      2: FixedColumnWidth(100),
-                      3: FlexColumnWidth(1)
-                    },
+                  const SizedBox(height: 10),
+                  Row(
                     children: [
-                      TableRow(
-                          children: [
-                            makeHeaderCell("처리자", true),
-                            makeBodyCell("처리자", 10),
-                            makeHeaderCell("분류", true),
-                            makeBodyDropdownCell(_divDropdownItem, _divDropDownVal,
-                                (value) => _divDropDownVal = value)
-                          ],
-                          decoration: const BoxDecoration(
-                              color: Color.fromRGBO(235, 235, 235, 1))),
-                      TableRow(
-                          children: [
-                            makeHeaderCell("처리유형", true),
-                            makeBodyDropdownCell(_processTypeDropdownItem, _processTypeDropdownVal,
-                                (value) => _processTypeDropdownVal = value),
-                            makeHeaderCell("서비스채널", true),
-                            makeBodyDropdownCell(_chanelDropdownItem, _chanelDropDownVal,
-                                (value) => _chanelDropDownVal = value)
-                            // makeBodyCell("서비스채널", 5),
-                          ],
-                          decoration: const BoxDecoration(
-                              color: Color.fromRGBO(235, 235, 235, 1)))
+                      Flexible(child: makeCell(labelText: "전화번호", onlyNumber: true, maxLength: 11)),
+                      const SizedBox(width: 10),
+                      Flexible(child: makeCell(labelText: "e-mail"))
                     ],
                   ),
-                  Table(
-                    border: const TableBorder(
-                      //top: BorderSide(color: Colors.black12),
-                      bottom: BorderSide(color: Colors.black12),
-                      horizontalInside: BorderSide(color: Colors.black12),
-                      verticalInside: BorderSide(color: Colors.black12),
-                    ),
-                    columnWidths: const <int, TableColumnWidth>{
-                      0: FixedColumnWidth(100),
-                      1: FlexColumnWidth(1),
-                    },
+                ],
+              ),
+            ),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(5),
+              color: Colors.black26,
+              child: const Text("의뢰 정보"),
+            ),
+            Container(
+              padding: const EdgeInsets.all(10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Row(
                     children: [
-                      TableRow(
-                          children: [
-                            makeHeaderCell("요약"),
-                            makeBodyCell("요약", 500),
-                          ],
-                          decoration: const BoxDecoration(
-                              color: Color.fromRGBO(235, 235, 235, 1))),
-                      TableRow(
-                          children: [
-                            makeHeaderCell("요청내역", true),
-                            makeBodyContCell("요청내역", 500),
-                          ],
-                          decoration: const BoxDecoration(
-                              color: Color.fromRGBO(235, 235, 235, 1))),
-                      TableRow(
-                          children: [
-                            makeHeaderCell("첨부파일"),
-                            makeBodyCell("첨부파일", 50),
-                          ],
-                          decoration: const BoxDecoration(
-                              color: Color.fromRGBO(235, 235, 235, 1))),
-                      TableRow(
-                          children: [
-                            makeHeaderCell("태그(Tag)"),
-                            makeBodyCell("태그", 10),
-                          ],
-                          decoration: const BoxDecoration(
-                              color: Color.fromRGBO(235, 235, 235, 1)))
+                      Flexible(fit: FlexFit.tight, child: makeCellWithReqDatetime("외뢰시간")),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Flexible(child: Row(
+                        children: [
+                          Flexible(child: makeCell(labelText: "처리자", required: true)),
+                          SizedBox(child: ElevatedButton(onPressed: () { showGetUserPop();  },
+                              child: const Text("조회")))
+                        ],
+                      )),
+                      const SizedBox(width: 10),
+                      Flexible(
+                          child: makeCellWithDropdown('분류', true, _divDropdownItem, _divDropDownVal, (value) {
+                            _divDropDownVal = value;
+                          })
+                      )
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Flexible(child: makeCellWithDropdown("처리유형", true, _processTypeDropdownItem, _processTypeDropdownVal, (value) {
+                        _processTypeDropdownVal = value;
+                      })),
+                      const SizedBox(width: 10),
+                      Flexible(child: makeCellWithDropdown("서비스채널", true, _chanelDropdownItem, _chanelDropDownVal, (value) {
+                        _chanelDropDownVal = value;
+                      }))
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Flexible(fit: FlexFit.tight, child: makeCell(labelText: "요약", maxLength: 100)),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Flexible(fit: FlexFit.tight, child: makeCell(labelText: "요청내용", maxLength: 500, required: true, maxLines: 4)),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Flexible(fit: FlexFit.tight, child: makeCell(labelText: "첨부파일")),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Flexible(fit: FlexFit.tight, child: makeCell(labelText: "태그")),
                     ],
                   )
                 ],
-              )),
-        ],
-      ),
-    );
-  }
-
-  /// 인시던스 입력 다이얼로그 헤더 셀 생성
-  /// @param label 라벨
-  /// @param requried 필수입력항목여부
-  TableCell makeHeaderCell(String label, [bool required = false]) {
-    return TableCell(
-        verticalAlignment: TableCellVerticalAlignment.middle,
-        child: Padding(
-            padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-            child: Row(
-              children: [
-                Text(label),
-                required
-                    ? const Text("*", style: TextStyle(color: Colors.red))
-                    : const Text("")
-              ],
-            )));
-  }
-
-  /// 입력 데코레이션 반환
-  InputDecoration getInputDecoration() {
-    return const InputDecoration(
-        enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.black12)),
-        fillColor: Colors.white,
-        filled: true,
-        isDense: true,
-        contentPadding: EdgeInsets.all(10),
-        counterText: "");
-  }
-
-  /// 인시던스 입력 다이얼로그 텍스트 셀 생성
-  /// @label 라벨
-  /// @maxLength 최대 입력 사이즈
-  /// @onlyNumber 숫자만 입력
-  TableCell makeBodyCell(String label,
-      [int maxLength = 100, bool onlyNumber = false]) {
-    return TableCell(
-        child: TextField(
-            decoration: getInputDecoration(),
-            keyboardType: onlyNumber
-                ? const TextInputType.numberWithOptions(decimal: true)
-                : TextInputType.none,
-            maxLength: maxLength,
-            inputFormatters: onlyNumber
-                ? [FilteringTextInputFormatter.allow(RegExp('[0-9.,]+'))]
-                : []));
-  }
-
-  /// 인시던스 드롭다운 셀 생성
-  /// @param items 옵션 목록
-  TableCell makeBodyDropdownCell(List<String> items, String initVal, Function func) {
-    return TableCell(
-      child: Container(
-        height: 37,
-        padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-        decoration: const BoxDecoration(color: Colors.white),
-        child: DropdownButtonHideUnderline(
-          child: DropdownButton2(
-            //underline: SizedBox.shrink(),
-            isExpanded: false,
-            value: initVal,
-            items: items.map((item) {
-              return DropdownMenuItem(
-                value: item,
-                child: Text(item),
-              );
-            }).toList(),
-            onChanged: (String? value) {
-              setState(() {
-                func.call(value);
-              });
-            },
-            buttonStyleData: const ButtonStyleData(
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              height: 40,
-              width: 140,
+              ),
             ),
-            menuItemStyleData: const MenuItemStyleData(
-              height: 40,
-            ),
-          ),
+          ],
+        )
+      );
+  }
+
+  /// 데코레이션 생성
+  /// @since 2023.12.30.
+  InputDecoration makeInputDecoration(String labelText, bool required) {
+    return InputDecoration(
+        labelStyle: TextStyle(fontSize: 12, color: required ? Colors.red : Colors.grey),
+        labelText: "$labelText" + (required ? " *" : ""),
+        enabledBorder: const OutlineInputBorder(
+          borderSide: BorderSide(
+              color: Colors.grey,
+              width: 1),
         ),
-      ),
+        isDense: true,
+        contentPadding: EdgeInsets.all(12),
+        counterText: ""
     );
   }
 
-  /// 요청내역 셀 생성
-  TableCell makeBodyContCell(String label, [int maxLength = 100]) {
-    return TableCell(
-        child: SizedBox(
-          child: TextField(
-          maxLines: 4, decoration: getInputDecoration(), maxLength: maxLength),
-    ));
-  }
-
-  /// 인시던스 의뢰일시 datetime 셀 생성
-  TableCell makeReqTimedateCell() {
-    return TableCell(
-      child: TextField(
-          decoration: getInputDecoration(),
-          readOnly: true,
-          controller: TextEditingController(text: _reqDatetimeValue),
-          onTap: () async {
-            DateTime? now = await showOmniDateTimePicker(
-              context: context,
-              initialDate: DateTime.now(),
+  /// 드랍다운 셀 생성
+  /// @param labelText 라벨
+  /// @param required 필수여부
+  /// @param item 드랍다운 아이템
+  /// @param value 선택값
+  /// @param callback 콜백
+  /// @since 2023.12.30.
+  Widget makeCellWithDropdown(String labelText, bool required, List item, String value, Function callback) {
+    return DropdownButtonHideUnderline(
+      child: DropdownButtonFormField2(
+          decoration: makeInputDecoration(labelText, true),
+          isExpanded: true,
+          onChanged: (item) {
+            print(item);
+            callback.call(item);
+          },
+          items: item.map((item) {
+            return DropdownMenuItem(
+              value: item,
+              child: Text(item),
             );
-            setState(() {
-              // 시간 쓰기
-              _reqDatetimeValue = DateFormat('yyyy-MM-dd HH:mm:ss').format(now!);
-            });
-          }),
+          }).toList(),
+          value: value
+      )
     );
+  }
+
+  /// 의뢰시간 셀 생성
+  /// @param labelText 라벨텍스트
+  /// @since 2023.12.30.
+  TextField makeCellWithReqDatetime(String labelText) {
+    return TextField(
+      decoration: makeInputDecoration(labelText, true),
+      readOnly: true,
+      controller: TextEditingController(text: _reqDatetimeValue),
+      onTap: () async {
+        DateTime? now = await showOmniDateTimePicker(
+          context: context,
+          // 최초 시간
+          initialDate: DateTime.now(),
+        );
+        setState(() {
+          // 시간 쓰기
+          _reqDatetimeValue = DateFormat('yyyy-MM-dd HH:mm:ss').format(now!);
+        });
+      }
+    );
+  }
+
+  /// 셀생성
+  /// @param labelText 라벨
+  /// @param requried 필수여부
+  /// @param onlyNumber 숫자여부
+  /// @param maxLength 최대길이
+  /// @param readOnly 읽기만가능
+  /// @param maxLines 최대라인
+  /// @since 2023.12.30.
+  TextField makeCell({
+    required String labelText,
+    bool required = false,
+    bool onlyNumber = false,
+    int maxLength = 10,
+    bool readOnly = false,
+    int maxLines = 1
+  }) {
+    return TextField(
+      readOnly: readOnly,
+      textInputAction: TextInputAction.newline,
+      decoration: makeInputDecoration(labelText, required),
+      maxLength: maxLength,
+      maxLines: maxLines,
+      keyboardType: onlyNumber
+          ? const TextInputType.numberWithOptions(decimal: true)
+          : TextInputType.multiline,
+      inputFormatters: onlyNumber
+          ? [FilteringTextInputFormatter.allow(RegExp('[0-9.,]+'))]
+          : [],
+    );
+  }
+
+  void showGetUserPop() {
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: ((context) {
+          return AlertDialog(
+            surfaceTintColor: Colors.transparent,
+            title: const Text("사용자 조회"),
+            content: Text("aaa"),
+            actions: [
+              ElevatedButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text('취소')),
+              ElevatedButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text('저장')),
+            ],
+          );
+        }));
   }
 }

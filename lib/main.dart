@@ -13,7 +13,6 @@ void main() {
       colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent),
       useMaterial3: true,
     ),
-    //home: const MvHome()));
     debugShowCheckedModeBanner: false,
     home: const MvLogin()));
 }
@@ -21,11 +20,15 @@ void main() {
 class MvHome extends StatefulWidget {
   const MvHome({super.key});
 
+  // 메인 컬러 지정
+  static const Color themeColorGray = Color.fromRGBO(235, 235, 235, 1);
+
   @override
   State<MvHome> createState() => _MvHomeState();
 }
 
 class _MvHomeState extends State<MvHome> {
+  final _themeColorGray = MvHome.themeColorGray;
   // 세션 스토리지
   static final _storage = new FlutterSecureStorage();
   // 사용자 정보
@@ -33,7 +36,7 @@ class _MvHomeState extends State<MvHome> {
   // 사용자 정보 출력 텍스트
   String _userInfoValue = "...";
   // 인시던스 목록
-  List<TableRow> _rows = [];
+  List<Map> _rows = [];
   // 인시던스 목록 개수 표시
   String _incidentCountValue = "...";
   int _newIncidentCount = 0;
@@ -51,6 +54,8 @@ class _MvHomeState extends State<MvHome> {
       if (userJson != null) {
         _userMap = json.decode(userJson);
         _userInfoValue = "${_userMap["userNm"]}(${_userMap["userId"]}), ${_userMap["instt"]}";
+        //print(_userMap);
+        //_userInfoValue = 'aaa';
       }
     });
 
@@ -71,7 +76,7 @@ class _MvHomeState extends State<MvHome> {
         child: Scaffold(
           appBar: AppBar(
             toolbarHeight: 30,
-            backgroundColor: const Color.fromRGBO(235, 235, 235, 1),
+            backgroundColor: _themeColorGray,
             centerTitle: true,
             bottom: const TabBar(tabs: [
               Tab(text: "home"),
@@ -84,17 +89,28 @@ class _MvHomeState extends State<MvHome> {
                 Flexible(fit: FlexFit.tight, child: Center(child: new Text("MVOMS"))),
                 // 사용자 정보 출력
                 Flexible(fit: FlexFit.tight,
-                  child: Align(
-                    alignment: Alignment.centerRight,
-                    child: Text(_userInfoValue, style: const TextStyle(fontSize: 12)),
-                  ))
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(_userInfoValue, style: const TextStyle(fontSize: 12)),
+                      SizedBox(width: 10),
+                      SizedBox(child:TextButton(
+                          onPressed: () {
+                            logout();
+                          },
+                          child: Text("로그아웃", style: TextStyle(fontSize: 12),))
+                      )
+                    ],
+                  ),
+                )
               ],
             )
           ),
           body: Container(
             padding: const EdgeInsets.fromLTRB(15, 0, 15, 15),
-            color: const Color.fromRGBO(235, 235, 235, 1),
+            color: _themeColorGray,
             child: TabBarView(children: [
+              const Text("home"),
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: const BoxDecoration(
@@ -143,8 +159,8 @@ class _MvHomeState extends State<MvHome> {
                       children: [
                         Expanded(
                           child: Table(
-                            border: const TableBorder(bottom:
-                              BorderSide(color: Color.fromRGBO(235, 235, 235, 1), width: 2)),
+                            border: TableBorder(bottom:
+                              BorderSide(color: _themeColorGray, width: 2)),
                             columnWidths: getIncidentColumnWidths(),
                             children: [
                               TableRow(children: [
@@ -162,22 +178,30 @@ class _MvHomeState extends State<MvHome> {
                     ),
                     // 인시던스 테이블 목록
                     Expanded(
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.vertical,
-                        child: Table(
-                          border: const TableBorder(
-                            verticalInside: BorderSide(color: Colors.black12),
-                            horizontalInside: BorderSide(color: Colors.black12)),
-                          columnWidths: getIncidentColumnWidths(),
-                          children: _rows,
-                        )
-                      ),
+                      child: ListView.builder(
+                        itemCount: _rows.length,
+                        itemBuilder: (BuildContext context, int idx) {
+                          return Container(
+                            padding: const EdgeInsets.only(top:3, bottom: 3),
+                            decoration: BoxDecoration(border: Border(bottom: BorderSide(color: _themeColorGray))),
+                            child: Row(
+                              children: [
+                                Flexible(fit: FlexFit.tight, flex: 5, child: SizedBox(child: Text("${_rows[idx]["c1"]}"))),
+                                Flexible(fit: FlexFit.tight, flex: 1, child: Center(child: Text("${_rows[idx]["c2"]}"))),
+                                Flexible(fit: FlexFit.tight, flex: 3, child: Center(child: Text("${_rows[idx]["c3"]}"))),
+                                Flexible(fit: FlexFit.tight, flex: 2, child: Center(child: Text("${_rows[idx]["c4"]}"))),
+                                Flexible(fit: FlexFit.tight, flex: 1, child: Center(child: Text("${_rows[idx]["c5"]}"))),
+                                Flexible(fit: FlexFit.tight, flex: 1, child: Center(child: Text("${_rows[idx]["c6"]}"))),
+                              ],
+                            )
+                          );
+                        },
+                      )
                     ),
                   ],
                 ),
               ),
               const Text("b"),
-              const Text("home"),
             ]),
           ),
         ),
@@ -194,7 +218,7 @@ class _MvHomeState extends State<MvHome> {
         builder: ((context) {
           return AlertDialog(
             //contentTextStyle: TextStyle(fontSize: 13),
-            backgroundColor: Colors.white,
+            backgroundColor: _themeColorGray,
             surfaceTintColor: Colors.transparent,
             title: const Text("인시던트 등록"),
             content: const MvIncidentDialog(),
@@ -212,17 +236,10 @@ class _MvHomeState extends State<MvHome> {
 
   /// 인시던스 동적 테이블 로우 반환
   /// @since 2023.12.30.
-  List<TableRow> getRow() {
-    List<TableRow> row = [];
+  List<Map> getRow() {
+    List<Map> row = [];
     for (var i = 0; i < 1000; i++) {
-      row.add(TableRow(children: [
-        makeIncidentBodyCell("aa ${i.toString()}", TextAlign.left),
-        makeIncidentBodyCell("bb ${i.toString()}"),
-        makeIncidentBodyCell("cc ${i.toString()}"),
-        makeIncidentBodyCell("dd ${i.toString()}"),
-        makeIncidentBodyCell("ee ${i.toString()}"),
-        makeIncidentBodyCell("ff ${i.toString()}"),
-      ]));
+      row.add({"index":i, "c1":"c1$i", "c2":"c2$i", "c3":"c3$i", "c4":"c4$i", "c5":"c5$i", "c6":"c6$i"});
     }
     return row;
   }
@@ -234,10 +251,10 @@ class _MvHomeState extends State<MvHome> {
   TableCell makeIncidentBodyCell(String label,
       [TextAlign align = TextAlign.center]) {
     return TableCell(
-        verticalAlignment: TableCellVerticalAlignment.middle,
-        child: Padding(
-            padding: const EdgeInsets.all(8),
-            child: Text(label, textAlign: align)));
+      verticalAlignment: TableCellVerticalAlignment.middle,
+      child: Padding(
+        padding: const EdgeInsets.all(8),
+        child: Text(label, textAlign: align)));
   }
 
   /// 임시던스 테이블 헤더 셀 생성
@@ -245,12 +262,12 @@ class _MvHomeState extends State<MvHome> {
   /// @since 2023.12.30.
   TableCell makeIncidentHeaderCell(String label) {
     return TableCell(
-        verticalAlignment: TableCellVerticalAlignment.middle,
-        child: Padding(
-          padding: const EdgeInsets.only(bottom: 8),
-          child: Text(label,
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontWeight: FontWeight.bold)),
+      verticalAlignment: TableCellVerticalAlignment.middle,
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 8),
+        child: Text(label,
+          textAlign: TextAlign.center,
+          style: const TextStyle(fontWeight: FontWeight.bold)),
         ));
   }
 
@@ -265,5 +282,12 @@ class _MvHomeState extends State<MvHome> {
       4: FlexColumnWidth(1),
       5: FlexColumnWidth(1),
     };
+  }
+
+  void logout() {
+    _storage.delete(key: "user");
+    // 모든 페이지 제거 하고 이동
+    Navigator.pushAndRemoveUntil(context,
+        MaterialPageRoute(builder: (context)=> const MvLogin()), (route) => false);
   }
 }
