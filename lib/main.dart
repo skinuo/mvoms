@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'incidentDialog.dart';
+import 'login.dart';
 
 /// MVOMS 메인 구현
 /// @since 2023.12.30.
@@ -9,7 +10,8 @@ void main() {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent),
         useMaterial3: true,
       ),
-      home: const MvHome()));
+      //home: const MvHome()));
+      home: const MvLogin()));
 }
 
 class MvHome extends StatefulWidget {
