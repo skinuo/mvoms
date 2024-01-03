@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:mvoms/main.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:mvoms/restRepository.dart';
 
 /// 로그인 화면 구현
 /// @since 2024.01.01
@@ -21,8 +22,8 @@ class _MvLoginState extends State<MvLogin> {
   final _formKey = GlobalKey<FormState>();
   // 세션 스토리지
   static final _storage = new FlutterSecureStorage();
+  final _rest = new RestRepogitory();
 
-  /// 최초 한번 실행
   @override
   void initState() {
     super.initState();
@@ -123,10 +124,9 @@ class _MvLoginState extends State<MvLogin> {
     );
   }
 
-  /// 로그인 입력값 검사
-  /// @label 라벨
-  /// @value 입력값
-  /// @since 2024.01.01.
+  /// 로그인 입력 값을 검사한다.
+  ///
+  /// [label]로 타이틀 명, [value]는 입력 값이다.
   String? validValue(String label, String? value) {
     if (value == null || value.isEmpty || value.contains(" ")) {
       return '$label는 공백을 포함할 수 없습니다.';
@@ -135,43 +135,29 @@ class _MvLoginState extends State<MvLogin> {
     }
   }
 
-  /// 로그인 수행
-  /// @context context
-  /// @since 2024.01.01.
+  /// 로그인을 수행한다.
   void login(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
-      var user = newUser(userId: _id, userNm: "테스터", instt: "mvst");
-      var userJson = json.encode(user);
-      userJson.replaceAll("\\""", "");
-      await _storage.write(key: "user", value: userJson);
-      goToHome();
+      // 유저 조회
+      var res = await _rest.getUser(_id);
+      if (res.data == null || res.data == "") {
+        print("사용자 검색 실패");
+      } else {
+        var userJson = json.encode(res.data);
+        // 세션 쓰기
+        await _storage.write(key: "user", value: userJson);
+        // 메인 홈으로 이동
+        goToHome();
+      }
     } else {
-      print("오류");
+      print("오류있어서 로그인 수행 안함");
     }
   }
 
-  /// 메인 페이지로 이동
-  /// @since 2024.01.01.
+  /// 메인 페이지로 이동한다.
   void goToHome() {
     // 모든 페이지 제거 하고 이동
     Navigator.pushAndRemoveUntil(context, 
         MaterialPageRoute(builder: (context)=> const MvHome()), (route) => false);
-  }
-
-  /// 유저생성
-  /// @param userId
-  /// @param userNm
-  /// @param instt
-  /// @reutrn 사용자객체
-  Map<String, String> newUser({
-    required String userId,
-    required String userNm,
-    required String instt})
-  {
-    return {
-      'userId': userId,
-      'userNm': userNm,
-      'instt': instt
-    };
   }
 }

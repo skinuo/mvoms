@@ -5,7 +5,6 @@ import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 
 /// 인시던스 다이얼로그 구현
-/// @since 2023.12.30.
 class MvIncidentDialog extends StatefulWidget {
   const MvIncidentDialog({super.key});
 
@@ -29,7 +28,6 @@ class _MvIncidentDialogState extends State<MvIncidentDialog> {
   final List<String> _processTypeDropdownItem = ["유형1", "유형2", "유형3"];
   String _processTypeDropdownVal = "";
 
-  // 최초 한번 실행
   @override
   void initState() {
     // TODO: implement initState

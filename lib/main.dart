@@ -6,7 +6,6 @@ import 'incidentDialog.dart';
 import 'login.dart';
 
 /// MVOMS 메인 구현
-/// @since 2023.12.30.
 void main() {
   runApp(MaterialApp(
     theme: ThemeData(
@@ -19,7 +18,6 @@ void main() {
 
 class MvHome extends StatefulWidget {
   const MvHome({super.key});
-
   // 메인 컬러 지정
   static const Color themeColorGray = Color.fromRGBO(235, 235, 235, 1);
 
@@ -42,7 +40,6 @@ class _MvHomeState extends State<MvHome> {
   int _newIncidentCount = 0;
   int _notCompleteIncidentCount = 0;
 
-  // 최초 한번 실행
   @override
   void initState() {
     // TODO: implement initState
@@ -50,13 +47,7 @@ class _MvHomeState extends State<MvHome> {
 
     // 사용자 정보 로드
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      String? userJson = await _storage.read(key: "user");
-      if (userJson != null) {
-        _userMap = json.decode(userJson);
-        _userInfoValue = "${_userMap["userNm"]}(${_userMap["userId"]}), ${_userMap["instt"]}";
-        //print(_userMap);
-        //_userInfoValue = 'aaa';
-      }
+      printUserInfo();
     });
 
     // 인시던스 목록 불러오기
@@ -78,6 +69,7 @@ class _MvHomeState extends State<MvHome> {
             toolbarHeight: 30,
             backgroundColor: _themeColorGray,
             centerTitle: true,
+            // 탭바 구성
             bottom: const TabBar(tabs: [
               Tab(text: "home"),
               Tab(text: "incident"),
@@ -92,6 +84,7 @@ class _MvHomeState extends State<MvHome> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
+                      //Text(_userInfoValue, style: const TextStyle(fontSize: 12)),
                       Text(_userInfoValue, style: const TextStyle(fontSize: 12)),
                       SizedBox(width: 10),
                       SizedBox(child:TextButton(
@@ -209,8 +202,7 @@ class _MvHomeState extends State<MvHome> {
     );
   }
 
-  /// 인스던스 추가 팝업 열기
-  /// @since 2023.12.30.
+  /// 이벤트 등록 팝업을 보여준다.
   void showIncidentPop(BuildContext context) {
     showDialog(
         context: context,
@@ -234,8 +226,7 @@ class _MvHomeState extends State<MvHome> {
         }));
   }
 
-  /// 인시던스 동적 테이블 로우 반환
-  /// @since 2023.12.30.
+  /// 인시던스 동적 테이블 로우를 반환한다.
   List<Map> getRow() {
     List<Map> row = [];
     for (var i = 0; i < 1000; i++) {
@@ -244,12 +235,10 @@ class _MvHomeState extends State<MvHome> {
     return row;
   }
 
-  /// 인시던스 테이블 바디 셀 생성
-  /// @param label 라벨
-  /// @param align 정렬
-  /// @since 2023.12.30.
-  TableCell makeIncidentBodyCell(String label,
-      [TextAlign align = TextAlign.center]) {
+  /// 인시던스 테이블 바디 셀을 생성한다.
+  ///
+  /// [label]로 셀의 내용을 채우고, [align]은 정렬방식을 지정한다.
+  TableCell makeIncidentBodyCell(String label, [TextAlign align = TextAlign.center]) {
     return TableCell(
       verticalAlignment: TableCellVerticalAlignment.middle,
       child: Padding(
@@ -257,9 +246,9 @@ class _MvHomeState extends State<MvHome> {
         child: Text(label, textAlign: align)));
   }
 
-  /// 임시던스 테이블 헤더 셀 생성
-  /// @param label 라벨
-  /// @since 2023.12.30.
+  /// 임시던스 테이블 헤더 셀을 생성함
+  ///
+  /// [label]로 헤더 셀의 내용을 채운다.
   TableCell makeIncidentHeaderCell(String label) {
     return TableCell(
       verticalAlignment: TableCellVerticalAlignment.middle,
@@ -271,8 +260,7 @@ class _MvHomeState extends State<MvHome> {
         ));
   }
 
-  /// 인시던스 테이블 컬럼 너비 반환
-  /// @since 2023.12.30.
+  /// 인시던스 테이블 컬럼 너비 객체를 반환한다.
   Map<int, TableColumnWidth> getIncidentColumnWidths() {
     return const <int, TableColumnWidth>{
       0: FlexColumnWidth(5),
@@ -284,6 +272,18 @@ class _MvHomeState extends State<MvHome> {
     };
   }
 
+  /// 사용자 정보를 출력한다.
+  void printUserInfo() async {
+    String? userJson = await _storage.read(key: "user");
+    if (userJson != null) {
+      _userMap = json.decode(userJson);
+      setState(() {
+        _userInfoValue = "${_userMap["name"]}(${_userMap["id"]}), [기관자리]";
+      });
+    }
+  }
+
+  /// 사용자 로그아웃
   void logout() {
     _storage.delete(key: "user");
     // 모든 페이지 제거 하고 이동
