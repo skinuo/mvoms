@@ -4,15 +4,15 @@ import 'package:intl/intl.dart';
 import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 
-/// 인시던스 다이얼로그 구현
-class MvIncidentDialog extends StatefulWidget {
-  const MvIncidentDialog({super.key});
+/// 이벤트 다이얼로그 구현
+class MvEventDialog extends StatefulWidget {
+  const MvEventDialog({super.key});
 
   @override
-  State<MvIncidentDialog> createState() => _MvIncidentDialogState();
+  State<MvEventDialog> createState() => _MvEventDialogState();
 }
 
-class _MvIncidentDialogState extends State<MvIncidentDialog> {
+class _MvEventDialogState extends State<MvEventDialog> {
   // 요청 시간 위젯 값
   String _reqDatetimeValue = "";
 
@@ -64,7 +64,7 @@ class _MvIncidentDialogState extends State<MvIncidentDialog> {
                     children: [
                       Flexible(child: Row(
                         children: [
-                            Flexible(child: makeCell(labelText: "이름", required: true)),
+                            Flexible(child: makeCell(labelText: "이름", required: true, maxLength: 5)),
                             SizedBox(child: ElevatedButton(onPressed: () { showGetUserPop(); },
                             child: const Text("조회"))),
                           ]
@@ -140,7 +140,7 @@ class _MvIncidentDialogState extends State<MvIncidentDialog> {
                   const SizedBox(height: 10),
                   Row(
                     children: [
-                      Flexible(fit: FlexFit.tight, child: makeCell(labelText: "요청내용", maxLength: 500, required: true, maxLines: 4)),
+                      Flexible(fit: FlexFit.tight, child: makeCell(labelText: "요청내용", maxLength: 500, required: true, maxLines: 5)),
                     ],
                   ),
                   const SizedBox(height: 10),
@@ -164,7 +164,6 @@ class _MvIncidentDialogState extends State<MvIncidentDialog> {
   }
 
   /// 데코레이션 생성
-  /// @since 2023.12.30.
   InputDecoration makeInputDecoration(String labelText, bool required) {
     return InputDecoration(
         labelStyle: TextStyle(fontSize: 12, color: required ? Colors.red : Colors.grey),
@@ -181,12 +180,8 @@ class _MvIncidentDialogState extends State<MvIncidentDialog> {
   }
 
   /// 드랍다운 셀 생성
-  /// @param labelText 라벨
-  /// @param required 필수여부
-  /// @param item 드랍다운 아이템
-  /// @param value 선택값
-  /// @param callback 콜백
-  /// @since 2023.12.30.
+  ///
+  /// [labelText]라벨, [required]필수여부, [item]아이템목록, [value]초기값, [callback]선택콜백
   Widget makeCellWithDropdown(String labelText, bool required, List item, String value, Function callback) {
     return DropdownButtonHideUnderline(
       child: DropdownButtonFormField2(
@@ -208,8 +203,6 @@ class _MvIncidentDialogState extends State<MvIncidentDialog> {
   }
 
   /// 의뢰시간 셀 생성
-  /// @param labelText 라벨텍스트
-  /// @since 2023.12.30.
   TextField makeCellWithReqDatetime(String labelText) {
     return TextField(
       decoration: makeInputDecoration(labelText, true),
@@ -229,14 +222,10 @@ class _MvIncidentDialogState extends State<MvIncidentDialog> {
     );
   }
 
-  /// 셀생성
-  /// @param labelText 라벨
-  /// @param requried 필수여부
-  /// @param onlyNumber 숫자여부
-  /// @param maxLength 최대길이
-  /// @param readOnly 읽기만가능
-  /// @param maxLines 최대라인
-  /// @since 2023.12.30.
+  /// 셀을 생성한다
+  ///
+  /// [labelText]라벨, [requried]필수여부, [onlyNumber]숫자여부, [maxLength]최대길이
+  /// [readOnly]조회만가능여부, [maxLines]최대라인
   TextField makeCell({
     required String labelText,
     bool required = false,

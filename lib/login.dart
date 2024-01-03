@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:mvoms/User.dart';
 import 'package:mvoms/main.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mvoms/restRepository.dart';
@@ -126,7 +127,7 @@ class _MvLoginState extends State<MvLogin> {
 
   /// 로그인 입력 값을 검사한다.
   ///
-  /// [label]로 타이틀 명, [value]는 입력 값이다.
+  /// [label]은 타이틀 명, [value]는 입력 값이다.
   String? validValue(String label, String? value) {
     if (value == null || value.isEmpty || value.contains(" ")) {
       return '$label는 공백을 포함할 수 없습니다.';
@@ -143,6 +144,7 @@ class _MvLoginState extends State<MvLogin> {
       if (res.data == null || res.data == "") {
         print("사용자 검색 실패");
       } else {
+        //var user = User.fromJson(res.data);
         var userJson = json.encode(res.data);
         // 세션 쓰기
         await _storage.write(key: "user", value: userJson);
