@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-part 'User.freezed.dart';
-part 'User.g.dart';
+part 'user.freezed.dart';
+part 'user.g.dart';
 
 /// 사용자 관리
 @freezed

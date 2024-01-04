@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:mvoms/User.dart';
+import 'package:mvoms/user.dart';
 import 'package:mvoms/main.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:mvoms/restRepository.dart';
+import 'package:mvoms/rest_repository.dart';
 
 /// 로그인 화면 구현
 /// @since 2024.01.01
@@ -30,11 +30,13 @@ class _MvLoginState extends State<MvLogin> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      var user = await _storage.read(key: "user");
+      goToHome();
+
+      /*var user = await _storage.read(key: "user");
       if (user != null) {
         // 세션 정보가 있으면, 메인페이지로 바로 이동
         goToHome();
-      }
+      }*/
     });
   }
 
@@ -140,7 +142,7 @@ class _MvLoginState extends State<MvLogin> {
   void login(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
       // 유저 조회
-      var res = await _rest.getUser(_id);
+      /*var res = await _rest.getUser(_id);
       if (res.data == null || res.data == "") {
         print("사용자 검색 실패");
       } else {
@@ -150,7 +152,8 @@ class _MvLoginState extends State<MvLogin> {
         await _storage.write(key: "user", value: userJson);
         // 메인 홈으로 이동
         goToHome();
-      }
+      }*/
+      goToHome();
     } else {
       print("오류있어서 로그인 수행 안함");
     }
