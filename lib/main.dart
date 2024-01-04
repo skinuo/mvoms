@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'common.dart';
 import 'eventDialog.dart';
 import 'login.dart';
 
@@ -25,7 +26,7 @@ class MvHome extends StatefulWidget {
   State<MvHome> createState() => _MvHomeState();
 }
 
-class _MvHomeState extends State<MvHome> {
+class _MvHomeState extends State<MvHome> with Common {
   final _themeColorGray = MvHome.themeColorGray;
   // 세션 스토리지
   static final _storage = new FlutterSecureStorage();
@@ -153,7 +154,85 @@ class _MvHomeState extends State<MvHome> {
                         child: ExpansionTile(
                           title: Text("검색"),
                           children: [
-                            Text("보이냥")
+                            Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    SizedBox(
+                                      width: 100,
+                                      child: Text("검색어")
+                                    ),
+                                    Expanded(child: TextField(),),
+                                    Expanded(
+                                      child: Row(
+                                        children: [
+                                          Checkbox(value: true, onChanged: (value){}),
+                                          Text("제목:"),
+                                          Checkbox(value: true, onChanged: (value){}),
+                                          Text("내용:"),
+                                          Checkbox(value: true, onChanged: (value){}),
+                                          Text("처리자:"),
+                                          Checkbox(value: true, onChanged: (value){}),
+                                          Text("의뢰자:"),
+                                          Checkbox(value: true, onChanged: (value){}),
+                                          Text("의뢰부서:"),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    SizedBox(
+                                        width: 100,
+                                        child: Text("상태")
+                                    ),
+                                    Expanded(
+                                      child: makeCellWithDropdown("상태", false, ["상태","상태1"], "상태", (value){print(value);}),
+                                    ),
+                                    SizedBox(
+                                        width: 100,
+                                        child: Text("발생일시")
+                                    ),
+                                    SizedBox(
+                                        width: 100,
+                                        child: TextField()
+                                    ),
+                                    SizedBox(
+                                        width: 10,
+                                        child: Text("~")
+                                    ),
+                                    SizedBox(
+                                        width: 100,
+                                        child: TextField()
+                                    ),
+                                    SizedBox(
+                                        width: 100,
+                                        child: Text("종결일시")
+                                    ),
+                                    SizedBox(
+                                        width: 100,
+                                        child: TextField()
+                                    ),
+                                    SizedBox(
+                                        width: 10,
+                                        child: Text("~")
+                                    ),
+                                    SizedBox(
+                                        width: 100,
+                                        child: TextField()
+                                    ),
+                                  ],
+                                ),
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                  child: ElevatedButton(
+                                    onPressed: (){},
+                                    child: Text("검색"),
+                                  ),
+                                )
+                              ],
+                            )
                           ],
                       )),
                       // 이벤트 테이블 헤더 (헤더 고정을 위해 분리)
