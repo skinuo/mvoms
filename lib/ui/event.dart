@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:mvoms/search.dart';
+import 'package:mvoms/ui/search.dart';
 
-import 'common.dart';
-import 'constants.dart';
+import '../utilities/common.dart';
+import '../utilities/constants.dart';
 import 'event_dialog.dart';
 
 /// 이벤트 위젯 구현
@@ -34,6 +34,7 @@ class _MVOMSEventState extends State<MVOMSEvent> with Common {
 
   @override
   Widget build(BuildContext context) {
+    print('event build!');
     return Container(
       padding: const EdgeInsets.all(10),
       decoration: const BoxDecoration(
@@ -82,7 +83,7 @@ class _MVOMSEventState extends State<MVOMSEvent> with Common {
           // 간격
           const SizedBox(height: 10),
           // 검색바
-          MVOMSSearch(),
+          const MVOMSSearch(),
           // 간격
           const SizedBox(height: 10),
           // 이벤트 테이블 헤더 (헤더 고정을 위해 분리)
@@ -91,7 +92,7 @@ class _MVOMSEventState extends State<MVOMSEvent> with Common {
               Expanded(
                 child: Table(
                   border: TableBorder(
-                      bottom: BorderSide(color: kColorGray, width: 2)),
+                      bottom: BorderSide(color: ConstantValues.kColorGray, width: 2)),
                   columnWidths: getEventHeaderColWidths(),
                   children: [
                     TableRow(children: [
@@ -115,7 +116,7 @@ class _MVOMSEventState extends State<MVOMSEvent> with Common {
               return Container(
                   padding: const EdgeInsets.only(top: 3, bottom: 3),
                   decoration: BoxDecoration(
-                      border: Border(bottom: BorderSide(color: kColorGray))),
+                      border: Border(bottom: BorderSide(color: ConstantValues.kColorGray))),
                   child: Row(
                     children: [
                       Flexible(
@@ -170,7 +171,7 @@ class _MVOMSEventState extends State<MVOMSEvent> with Common {
         builder: ((context) {
           return AlertDialog(
             //contentTextStyle: TextStyle(fontSize: 13),
-            backgroundColor: kColorGray,
+            backgroundColor: ConstantValues.kColorGray,
             surfaceTintColor: Colors.transparent,
             title: const Text("이벤트 등록"),
             content: const MvEventDialog(),

@@ -3,11 +3,40 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 
-import 'common_code.dart';
+import '../models/common_code.dart';
+import '../models/user.dart';
 
 mixin Common {
-  static Map<String, List<CommonCode>> comCodes = {};
+  // 공통코드
+  static Map<String, List<CommonCode>> _comCodes = {};
 
+  /// 공통코드 조회
+  ///
+  /// - [id]: 코드아이디
+  static List<CommonCode>? getCode(String id) => _comCodes[id];
+
+  /// 공통코드 쓰기
+  ///
+  /// - [comCodes]: 공통코드
+  static set setCodes(Map<String, List<CommonCode>> comCodes) => _comCodes = comCodes;
+
+  /// 공통코드 추가
+  ///
+  /// - [key]: 코드키
+  /// - [comCodes]: 코드목록
+  static void addCode(String key, List<CommonCode> comCodes) {
+    _comCodes[key] = comCodes;
+  }
+
+  static User? user;
+
+  /// 드랍다운 셀 생성
+  ///
+  /// - [item]: 아이템 목록
+  /// - [value]: 최초 값
+  /// - [callback]: 아이템 선택 후 호출
+  /// - [decoration]: 셀박스 데코레이션
+  /// - [fontSize]: 폰트사이즈
   Widget makeCellWithDropdown({
       required List item,
       required String value,

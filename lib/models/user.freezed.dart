@@ -20,12 +20,12 @@ User _$UserFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$User {
-  String? get id => throw _privateConstructorUsedError;
-  String? get name => throw _privateConstructorUsedError;
+  String get id => throw _privateConstructorUsedError;
+  String get name => throw _privateConstructorUsedError;
   String? get email => throw _privateConstructorUsedError;
   String? get phone => throw _privateConstructorUsedError;
-  String? get usrTypeCd => throw _privateConstructorUsedError;
-  String? get password => throw _privateConstructorUsedError;
+  String get usrTypeCd => throw _privateConstructorUsedError;
+  String get password => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -38,12 +38,12 @@ abstract class $UserCopyWith<$Res> {
       _$UserCopyWithImpl<$Res, User>;
   @useResult
   $Res call(
-      {String? id,
-      String? name,
+      {String id,
+      String name,
       String? email,
       String? phone,
-      String? usrTypeCd,
-      String? password});
+      String usrTypeCd,
+      String password});
 }
 
 /// @nodoc
@@ -59,22 +59,22 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
-    Object? name = freezed,
+    Object? id = null,
+    Object? name = null,
     Object? email = freezed,
     Object? phone = freezed,
-    Object? usrTypeCd = freezed,
-    Object? password = freezed,
+    Object? usrTypeCd = null,
+    Object? password = null,
   }) {
     return _then(_value.copyWith(
-      id: freezed == id
+      id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String?,
-      name: freezed == name
+              as String,
+      name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       email: freezed == email
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
@@ -83,14 +83,14 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
           ? _value.phone
           : phone // ignore: cast_nullable_to_non_nullable
               as String?,
-      usrTypeCd: freezed == usrTypeCd
+      usrTypeCd: null == usrTypeCd
           ? _value.usrTypeCd
           : usrTypeCd // ignore: cast_nullable_to_non_nullable
-              as String?,
-      password: freezed == password
+              as String,
+      password: null == password
           ? _value.password
           : password // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
     ) as $Val);
   }
 }
@@ -103,12 +103,12 @@ abstract class _$$UserImplCopyWith<$Res> implements $UserCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {String? id,
-      String? name,
+      {String id,
+      String name,
       String? email,
       String? phone,
-      String? usrTypeCd,
-      String? password});
+      String usrTypeCd,
+      String password});
 }
 
 /// @nodoc
@@ -121,22 +121,22 @@ class __$$UserImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
-    Object? name = freezed,
+    Object? id = null,
+    Object? name = null,
     Object? email = freezed,
     Object? phone = freezed,
-    Object? usrTypeCd = freezed,
-    Object? password = freezed,
+    Object? usrTypeCd = null,
+    Object? password = null,
   }) {
     return _then(_$UserImpl(
-      id: freezed == id
+      id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String?,
-      name: freezed == name
+              as String,
+      name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       email: freezed == email
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
@@ -145,14 +145,14 @@ class __$$UserImplCopyWithImpl<$Res>
           ? _value.phone
           : phone // ignore: cast_nullable_to_non_nullable
               as String?,
-      usrTypeCd: freezed == usrTypeCd
+      usrTypeCd: null == usrTypeCd
           ? _value.usrTypeCd
           : usrTypeCd // ignore: cast_nullable_to_non_nullable
-              as String?,
-      password: freezed == password
+              as String,
+      password: null == password
           ? _value.password
           : password // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
     ));
   }
 }
@@ -161,28 +161,28 @@ class __$$UserImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$UserImpl implements _User {
   _$UserImpl(
-      {this.id,
-      this.name,
+      {required this.id,
+      required this.name,
       this.email,
       this.phone,
-      this.usrTypeCd,
-      this.password});
+      required this.usrTypeCd,
+      required this.password});
 
   factory _$UserImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserImplFromJson(json);
 
   @override
-  final String? id;
+  final String id;
   @override
-  final String? name;
+  final String name;
   @override
   final String? email;
   @override
   final String? phone;
   @override
-  final String? usrTypeCd;
+  final String usrTypeCd;
   @override
-  final String? password;
+  final String password;
 
   @override
   String toString() {
@@ -225,27 +225,27 @@ class _$UserImpl implements _User {
 
 abstract class _User implements User {
   factory _User(
-      {final String? id,
-      final String? name,
+      {required final String id,
+      required final String name,
       final String? email,
       final String? phone,
-      final String? usrTypeCd,
-      final String? password}) = _$UserImpl;
+      required final String usrTypeCd,
+      required final String password}) = _$UserImpl;
 
   factory _User.fromJson(Map<String, dynamic> json) = _$UserImpl.fromJson;
 
   @override
-  String? get id;
+  String get id;
   @override
-  String? get name;
+  String get name;
   @override
   String? get email;
   @override
   String? get phone;
   @override
-  String? get usrTypeCd;
+  String get usrTypeCd;
   @override
-  String? get password;
+  String get password;
   @override
   @JsonKey(ignore: true)
   _$$UserImplCopyWith<_$UserImpl> get copyWith =>

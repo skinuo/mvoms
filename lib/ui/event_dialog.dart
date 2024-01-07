@@ -4,8 +4,8 @@ import 'package:intl/intl.dart';
 import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 
-import 'common.dart';
-import 'constants.dart';
+import '../utilities/constants.dart';
+
 
 /// 이벤트 다이얼로그 구현
 class MvEventDialog extends StatefulWidget {
@@ -47,6 +47,7 @@ class _MvEventDialogState extends State<MvEventDialog> {
 
   @override
   Widget build(BuildContext context) {
+    print('event_dialog build!');
     return Container(
         width: 550,
         color: Colors.white,
@@ -55,7 +56,7 @@ class _MvEventDialogState extends State<MvEventDialog> {
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(5),
-              color: kColorBlue05,
+              color: ConstantValues.kColorBlue05,
               child: const Text("의뢰자 정보"),
               //child: Text(Common.comCodes['state_cd']!.length == 0 ? '' : Common.comCodes['state_cd']![0].name)
             ),
@@ -92,7 +93,7 @@ class _MvEventDialogState extends State<MvEventDialog> {
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(5),
-              color: kColorBlue05,
+              color: ConstantValues.kColorBlue05,
               child: const Text("의뢰 정보"),
             ),
             Container(

@@ -1,20 +1,29 @@
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:mvoms/user.dart';
 import 'package:mvoms/main.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:mvoms/rest_repository.dart';
+import 'package:mvoms/models/user.dart';
+import 'package:mvoms/utilities/constants.dart';
+import 'package:mvoms/utilities/rest_repository.dart';
+import 'package:encrypt/encrypt.dart' as enc;
+
+
+import 'dart:html';
 
 /// 로그인 화면 구현
-/// @since 2024.01.01
-class MvLogin extends StatefulWidget {
-  const MvLogin({super.key});
+class MVOMSLogin extends StatefulWidget {
+  const MVOMSLogin({super.key});
 
   @override
-  State<MvLogin> createState() => _MvLoginState();
+  State<MVOMSLogin> createState() => _MVOMSLoginState();
 }
 
-class _MvLoginState extends State<MvLogin> {
+class _MVOMSLoginState extends State<MVOMSLogin> {
+
+  // 세션 스토리지
+  Storage _localStorage = window.localStorage;
+
   // 아이디
   String _id = "";
   // 비밀번호
@@ -24,24 +33,30 @@ class _MvLoginState extends State<MvLogin> {
   // 세션 스토리지
   static final _storage = new FlutterSecureStorage();
   final _rest = new RestRepogitory();
+  // 암호화 초기 벡터
+  String _ivStr = "";
 
   @override
   void initState() {
     super.initState();
+    print('login init');
 
+/*
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      goToHome();
+      //goToHome();
 
-      /*var user = await _storage.read(key: "user");
+      var user = await _storage.read(key: "user");
       if (user != null) {
         // 세션 정보가 있으면, 메인페이지로 바로 이동
         goToHome();
-      }*/
+      }
     });
+ */
   }
 
   @override
   Widget build(BuildContext context) {
+    print('login build!');
     return Material(
       child: Center(
         child: Container(
@@ -129,7 +144,8 @@ class _MvLoginState extends State<MvLogin> {
 
   /// 로그인 입력 값을 검사한다.
   ///
-  /// [label]은 타이틀 명, [value]는 입력 값이다.
+  /// - [label]: 타이틀 명
+  /// - [value]: 입력 값
   String? validValue(String label, String? value) {
     if (value == null || value.isEmpty || value.contains(" ")) {
       return '$label는 공백을 포함할 수 없습니다.';
@@ -141,28 +157,53 @@ class _MvLoginState extends State<MvLogin> {
   /// 로그인을 수행한다.
   void login(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
-      // 유저 조회
-      /*var res = await _rest.getUser(_id);
-      if (res.data == null || res.data == "") {
-        print("사용자 검색 실패");
-      } else {
-        //var user = User.fromJson(res.data);
-        var userJson = json.encode(res.data);
-        // 세션 쓰기
-        await _storage.write(key: "user", value: userJson);
-        // 메인 홈으로 이동
+      // 비밀번호 암호화
+      var password = await encPassword(_password);
+      // 로그인 수행
+      var succeeded = await _rest.login(_id, password);
+      if (succeeded) {
+        print("로그인성공");
+        String? user = await _rest.getUser(_id);
+        print("사용자");
+        // 세션에 사용자정보 담기
+        /*Storage localStorage = window.localStorage;
+        if (localStorage.containsKey("user")) {
+          localStorage.remove("user");
+        }
+        User user = await _rest.getUser(_id);
+        localStorage["user"] = jsonEncode(user);*/
+
+        // 로그인 성공 시 메인으로 이동
         goToHome();
-      }*/
-      goToHome();
-    } else {
-      print("오류있어서 로그인 수행 안함");
+
+      } else {
+        print("오류있어서 로그인 수행 안함");
+      }
     }
+  }
+
+  /// 비밀번호 암호화
+  ///
+  /// - [password]: 암호
+  Future<String> encPassword(String password) async {
+    // 암호화 키
+    var key = enc.Key.fromUtf8(ConstantValues.kEncKey.substring(0,32));
+
+    // iv 가져오기
+    if (_ivStr == "") _ivStr = await _rest.getIV();
+    var iv = enc.IV.fromUtf8(_ivStr.substring(0,16));
+
+    // cbc방식으로 객체 생성 및 암호화
+    var encrypter = enc.Encrypter(enc.AES(key, mode:enc.AESMode.cbc));
+    var enct = encrypter.encrypt(password, iv:iv);
+    var encStr = enct.base64;
+    return encStr;
   }
 
   /// 메인 페이지로 이동한다.
   void goToHome() {
     // 모든 페이지 제거 하고 이동
     Navigator.pushAndRemoveUntil(context, 
-        MaterialPageRoute(builder: (context)=> const MvHome()), (route) => false);
+        MaterialPageRoute(builder: (context)=> const MVOMSHome()), (route) => false);
   }
 }

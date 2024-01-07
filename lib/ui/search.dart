@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'common.dart';
-import 'common_code.dart';
-import 'constants.dart';
+import 'package:mvoms/utilities/auth_updater.dart';
+
+import '../models/common_code.dart';
+import '../utilities/common.dart';
+import '../utilities/constants.dart';
 
 /// 검색 위젯 구현
 class MVOMSSearch extends StatefulWidget {
@@ -26,16 +28,17 @@ class _MVOMSSearchState extends State<MVOMSSearch> with Common {
 
   @override
   Widget build(BuildContext context) {
+    print('search build!');
     return Container(
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),
-            color: kColorBlue
+            color: ConstantValues.kColorBlue
         ),
         child: ExpansionTile(
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10)
           ),
-          backgroundColor: kColorBlue01,
+          backgroundColor: ConstantValues.kColorBlue01,
           title: const Text("검색", style: TextStyle(fontSize: 13)),
           children: [
             // 검색조건
@@ -55,7 +58,7 @@ class _MVOMSSearchState extends State<MVOMSSearch> with Common {
                         ),
                         SizedBox(
                             width: 250,
-                            child: makeTextCell(maxLength: 50, decoration: makeInputDecoration(), fontSize: kBodyFontSize)),
+                            child: makeTextCell(maxLength: 50, decoration: makeInputDecoration(), fontSize: ConstantValues.kBodyFontSize)),
                         Expanded(
                           child: Row(
                             children: [
@@ -83,7 +86,7 @@ class _MVOMSSearchState extends State<MVOMSSearch> with Common {
                               item: _stateCodeNms,
                               value: _stateCodeNms.isNotEmpty ? _stateCodeNms[0]! : "",
                               decoration: makeInputDecoration(),
-                              fontSize: kBodyFontSize,
+                              fontSize: ConstantValues.kBodyFontSize,
                               callback: (){}),
                         )
                       ],
@@ -111,7 +114,7 @@ class _MVOMSSearchState extends State<MVOMSSearch> with Common {
                                       },
                                       readOnly: true,
                                       decoration: makeInputDecoration(),
-                                      fontSize: kBodyFontSize
+                                      fontSize: ConstantValues.kBodyFontSize
                                   )
                               ),
                               Container(
@@ -130,7 +133,7 @@ class _MVOMSSearchState extends State<MVOMSSearch> with Common {
                                       },
                                       readOnly: true,
                                       decoration: makeInputDecoration(),
-                                      fontSize: kBodyFontSize
+                                      fontSize: ConstantValues.kBodyFontSize
                                   )
                               ),
                             ],
@@ -154,7 +157,7 @@ class _MVOMSSearchState extends State<MVOMSSearch> with Common {
                                       },
                                       readOnly: true,
                                       decoration: makeInputDecoration(),
-                                      fontSize: kBodyFontSize
+                                      fontSize: ConstantValues.kBodyFontSize
                                   )
                               ),
                               Container(
@@ -173,7 +176,7 @@ class _MVOMSSearchState extends State<MVOMSSearch> with Common {
                                       },
                                       readOnly: true,
                                       decoration: makeInputDecoration(),
-                                      fontSize: kBodyFontSize
+                                      fontSize: ConstantValues.kBodyFontSize
                                   )
                               )
                             ],
@@ -185,7 +188,8 @@ class _MVOMSSearchState extends State<MVOMSSearch> with Common {
                         SizedBox(
                             width: 80,
                             child: ElevatedButton(
-                              onPressed: (){},
+                              onPressed: (){
+                              },
                               child: const Text("검색"),
                             )
                         )
