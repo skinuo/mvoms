@@ -55,7 +55,7 @@ class _MVOMSHomeState extends State<MVOMSHome> with Common {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      initUser();
+      //initUser();
       //initComCode();
     });
   }
@@ -152,9 +152,9 @@ class _MVOMSHomeState extends State<MVOMSHome> with Common {
 
   /// 공통코드 초기화
   void initComCode() async {
-    var res = await _rest.getComCode(ConstantValues.kCodeState);
+    var listJson = await _rest.getComCode(ConstantValues.kCodeState);
     List<CommonCode> state = [];
-    for (var s in res.data as List) {
+    for (var s in listJson as List) {
       CommonCode code = CommonCode.fromJson(s);
       state.add(code);
     }

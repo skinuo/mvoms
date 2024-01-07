@@ -163,8 +163,9 @@ class _MVOMSLoginState extends State<MVOMSLogin> {
       var succeeded = await _rest.login(_id, password);
       if (succeeded) {
         print("로그인성공");
-        String? user = await _rest.getUser(_id);
-        print("사용자");
+        String user = await _rest.getUser(_id);
+        print("사용자: $user");
+
         // 세션에 사용자정보 담기
         /*Storage localStorage = window.localStorage;
         if (localStorage.containsKey("user")) {

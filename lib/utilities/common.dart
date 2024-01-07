@@ -28,8 +28,6 @@ mixin Common {
     _comCodes[key] = comCodes;
   }
 
-  static User? user;
-
   /// 드랍다운 셀 생성
   ///
   /// - [item]: 아이템 목록
