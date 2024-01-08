@@ -54,6 +54,10 @@ class RestRepogitory {
     return req(get: true, uri:'/mytest');
   }
 
+  Future<dynamic> getEventById(String evntId) {
+    return req(get: true, uri:'/op-evnet/$evntId');
+  }
+
   Future<dynamic> getEventList({
       required int page,
       int size = 10,

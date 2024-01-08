@@ -12,6 +12,12 @@ class ConstantValues {
   // 비밀번호 암호화 키
   static const String kEncKey = "mvsoftech07076393629j;kasjf;lksjf;ajf3foisdflkj";
 
+  // 공통 코드 키
+  // 상태 코드
   static const String kCodeState = "state_cd";
+  // 요청 경로
+  static const String kCodeReqMethod = "req_mthd_cd";
+  // 요청 유형
+  static const String kCodeReqType = "req_tp_cd";
 }
 

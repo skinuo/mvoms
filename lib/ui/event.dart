@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:mvoms/models/operation_event.dart';
 import 'package:mvoms/models/pagination.dart';
 import 'package:mvoms/ui/search.dart';
@@ -20,7 +21,7 @@ class _MVOMSEventState extends State<MVOMSEvent> with Common {
   late final int _newEventCount;
   late final int _notCompleteEventCount;
   late final String _eventCountValue;
-  final _rest = new RestRepogitory();
+  final _rest = RestRepogitory();
 
   // 이벤트 목록
   late List<OperationEvent> _rows = [];
@@ -30,8 +31,8 @@ class _MVOMSEventState extends State<MVOMSEvent> with Common {
 
   // 현재 페이지 번호
   int _curPageNo = 0;
-  int _recordSize = 10;
-  int _pageSize = 10;
+  final int _recordSize = 25;
+  final int _pageSize = 10;
 
   @override
   void initState() {
@@ -82,7 +83,7 @@ class _MVOMSEventState extends State<MVOMSEvent> with Common {
                   width: 150,
                   child: ElevatedButton(
                       onPressed: () {
-                        showEventPop(context);
+                        showEventPop(context, "이벤트 추가", false);
                       },
                       child: const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -105,7 +106,7 @@ class _MVOMSEventState extends State<MVOMSEvent> with Common {
             children: [
               Expanded(
                 child: Table(
-                  border: TableBorder(
+                  border: const TableBorder(
                       bottom: BorderSide(
                           color: ConstantValues.kColorGray, width: 2)),
                   columnWidths: getEventHeaderColWidths(),
@@ -130,43 +131,43 @@ class _MVOMSEventState extends State<MVOMSEvent> with Common {
             itemBuilder: (BuildContext context, int idx) {
               return Container(
                 padding: const EdgeInsets.only(top: 3, bottom: 3),
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   border: Border(bottom:BorderSide(color: ConstantValues.kColorGray))),
                   child: Row(
                     children: [
-                      Flexible(
-                          fit: FlexFit.tight,
+                      Expanded(
                           flex: 5,
-                          child: SizedBox(child: Text("${getRowNum(idx)}, ${_rows[idx].title}",
-                            overflow: TextOverflow.ellipsis,))),
-                      Flexible(
-                          fit: FlexFit.tight,
+                          child: SizedBox(
+                            child: InkWell(
+                              onTap: (){
+                                showEventPop(context, "이벤트 상세 조회", true, _rows[idx].evntId);
+                              },
+                              child: Text("${getRowNum(idx)}, ${_rows[idx].title}",
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                          ))),
+                      const Expanded(
                           flex: 1,
                           child: Center(child: Text("-"))),
-                      Flexible(
-                          fit: FlexFit.tight,
+                      const Expanded(
                           flex: 3,
                           child: Center(child: Text("-"))),
-                      Flexible(
-                          fit: FlexFit.tight,
+                      Expanded(
                           flex: 2,
-                          child: Center(child: Text("${_rows[idx].evntTime}"))),
-                      Flexible(
-                          fit: FlexFit.tight,
+                          child: Center(child: Text(DateFormat('yyyy-MM-dd HH:mm:ss').format(_rows[idx].evntTime)))),
+                      Expanded(
                           flex: 1,
-                          child: Center(child: Text("-"))),
-                      Flexible(
-                          fit: FlexFit.tight,
+                          child: Center(child: Text(_rows[idx].charger == null ? "" : _rows[idx].charger!.name))),
+                      Expanded(
                           flex: 1,
-                          child: Center(child: Text("${_rows[idx].stateCd}"))),
+                          child: Center(child: Text(Common.getComCodeName(ConstantValues.kCodeState, _rows[idx].stateCd)!))),
                     ],
                   ));
             },
           )),
           // 페이징
-          Container(
+          SizedBox(
             height: 50,
-            color: Colors.green,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: _pageButtons,
@@ -178,30 +179,6 @@ class _MVOMSEventState extends State<MVOMSEvent> with Common {
   }
 
   int getRowNum(int idx) => _recordSize * (_curPageNo+1) - _recordSize + idx + 1;
-
-  /// 이벤트 등록 팝업을 보여준다.
-  void showEventPop(BuildContext context) {
-    showDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: ((context) {
-          return AlertDialog(
-            //contentTextStyle: TextStyle(fontSize: 13),
-            backgroundColor: ConstantValues.kColorGray,
-            surfaceTintColor: Colors.transparent,
-            title: const Text("이벤트 등록"),
-            content: const MvEventDialog(),
-            actions: [
-              ElevatedButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: const Text('취소')),
-              ElevatedButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: const Text('저장')),
-            ],
-          );
-        }));
-  }
 
   /// 이벤트 테이블 컬럼 너비 객체를 반환한다.
   Map<int, TableColumnWidth> getEventHeaderColWidths() {
@@ -260,38 +237,83 @@ class _MVOMSEventState extends State<MVOMSEvent> with Common {
 
     // 초기화 후 추가
     _pageButtons.clear();
-
     // 버튼 생성
-    int firstPage = (pg.number ~/ _pageSize);
+    int firstPage = (pg.number ~/ _pageSize) * _pageSize;
     int lastPage = firstPage;
-    firstPage = pg.number >= _pageSize ? firstPage * _pageSize : firstPage;
-    // prev
-
-    print('firstPage: $firstPage');
+    // 이전으로
+    if (pg.number >= _pageSize) {
+      _pageButtons.add(makePageButton("<<", firstPage-_pageSize, false));
+      _pageButtons.add(makePageButton("<", pg.number-1, false));
+    }
     for (int i = 0; i < _pageSize; i++) {
       int pageNum = firstPage + i;
+      if (pageNum >= pg.totalPages) {
+        // 최대 페이지 도달, 다음페이지 없음
+        lastPage = -1;
+        break;
+      }
       // 현재 페이지 여부
       bool curr = pageNum == pg.number;
       _pageButtons.add(makePageButton((pageNum+1).toString(), pageNum, curr));
       // 마지막 페이지
       lastPage = pageNum;
     }
-    // next
-    if (lastPage+1 <= pg.totalPages) {
-      _pageButtons.add(makePageButton(">", lastPage+1, false));
+    // 다음으로
+    if (lastPage > -1 && lastPage+1 <= pg.totalPages) {
+      _pageButtons.add(makePageButton(">", pg.number+1, false));
+      _pageButtons.add(makePageButton(">>", lastPage+1, false));
     }
   }
 
-  Widget makePageButton(String pageTxt, int pageNum, bool bold) {
+  /// 페이지 버튼 생성
+  /// 
+  /// - [pageTxt]: 페이지텍스트
+  /// - [pageNum]: 페이지번호
+  /// - [highlighting]: 강조여부
+  Widget makePageButton(String pageTxt, int pageNum, bool highlighting) {
     return Flexible(
       child: TextButton(
           child: Text(pageTxt, style: TextStyle(
-              fontWeight: bold ? FontWeight.bold: FontWeight.normal)),
+            decoration: highlighting ? TextDecoration.underline : null,
+            fontWeight: highlighting ? FontWeight.bold: FontWeight.normal)),
           onPressed: () {
             // 목록 요청
             getEventList(page: pageNum);
           }
       ),
     );
+  }
+
+  /// 이벤트 팝업 열기
+  /// 
+  /// - [context]: 부모컨텍스트
+  /// - [title]: 팝업타이틀
+  /// - [readOnly]: 조회만가능
+  /// - [evntId]: 이벤트아이디(상세조회시사용)
+  void showEventPop(BuildContext context, String title, bool readOnly, [String? evntId]) {
+    List<Widget> actions = [
+      ElevatedButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text('취소'))
+    ];
+    // 수정가능시 저장버튼 추가
+    if (!readOnly) {
+      actions.add(ElevatedButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text('저장')));
+    }
+    
+    // 다이얼로그호출
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: ((context) {
+          return AlertDialog(
+            surfaceTintColor: Colors.transparent,
+            title: Text(title),
+            content: MvEventDialog(evntId: evntId, readOnly: readOnly),
+            actions: actions,
+          );
+        }));
   }
 }

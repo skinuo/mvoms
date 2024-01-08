@@ -1,52 +1,64 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:omni_datetime_picker/omni_datetime_picker.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
-
+import 'package:mvoms/models/operation_event.dart';
+import '../utilities/common.dart';
 import '../utilities/constants.dart';
-
+import '../utilities/rest_repository.dart';
 
 /// 이벤트 다이얼로그 구현
 class MvEventDialog extends StatefulWidget {
-  const MvEventDialog({super.key});
+  const MvEventDialog({super.key, required this.readOnly, this.evntId});
+
+  // 이벤트 아이디
+  final String? evntId;
+  // 수정불가
+  final bool readOnly;
 
   @override
   State<MvEventDialog> createState() => _MvEventDialogState();
 }
 
-class _MvEventDialogState extends State<MvEventDialog> {
+class _MvEventDialogState extends State<MvEventDialog> with Common {
+
+  final _rest = RestRepogitory();
+
   // 요청 시간 위젯 값
   String _reqDatetimeValue = "";
 
-  // 분류 콤보박스 아이템
-  final List<String> _divDropdownItem = ["정보", "정보2", "정보3"];
-  String _divDropDownVal = "";
+  // 시스템 콤보박스 아이템
+  final List<String> _systemDropdownItem = ["정보", "정보2", "정보3"];
+  String _systemDropdownVal = "";
 
-  // 서비스 채널 아이템
-  final List<String> _chanelDropdownItem = ["채널1", "채널2", "채널3"];
-  String _chanelDropDownVal = "";
+  // 요청 경로 아이템
+  final List<String> _reqMethodDropdownItem = Common.getComCode(ConstantValues.kCodeReqMethod).map((c) => c.name).toList();
+  String _reqMethodDropdownVal = "";
 
-  // 처리 유형 아이템
-  final List<String> _processTypeDropdownItem = ["유형1", "유형2", "유형3"];
-  String _processTypeDropdownVal = "";
+  // 요청 유형 아이템
+  final List<String> _reqTypeDropdownItem = Common.getComCode(ConstantValues.kCodeReqType).map((c) => c.name).toList();
+  String _reqTypeDropdownVal = "";
+
+  // 이벤트 객체 (상세조회시 사용)
+  OperationEvent? _event;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    // 분류 콤보박스 아이템
-    _divDropDownVal = _divDropdownItem[0];
-    // 서비스 채널 아이템
-    _chanelDropDownVal = _chanelDropdownItem[0];
-    // 처리 유형 아이템
-    _processTypeDropdownVal = _processTypeDropdownItem[0];
-    // 의뢰 시간
+
+    // 초기값
+    _systemDropdownVal = _systemDropdownItem[0];
+    _reqMethodDropdownVal = _reqMethodDropdownItem[0];
+    _reqTypeDropdownVal = _reqTypeDropdownItem[0];
     _reqDatetimeValue = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
+
+    print('readOnly: ${widget.readOnly}');
+    // 이벤트 정보 초기화
+    initEvent();
   }
 
   @override
   Widget build(BuildContext context) {
+    // 이벤트 조회
     print('event_dialog build!');
     return Container(
         width: 550,
@@ -55,10 +67,12 @@ class _MvEventDialogState extends State<MvEventDialog> {
           children: [
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.all(5),
-              color: ConstantValues.kColorBlue05,
+              padding: const EdgeInsets.all(8),
               child: const Text("의뢰자 정보"),
-              //child: Text(Common.comCodes['state_cd']!.length == 0 ? '' : Common.comCodes['state_cd']![0].name)
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  color: ConstantValues.kColorBlue
+              )
             ),
             Container(
               padding: const EdgeInsets.all(10),
@@ -67,34 +81,25 @@ class _MvEventDialogState extends State<MvEventDialog> {
                 children: [
                   Row(
                     children: [
-                      Flexible(child: Row(
-                        children: [
-                            Flexible(child: makeCell(labelText: "이름", required: true, maxLength: 5)),
-                            SizedBox(child: ElevatedButton(onPressed: () { showGetUserPop(); },
-                            child: const Text("조회"))),
-                          ]
-                        )
-                      ),
-                      const SizedBox(width: 10),
-                      Flexible(child: makeCell(labelText: "소속", required: true))
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
-                    children: [
-                      Flexible(child: makeCell(labelText: "전화번호", onlyNumber: true, maxLength: 11)),
-                      const SizedBox(width: 10),
-                      Flexible(child: makeCell(labelText: "e-mail"))
+                      Expanded(child: makeTextCell(readOnly: true, required: true,
+                          decoration: makeInputDecoration(required: true, labelText: "이름"), fontSize:ConstantValues.kBodyFontSize)),
+                      const SizedBox(width: 15),
+                      Expanded(child: makeTextCell(readOnly: true, required: true,
+                          decoration: makeInputDecoration(required: true, labelText: "소속"), fontSize:ConstantValues.kBodyFontSize)),
                     ],
                   ),
                 ],
               ),
             ),
+            const SizedBox(height: 20),
             Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(5),
-              color: ConstantValues.kColorBlue05,
-              child: const Text("의뢰 정보"),
+                width: double.infinity,
+                padding: const EdgeInsets.all(8),
+                child: const Text("의뢰 정보"),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: ConstantValues.kColorBlue
+                )
             ),
             Container(
               padding: const EdgeInsets.all(10),
@@ -103,61 +108,78 @@ class _MvEventDialogState extends State<MvEventDialog> {
                 children: [
                   Row(
                     children: [
-                      Flexible(fit: FlexFit.tight, child: makeCellWithReqDatetime("외뢰시간")),
+                      Expanded(child:
+                        makeDatetimeCell(
+                          readOnly: true,
+                          disabled: widget.readOnly,
+                          decoration: makeInputDecoration(required: true, labelText: "의뢰시간"),
+                          onSelected: (value) {
+                            setState(() {
+                              _reqDatetimeValue = DateFormat('yyyy-MM-dd HH:mm:ss').format(value);
+                            });
+                          },
+                          controller: TextEditingController(text: _reqDatetimeValue),
+                          context: context,
+                          fontSize:ConstantValues.kBodyFontSize)),
                     ],
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 15),
                   Row(
                     children: [
-                      Flexible(child: Row(
-                        children: [
-                          Flexible(child: makeCell(labelText: "처리자", required: true)),
-                          SizedBox(child: ElevatedButton(onPressed: () { showGetUserPop();  },
-                              child: const Text("조회")))
-                        ],
-                      )),
-                      const SizedBox(width: 10),
-                      Flexible(
-                          child: makeCellWithDropdown('분류', true, _divDropdownItem, _divDropDownVal, (value) {
-                            _divDropDownVal = value;
-                          })
+                      Expanded(child: makeTextCell(readOnly: true, required: true,
+                          decoration: makeInputDecoration(required: true, labelText: "처리자"),
+                          fontSize:ConstantValues.kBodyFontSize, controller: TextEditingController(text: _event?.charger?.name))),
+                      const SizedBox(width: 15),
+                      Expanded(
+                        child: makeCellWithDropdown(decoration: makeInputDecoration(required: true, labelText: "시스템"),
+                          item: _systemDropdownItem, value: _systemDropdownVal, callback: (){}, fontSize:ConstantValues.kBodyFontSize,
+                          disabled: widget.readOnly)
                       )
                     ],
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 15),
                   Row(
                     children: [
-                      Flexible(child: makeCellWithDropdown("처리유형", true, _processTypeDropdownItem, _processTypeDropdownVal, (value) {
-                        _processTypeDropdownVal = value;
-                      })),
-                      const SizedBox(width: 10),
-                      Flexible(child: makeCellWithDropdown("서비스채널", true, _chanelDropdownItem, _chanelDropDownVal, (value) {
-                        _chanelDropDownVal = value;
-                      }))
+                      Expanded(
+                          child: makeCellWithDropdown(decoration: makeInputDecoration(required: true, labelText: "요청유형"),
+                            item: _reqTypeDropdownItem, value: _reqTypeDropdownVal, callback: (){}, fontSize:ConstantValues.kBodyFontSize,
+                            disabled: widget.readOnly)
+                      ),
+                      const SizedBox(width: 15),
+                      Expanded(
+                          child: makeCellWithDropdown(decoration: makeInputDecoration(required: true, labelText: "요청경로"),
+                            item: _reqMethodDropdownItem, value: _reqMethodDropdownVal, callback: (){}, fontSize:ConstantValues.kBodyFontSize,
+                            disabled: widget.readOnly)
+                      )
                     ],
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 15),
                   Row(
                     children: [
-                      Flexible(fit: FlexFit.tight, child: makeCell(labelText: "요약", maxLength: 100)),
+                      Expanded(child: makeTextCell(decoration: makeInputDecoration(labelText: "제목"),
+                          controller: TextEditingController(text: _event?.title), fontSize:ConstantValues.kBodyFontSize,
+                          maxLines: 2, maxLength: 100, readOnly: widget.readOnly)),
                     ],
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 15),
                   Row(
                     children: [
-                      Flexible(fit: FlexFit.tight, child: makeCell(labelText: "요청내용", maxLength: 500, required: true, maxLines: 5)),
+                      Expanded(child: makeTextCell(decoration: makeInputDecoration(required: true, labelText: "요청내용"),
+                          maxLines: 8, maxLength: 500, controller: TextEditingController(text: _event?.evntDesc),
+                          fontSize:ConstantValues.kBodyFontSize, readOnly: widget.readOnly)),
+                    ]
+                  ),
+                  const SizedBox(height: 15),
+                  Row(
+                    children: [
+                      Expanded(child: makeTextCell(decoration: makeInputDecoration(labelText: "첨부파일"), fontSize:ConstantValues.kBodyFontSize)),
                     ],
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 15),
                   Row(
                     children: [
-                      Flexible(fit: FlexFit.tight, child: makeCell(labelText: "첨부파일")),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
-                    children: [
-                      Flexible(fit: FlexFit.tight, child: makeCell(labelText: "태그")),
+                      Expanded(child: makeTextCell(decoration: makeInputDecoration(labelText: "태그"),
+                          fontSize:ConstantValues.kBodyFontSize, readOnly: widget.readOnly)),
                     ],
                   )
                 ],
@@ -165,96 +187,10 @@ class _MvEventDialogState extends State<MvEventDialog> {
             ),
           ],
         )
-      );
-  }
-
-  /// 데코레이션 생성
-  InputDecoration makeInputDecoration(String labelText, bool required) {
-    return InputDecoration(
-        labelStyle: TextStyle(fontSize: 12, color: required ? Colors.red : Colors.grey),
-        labelText: "$labelText" + (required ? " *" : ""),
-        enabledBorder: const OutlineInputBorder(
-          borderSide: BorderSide(
-              color: Colors.grey,
-              width: 1),
-        ),
-        isDense: true,
-        contentPadding: EdgeInsets.all(12),
-        counterText: ""
     );
   }
 
-  /// 드랍다운 셀 생성
-  ///
-  /// [labelText]라벨, [required]필수여부, [item]아이템목록, [value]초기값, [callback]선택콜백
-  Widget makeCellWithDropdown(String labelText, bool required, List item, String value, Function callback) {
-    return DropdownButtonHideUnderline(
-      child: DropdownButtonFormField2(
-          decoration: makeInputDecoration(labelText, true),
-          isExpanded: true,
-          onChanged: (item) {
-            print(item);
-            callback.call(item);
-          },
-          items: item.map((item) {
-            return DropdownMenuItem(
-              value: item,
-              child: Text(item),
-            );
-          }).toList(),
-          value: value
-      )
-    );
-  }
-
-  /// 의뢰시간 셀 생성
-  TextField makeCellWithReqDatetime(String labelText) {
-    return TextField(
-      decoration: makeInputDecoration(labelText, true),
-      readOnly: true,
-      controller: TextEditingController(text: _reqDatetimeValue),
-      onTap: () async {
-        DateTime? now = await showOmniDateTimePicker(
-          context: context,
-          // 최초 시간
-          initialDate: DateTime.now(),
-        );
-        setState(() {
-          // 시간 쓰기
-          _reqDatetimeValue = DateFormat('yyyy-MM-dd HH:mm:ss').format(now!);
-        });
-      }
-    );
-  }
-
-  /// 셀을 생성한다
-  ///
-  /// [labelText]라벨, [requried]필수여부, [onlyNumber]숫자여부, [maxLength]최대길이
-  /// [readOnly]조회만가능여부, [maxLines]최대라인
-  TextField makeCell({
-    required String labelText,
-    bool required = false,
-    bool onlyNumber = false,
-    int maxLength = 10,
-    bool readOnly = false,
-    int maxLines = 1
-  }) {
-    return TextField(
-      readOnly: readOnly,
-      textInputAction: TextInputAction.newline,
-      decoration: makeInputDecoration(labelText, required),
-      maxLength: maxLength,
-      maxLines: maxLines,
-      keyboardType: onlyNumber
-          ? const TextInputType.numberWithOptions(decimal: true)
-          : TextInputType.multiline,
-      inputFormatters: onlyNumber
-          ? [FilteringTextInputFormatter.allow(RegExp('[0-9.,]+'))]
-          : [],
-    );
-  }
-
-  void showGetUserPop() {
+  void showUserPop() {
     showDialog(
         context: context,
         barrierDismissible: true,
@@ -273,5 +209,15 @@ class _MvEventDialogState extends State<MvEventDialog> {
             ],
           );
         }));
+  }
+
+  /// 이벤트 조회
+  void initEvent() async {
+    if (widget.evntId != null) {
+      var eventMap = await _rest.getEventById(widget.evntId!);
+      setState(() {
+        _event = OperationEvent.fromJson(eventMap);
+      });
+    }
   }
 }
