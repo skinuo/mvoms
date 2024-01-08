@@ -55,6 +55,7 @@ class _MVOMSHomeState extends State<MVOMSHome> with Common {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      print('main init!');
       //initUser();
       //initComCode();
     });
@@ -114,11 +115,12 @@ class _MVOMSHomeState extends State<MVOMSHome> with Common {
               style: const TextStyle(fontSize: ConstantValues.kBodyFontSize),
               child: const TabBarView(children: [
                 // 탭1
-                const Text("home"),
+                //const Text("home"),
                 // 탭2
                 MVOMSEvent(),
                 // 탭3
                 Text("b"),
+                const Text("home"),
               ]),
             ),
           ),
@@ -158,18 +160,9 @@ class _MVOMSHomeState extends State<MVOMSHome> with Common {
       CommonCode code = CommonCode.fromJson(s);
       state.add(code);
     }
-    Common.addCode(ConstantValues.kCodeState, state);
+    Common.addComCode(ConstantValues.kCodeState, state);
   }
 
-  /// 세션 유효성 검증
-  ///
-  /// * 로컬 세션 있는지 확인
-  /// * > 세션 있으면 서버에 유효 여부 체크
-  /// * > > 서버에서 유효함 반환
-  /// * > > > 사용자표시
-  /// * > > 서버에서 만료됨 반환
-  /// * > > > 로그아웃 하고 로그인 페이지로 이동
-  /// * > 세션 없으면 로그인 페이지로 이동
   void initUser() {
     if (!_localStorage.containsKey("user")) {
       // 로그인페이지로 이동

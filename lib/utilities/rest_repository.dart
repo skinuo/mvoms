@@ -54,6 +54,16 @@ class RestRepogitory {
     return req(get: true, uri:'/mytest');
   }
 
+  Future<dynamic> getEventList({
+      required int page,
+      int size = 10,
+      String? sort,
+      String? direction,
+      String? title,
+    }) {
+    return req(get: true, uri:'/op-event/list?pg_page=$page&pg_size=$size');
+  }
+
   /// 요청 전송
   ///
   /// - [get]: get방식여부

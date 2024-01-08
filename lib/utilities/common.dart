@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 
 import '../models/common_code.dart';
-import '../models/user.dart';
 
 mixin Common {
   // 공통코드
@@ -13,18 +12,18 @@ mixin Common {
   /// 공통코드 조회
   ///
   /// - [id]: 코드아이디
-  static List<CommonCode>? getCode(String id) => _comCodes[id];
+  static List<CommonCode>? getComCode(String id) => _comCodes[id];
 
   /// 공통코드 쓰기
   ///
   /// - [comCodes]: 공통코드
-  static set setCodes(Map<String, List<CommonCode>> comCodes) => _comCodes = comCodes;
+  static set setComCodes(Map<String, List<CommonCode>> comCodes) => _comCodes = comCodes;
 
   /// 공통코드 추가
   ///
   /// - [key]: 코드키
   /// - [comCodes]: 코드목록
-  static void addCode(String key, List<CommonCode> comCodes) {
+  static void addComCode(String key, List<CommonCode> comCodes) {
     _comCodes[key] = comCodes;
   }
 
