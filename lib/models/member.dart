@@ -4,7 +4,7 @@ import 'department.dart';
 part 'member.freezed.dart';
 part 'member.g.dart';
 
-/// 이벤트 관리
+/// 사용자 관리
 @freezed
 class Member with _$Member {
   factory Member({

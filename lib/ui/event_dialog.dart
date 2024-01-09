@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mvoms/models/operation_event.dart';
-import '../utilities/common.dart';
+import '../utilities/global.dart';
+import '../utilities/input_widget_maker.dart';
 import '../utilities/constants.dart';
 import '../utilities/rest_repository.dart';
 
@@ -18,7 +19,7 @@ class MvEventDialog extends StatefulWidget {
   State<MvEventDialog> createState() => _MvEventDialogState();
 }
 
-class _MvEventDialogState extends State<MvEventDialog> with Common {
+class _MvEventDialogState extends State<MvEventDialog> with InputWidgetMaker {
 
   final _rest = RestRepogitory();
 
@@ -26,15 +27,15 @@ class _MvEventDialogState extends State<MvEventDialog> with Common {
   String _reqDatetimeValue = "";
 
   // 시스템 콤보박스 아이템
-  final List<String> _systemDropdownItem = ["정보", "정보2", "정보3"];
+  List<String> _systemDropdownItem = ["정보", "정보2", "정보3"];
   String _systemDropdownVal = "";
 
   // 요청 경로 아이템
-  final List<String> _reqMethodDropdownItem = Common.getComCode(ConstantValues.kCodeReqMethod).map((c) => c.name).toList();
+  late final List<String> _reqMethodDropdownItem;
   String _reqMethodDropdownVal = "";
 
   // 요청 유형 아이템
-  final List<String> _reqTypeDropdownItem = Common.getComCode(ConstantValues.kCodeReqType).map((c) => c.name).toList();
+  late final List<String> _reqTypeDropdownItem;
   String _reqTypeDropdownVal = "";
 
   // 이벤트 객체 (상세조회시 사용)
@@ -46,6 +47,9 @@ class _MvEventDialogState extends State<MvEventDialog> with Common {
     super.initState();
 
     // 초기값
+    _reqMethodDropdownItem = getCodeList(ConstantValues.kCodeReqMethod);
+    _reqTypeDropdownItem = getCodeList(ConstantValues.kCodeReqType);
+
     _systemDropdownVal = _systemDropdownItem[0];
     _reqMethodDropdownVal = _reqMethodDropdownItem[0];
     _reqTypeDropdownVal = _reqTypeDropdownItem[0];
@@ -68,11 +72,11 @@ class _MvEventDialogState extends State<MvEventDialog> with Common {
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(8),
-              child: const Text("의뢰자 정보"),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5),
                   color: ConstantValues.kColorBlue
-              )
+              ),
+              child: const Text("의뢰자 정보")
             ),
             Container(
               padding: const EdgeInsets.all(10),
@@ -95,11 +99,11 @@ class _MvEventDialogState extends State<MvEventDialog> with Common {
             Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(8),
-                child: const Text("의뢰 정보"),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5),
                     color: ConstantValues.kColorBlue
-                )
+                ),
+                child: const Text("의뢰 정보")
             ),
             Container(
               padding: const EdgeInsets.all(10),
@@ -219,5 +223,10 @@ class _MvEventDialogState extends State<MvEventDialog> with Common {
         _event = OperationEvent.fromJson(eventMap);
       });
     }
+  }
+
+  List<String> getCodeList(String id) {
+    var list = Global.getComCode(id)?.map((c) => c.name).toList();
+    return list ?? [];
   }
 }

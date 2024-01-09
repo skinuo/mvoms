@@ -5,7 +5,7 @@ import 'organization.dart';
 part 'department.freezed.dart';
 part 'department.g.dart';
 
-/// 이벤트 관리
+/// 부서 관리
 @freezed
 class Department with _$Department {
   factory Department({

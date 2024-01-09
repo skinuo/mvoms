@@ -3,47 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 
-import '../models/common_code.dart';
-
-mixin Common {
-  // 공통코드
-  static Map<String, List<CommonCode>> _comCodes = {};
-  static Map<String, Map<String,CommonCode>> _comCodeMap = {};
-
-  /// 공통코드 조회
-  ///
-  /// - [id]: 코드아이디
-  static List<CommonCode> getComCode(String id) => _comCodes[id]!;
-
-  /// 공통코드 쓰기
-  ///
-  /// - [comCodes]: 공통코드
-  static set setComCodes(Map<String, List<CommonCode>> comCodes) => _comCodes = comCodes;
-
-  /// 공통코드 추가
-  ///
-  /// - [id]: id
-  /// - [comCodes]: 코드목록
-  static void addComCode(String id, List<CommonCode> comCodes) {
-    _comCodes[id] = comCodes;
-    _comCodeMap[id] = {};
-    for (var c in comCodes) {
-      _comCodeMap[id]![c.code] = c;
-    }
-  }
-
-  /// 키로 공통코드 반환
-  ///
-  /// - [id]: id
-  /// - [code]: code
-  static CommonCode? getComCodeByKey(String id, String code) => _comCodeMap[id]?[code];
-
-  /// 공통코드 이름 반환
-  ///
-  /// - [id]: id
-  /// - [code]: code
-  static String? getComCodeName(String id, String code) => getComCodeByKey(id, code)?.name;
-
+/// 공통 입력 위젯 생성 mixin
+mixin InputWidgetMaker {
   /// 드랍다운 셀 생성
   ///
   /// - [item]: 아이템 목록

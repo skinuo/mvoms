@@ -4,7 +4,8 @@ import 'package:mvoms/models/operation_event.dart';
 import 'package:mvoms/models/pagination.dart';
 import 'package:mvoms/ui/search.dart';
 
-import '../utilities/common.dart';
+import '../utilities/global.dart';
+import '../utilities/input_widget_maker.dart';
 import '../utilities/constants.dart';
 import '../utilities/rest_repository.dart';
 import 'event_dialog.dart';
@@ -17,7 +18,7 @@ class MVOMSEvent extends StatefulWidget {
   State<MVOMSEvent> createState() => _MVOMSEventState();
 }
 
-class _MVOMSEventState extends State<MVOMSEvent> with Common {
+class _MVOMSEventState extends State<MVOMSEvent> with InputWidgetMaker {
   late final int _newEventCount;
   late final int _notCompleteEventCount;
   late final String _eventCountValue;
@@ -160,7 +161,7 @@ class _MVOMSEventState extends State<MVOMSEvent> with Common {
                           child: Center(child: Text(_rows[idx].charger == null ? "" : _rows[idx].charger!.name))),
                       Expanded(
                           flex: 1,
-                          child: Center(child: Text(Common.getComCodeName(ConstantValues.kCodeState, _rows[idx].stateCd)!))),
+                          child: Center(child: Text(Global.getComCodeName(ConstantValues.kCodeState, _rows[idx].stateCd)!))),
                     ],
                   ));
             },

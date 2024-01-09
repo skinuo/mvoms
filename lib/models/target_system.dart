@@ -3,7 +3,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'target_system.freezed.dart';
 part 'target_system.g.dart';
 
-/// 이벤트 관리
+/// 대상 시스템 관리
 @freezed
 class TargetSystem with _$TargetSystem {
   factory TargetSystem({

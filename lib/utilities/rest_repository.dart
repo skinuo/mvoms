@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:mvoms/utilities/auth_updater.dart';
+import 'package:mvoms/utilities/constants.dart';
 
 /// REST 요청 관리
 class RestRepogitory {
@@ -83,8 +84,9 @@ class RestRepogitory {
       res = _dio.post(uri, options: options);
     }
     return res.then((response) {
-      // 인증오류
-      if (response.data == "auth-fail") {
+      // TODO.. 상태코드별 오류 처리
+      if (response.statusCode != 200) {
+        print("${ConstantValues.kHttpStatus[response.statusCode]}");
         return Future.error(response);
       } else {
         return response.data;

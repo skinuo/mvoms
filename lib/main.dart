@@ -4,13 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mvoms/models/common_code.dart';
 import 'package:mvoms/models/user.dart';
-import 'package:mvoms/providers/main_provider.dart';
+import 'package:mvoms/providers/global_provider.dart';
 import 'package:mvoms/ui/event.dart';
+import 'package:mvoms/ui/loading.dart';
 import 'package:mvoms/utilities/auth_updater.dart';
+import 'package:mvoms/utilities/global.dart';
 import 'package:mvoms/utilities/constants.dart';
 import 'package:mvoms/utilities/rest_repository.dart';
 import 'package:provider/provider.dart';
-import 'utilities/common.dart';
+import 'utilities/input_widget_maker.dart';
 import 'ui/login.dart';
 import 'dart:html';
 
@@ -22,7 +24,7 @@ void main() {
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
-      home: MVOMSHome()));
+      home: MVOMSLoading()));
 }
 
 class MVOMSHome extends StatefulWidget {
@@ -32,7 +34,7 @@ class MVOMSHome extends StatefulWidget {
   State<MVOMSHome> createState() => _MVOMSHomeState();
 }
 
-class _MVOMSHomeState extends State<MVOMSHome> with Common {
+class _MVOMSHomeState extends State<MVOMSHome> with InputWidgetMaker {
   // 요청 관리
   final _rest = RestRepogitory();
 
@@ -57,7 +59,9 @@ class _MVOMSHomeState extends State<MVOMSHome> with Common {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       print('main init!');
       //initUser();
-      initComCode();
+      print('comcode start');
+      await initComCode();
+      print('comcode end');
     });
   }
 
@@ -115,12 +119,11 @@ class _MVOMSHomeState extends State<MVOMSHome> with Common {
               style: const TextStyle(fontSize: ConstantValues.kBodyFontSize),
               child: const TabBarView(children: [
                 // 탭1
-                //const Text("home"),
+                const Text("home"),
                 // 탭2
                 MVOMSEvent(),
                 // 탭3
                 Text("b"),
-                const Text("home"),
               ]),
             ),
           ),
@@ -153,7 +156,7 @@ class _MVOMSHomeState extends State<MVOMSHome> with Common {
   }*/
 
   /// 공통코드 초기화
-  void initComCode() async {
+  Future initComCode() async {
     List<String> codeIds = [
       ConstantValues.kCodeState,
       ConstantValues.kCodeReqMethod,
@@ -167,7 +170,7 @@ class _MVOMSHomeState extends State<MVOMSHome> with Common {
         CommonCode code = CommonCode.fromJson(s);
         codes.add(code);
       }
-      Common.addComCode(id, codes);
+      Global.addComCode(id, codes);
     }
   }
 

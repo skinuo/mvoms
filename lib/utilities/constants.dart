@@ -12,12 +12,18 @@ class ConstantValues {
   // 비밀번호 암호화 키
   static const String kEncKey = "mvsoftech07076393629j;kasjf;lksjf;ajf3foisdflkj";
 
-  // 공통 코드 키
+  // 공통 코드
   // 상태 코드
   static const String kCodeState = "state_cd";
   // 요청 경로
   static const String kCodeReqMethod = "req_mthd_cd";
   // 요청 유형
   static const String kCodeReqType = "req_tp_cd";
+
+  // http 상태
+  static const Map<int, String> kHttpStatus = {
+      461: "대상 객체가 존재하지 않음",
+      462: "대상 객체가 이미 존재함",
+  };
 }
 

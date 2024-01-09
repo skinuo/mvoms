@@ -2,7 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'organization.freezed.dart';
 part 'organization.g.dart';
 
-/// 이벤트 관리
+/// 기관 관리
 @freezed
 class Organization with _$Organization {
   factory Organization({

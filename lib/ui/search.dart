@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mvoms/utilities/auth_updater.dart';
+import 'package:mvoms/utilities/global.dart';
 
 import '../models/common_code.dart';
-import '../utilities/common.dart';
+import '../utilities/input_widget_maker.dart';
 import '../utilities/constants.dart';
 
 /// 검색 위젯 구현
@@ -13,7 +14,7 @@ class MVOMSSearch extends StatefulWidget {
   State<MVOMSSearch> createState() => _MVOMSSearchState();
 }
 
-class _MVOMSSearchState extends State<MVOMSSearch> with Common {
+class _MVOMSSearchState extends State<MVOMSSearch> with InputWidgetMaker {
   // 발생일시
   String _evntTimeStart = "";
   String _evntTimeEnd = "";
@@ -21,10 +22,17 @@ class _MVOMSSearchState extends State<MVOMSSearch> with Common {
   String _closeTimeStart = "";
   String _closeTimeEnd = "";
 
-  // 공통코드
   // 상태 코드
-  final List<CommonCode> _stateCodes = [];
-  final List<String> _stateCodeNms = [];
+  late final List<String> _stateCodeNames;
+  String _stateCodeName = "";
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _stateCodeNames = Global.getComCode(ConstantValues.kCodeState)?.map((c) => c.name).toList() ?? [];
+    _stateCodeName = _stateCodeNames[0];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -83,8 +91,8 @@ class _MVOMSSearchState extends State<MVOMSSearch> with Common {
                         SizedBox(
                           width: 200,
                           child: makeCellWithDropdown(
-                              item: _stateCodeNms,
-                              value: _stateCodeNms.isNotEmpty ? _stateCodeNms[0]! : "",
+                              item: _stateCodeNames,
+                              value: _stateCodeName,
                               decoration: makeInputDecoration(),
                               fontSize: ConstantValues.kBodyFontSize,
                               callback: (){}),
