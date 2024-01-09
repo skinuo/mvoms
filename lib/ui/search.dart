@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:mvoms/models/operation_event_search_condition.dart';
 import 'package:mvoms/utilities/auth_updater.dart';
 import 'package:mvoms/utilities/global.dart';
 
 import '../models/common_code.dart';
-import '../utilities/input_widget_maker.dart';
+import '../utilities/input_widget.dart';
 import '../utilities/constants.dart';
 
 /// 검색 위젯 구현
@@ -14,7 +16,11 @@ class MVOMSSearch extends StatefulWidget {
   State<MVOMSSearch> createState() => _MVOMSSearchState();
 }
 
-class _MVOMSSearchState extends State<MVOMSSearch> with InputWidgetMaker {
+class _MVOMSSearchState extends State<MVOMSSearch> with InputWidget {
+
+  // 검색조건
+  OperationEventSearchCondition _cond = OperationEventSearchCondition();
+
   // 발생일시
   String _evntTimeStart = "";
   String _evntTimeEnd = "";
@@ -30,7 +36,7 @@ class _MVOMSSearchState extends State<MVOMSSearch> with InputWidgetMaker {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _stateCodeNames = Global.getComCode(ConstantValues.kCodeState)?.map((c) => c.name).toList() ?? [];
+    _stateCodeNames = Global.getComCode(ConstantValues.kCodeState).map((c) => c.name).toList();
     _stateCodeName = _stateCodeNames[0];
   }
 
@@ -66,7 +72,15 @@ class _MVOMSSearchState extends State<MVOMSSearch> with InputWidgetMaker {
                         ),
                         SizedBox(
                             width: 250,
-                            child: makeTextCell(maxLength: 50, decoration: makeInputDecoration(), fontSize: ConstantValues.kBodyFontSize)),
+                            child: makeTextCell(
+                              controller: TextEditingController(text: _cond.titleLike),
+                              maxLength: 50,
+                              decoration: makeInputDecoration(),
+                              fontSize: ConstantValues.kBodyFontSize,
+                              onChanged: (v) {
+                                _cond.titleLike = v;
+                              }
+                            )),
                         Expanded(
                           child: Row(
                             children: [
@@ -117,7 +131,7 @@ class _MVOMSSearchState extends State<MVOMSSearch> with InputWidgetMaker {
                                       controller: TextEditingController(text: _evntTimeStart),
                                       onSelected: (value) {
                                         setState(() {
-                                          _evntTimeStart = value.toString();
+                                          _evntTimeStart = DateFormat('yyyy-MM-dd').format(value);
                                         });
                                       },
                                       readOnly: true,
@@ -136,7 +150,7 @@ class _MVOMSSearchState extends State<MVOMSSearch> with InputWidgetMaker {
                                       controller: TextEditingController(text: _evntTimeEnd),
                                       onSelected: (value) {
                                         setState(() {
-                                          _evntTimeEnd = value.toString();
+                                          _evntTimeEnd = DateFormat('yyyy-MM-dd').format(value);
                                         });
                                       },
                                       readOnly: true,
@@ -160,7 +174,7 @@ class _MVOMSSearchState extends State<MVOMSSearch> with InputWidgetMaker {
                                       controller: TextEditingController(text: _closeTimeStart),
                                       onSelected: (value) {
                                         setState(() {
-                                          _closeTimeStart = value.toString();
+                                          _closeTimeStart = DateFormat('yyyy-MM-dd').format(value);
                                         });
                                       },
                                       readOnly: true,
@@ -179,7 +193,7 @@ class _MVOMSSearchState extends State<MVOMSSearch> with InputWidgetMaker {
                                       controller: TextEditingController(text: _closeTimeEnd),
                                       onSelected: (value) {
                                         setState(() {
-                                          _closeTimeEnd = value.toString();
+                                          _closeTimeEnd = DateFormat('yyyy-MM-dd').format(value);
                                         });
                                       },
                                       readOnly: true,
@@ -197,6 +211,8 @@ class _MVOMSSearchState extends State<MVOMSSearch> with InputWidgetMaker {
                             width: 80,
                             child: ElevatedButton(
                               onPressed: (){
+                                print('검색!');
+                                print(_cond.titleLike);
                               },
                               child: const Text("검색"),
                             )

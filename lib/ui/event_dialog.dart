@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mvoms/models/operation_event.dart';
 import '../utilities/global.dart';
-import '../utilities/input_widget_maker.dart';
+import '../utilities/input_widget.dart';
 import '../utilities/constants.dart';
 import '../utilities/rest_repository.dart';
 
@@ -19,7 +19,7 @@ class MvEventDialog extends StatefulWidget {
   State<MvEventDialog> createState() => _MvEventDialogState();
 }
 
-class _MvEventDialogState extends State<MvEventDialog> with InputWidgetMaker {
+class _MvEventDialogState extends State<MvEventDialog> with InputWidget {
 
   final _rest = RestRepogitory();
 

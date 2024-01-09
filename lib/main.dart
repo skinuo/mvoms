@@ -6,13 +6,12 @@ import 'package:mvoms/models/common_code.dart';
 import 'package:mvoms/models/user.dart';
 import 'package:mvoms/providers/global_provider.dart';
 import 'package:mvoms/ui/event.dart';
-import 'package:mvoms/ui/loading.dart';
 import 'package:mvoms/utilities/auth_updater.dart';
 import 'package:mvoms/utilities/global.dart';
 import 'package:mvoms/utilities/constants.dart';
 import 'package:mvoms/utilities/rest_repository.dart';
 import 'package:provider/provider.dart';
-import 'utilities/input_widget_maker.dart';
+import 'utilities/input_widget.dart';
 import 'ui/login.dart';
 import 'dart:html';
 
@@ -24,17 +23,17 @@ void main() {
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
-      home: MVOMSLoading()));
+      home: MVOMSMain()));
 }
 
-class MVOMSHome extends StatefulWidget {
-  const MVOMSHome({super.key});
+class MVOMSMain extends StatefulWidget {
+  const MVOMSMain({super.key});
 
   @override
-  State<MVOMSHome> createState() => _MVOMSHomeState();
+  State<MVOMSMain> createState() => _MVOMSMainState();
 }
 
-class _MVOMSHomeState extends State<MVOMSHome> with InputWidgetMaker {
+class _MVOMSMainState extends State<MVOMSMain> with InputWidget {
   // 요청 관리
   final _rest = RestRepogitory();
 
@@ -48,8 +47,8 @@ class _MVOMSHomeState extends State<MVOMSHome> with InputWidgetMaker {
   // 사용자 정보 출력 텍스트
   String _userInfoValue = "...";
 
-  // 공통코드
-  final Map<String, List<CommonCode>> _comCodes = {};
+  // 메인 로드 여부
+  bool loaded = false;
 
   @override
   void initState() {
@@ -58,78 +57,86 @@ class _MVOMSHomeState extends State<MVOMSHome> with InputWidgetMaker {
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       print('main init!');
-      //initUser();
-      print('comcode start');
+      // 공통 코드 세팅
       await initComCode();
-      print('comcode end');
+      // 로딩바 걷고 메인 보이기
+      loaded = true;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     print('main build!');
-
-    return Container(
-      color: Colors.black12,
-      child: DefaultTabController(
-        length: 3,
-        child: Scaffold(
-          appBar: AppBar(
-              toolbarHeight: 30,
-              backgroundColor: ConstantValues.kColorGray,
-              centerTitle: true,
-              // 탭바 구성
-              bottom: const TabBar(tabs: [
-                Tab(text: "home"),
-                Tab(text: "이벤트"),
-                Tab(icon: Icon(Icons.star))
-              ]),
-              title: Row(
-                children: [
-                  Flexible(fit: FlexFit.tight, child: Center(child: Text(""))),
-                  Flexible(
-                      fit: FlexFit.tight, child: Center(child: Text("MVOMS"))),
-                  // 사용자 정보 출력
-                  Flexible(
-                    fit: FlexFit.tight,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text(_userInfoValue,
-                            style: const TextStyle(fontSize: 12)),
-                        SizedBox(width: 10),
-                        SizedBox(
-                            child: TextButton(
-                                onPressed: () {
-                                  print("stop");
-                                  AuthUpdater.instance.stop();
-                                },
-                                child: Text("로그아웃",
-                                    style: TextStyle(fontSize: 12))))
-                      ],
-                    ),
-                  )
-                ],
-              )),
-          body: Container(
-            padding: const EdgeInsets.fromLTRB(15, 0, 15, 15),
-            color: ConstantValues.kColorGray,
-            child: DefaultTextStyle.merge(
-              // 하위 탭 폰트 사이즈 지정
-              style: const TextStyle(fontSize: ConstantValues.kBodyFontSize),
-              child: const TabBarView(children: [
-                // 탭1
-                const Text("home"),
-                // 탭2
-                MVOMSEvent(),
-                // 탭3
-                Text("b"),
-              ]),
+    if (!loaded) {
+      print('main not loaded!');
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    } else {
+      print('main loaded!');
+      return Container(
+        color: Colors.black12,
+        child: DefaultTabController(
+          length: 3,
+          child: Scaffold(
+            appBar: AppBar(
+                toolbarHeight: 30,
+                backgroundColor: ConstantValues.kColorGray,
+                centerTitle: true,
+                // 탭바 구성
+                bottom: const TabBar(tabs: [
+                  Tab(text: "home"),
+                  Tab(text: "이벤트"),
+                  Tab(icon: Icon(Icons.star))
+                ]),
+                title: Row(
+                  children: [
+                    Flexible(fit: FlexFit.tight, child: Center(child: Text(""))),
+                    const Flexible(
+                        fit: FlexFit.tight, child: Center(child: Text("MVOMS"))),
+                    // 사용자 정보 출력
+                    Flexible(
+                      fit: FlexFit.tight,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text(_userInfoValue,
+                              style: const TextStyle(fontSize: 12)),
+                          const SizedBox(width: 10),
+                          SizedBox(
+                              child: TextButton(
+                                  onPressed: () {
+                                    print("stop");
+                                    AuthUpdater.instance.stop();
+                                  },
+                                  child: const Text("로그아웃",
+                                      style: TextStyle(fontSize: 12))))
+                        ],
+                      ),
+                    )
+                  ],
+                )),
+            body: Container(
+              padding: const EdgeInsets.fromLTRB(15, 0, 15, 15),
+              color: ConstantValues.kColorGray,
+              child: DefaultTextStyle.merge(
+                // 하위 탭 폰트 사이즈 지정
+                style: const TextStyle(fontSize: ConstantValues.kBodyFontSize),
+                child: const TabBarView(children: [
+                  // 탭1
+                  //const Text("home"),
+                  // 탭2
+                  MVOMSEvent(),
+                  // 탭3
+                  Text("b"),
+                  const Text("home"),
+                ]),
+              ),
             ),
           ),
         ),
-      ),
-    );
+      );
+    }
   }
 
   /// 사용자 정보를 출력한다.

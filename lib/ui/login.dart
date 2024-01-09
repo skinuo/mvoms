@@ -205,6 +205,6 @@ class _MVOMSLoginState extends State<MVOMSLogin> {
   void goToHome() {
     // 모든 페이지 제거 하고 이동
     Navigator.pushAndRemoveUntil(context, 
-        MaterialPageRoute(builder: (context)=> const MVOMSHome()), (route) => false);
+        MaterialPageRoute(builder: (context)=> const MVOMSMain()), (route) => false);
   }
 }

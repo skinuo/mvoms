@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 
 /// 공통 입력 위젯 생성 mixin
-mixin InputWidgetMaker {
+mixin InputWidget {
   /// 드랍다운 셀 생성
   ///
   /// - [item]: 아이템 목록
@@ -74,7 +74,8 @@ mixin InputWidgetMaker {
     int maxLines = 1,
     InputDecoration? decoration,
     double? fontSize,
-    TextEditingController? controller
+    TextEditingController? controller,
+    Function? onChanged
   }) {
     decoration ??= const InputDecoration();
     return TextField(
@@ -91,6 +92,7 @@ mixin InputWidgetMaker {
       inputFormatters: onlyNumber
           ? [FilteringTextInputFormatter.allow(RegExp('[0-9.,]+'))]
           : [],
+      onChanged:(value) => onChanged?.call(value),
     );
   }
 
