@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 
+import 'constants.dart';
+
 /// 공통 입력 위젯 생성 mixin
 mixin InputWidget {
   /// 드랍다운 셀 생성
@@ -16,20 +18,19 @@ mixin InputWidget {
   Widget makeCellWithDropdown({
       required List item,
       required String value,
-      Function? callback,
+      Function? onChanged,
       InputDecoration? decoration,
-      double? fontSize,
+      double fontSize = ConstantValues.kBodyFontSize,
       bool disabled = false
     }) {
     decoration ??= const InputDecoration();
     return DropdownButtonFormField2(
-        style: fontSize != null ? TextStyle(fontSize: fontSize) : null,
+        style: TextStyle(fontSize: fontSize),
         decoration: decoration,
         isExpanded: true,
         disabledHint: disabled ? Text(value) : null,
         onChanged: !disabled ? (item) {
-          print(item);
-          callback?.call(item);
+          onChanged?.call(item);
         } : null,
         items: item.map((item) {
           return DropdownMenuItem(
@@ -45,6 +46,7 @@ mixin InputWidget {
   InputDecoration makeInputDecoration({
       String? labelText,
       bool required = false,
+      double padding = 12
     }) {
     return InputDecoration(
         labelStyle: labelText != null ? TextStyle(fontSize: 12, color: required ? Colors.red : Colors.grey) : null,
@@ -59,7 +61,7 @@ mixin InputWidget {
             width: 1),
         ),
         isDense: true,
-        contentPadding: EdgeInsets.all(12),
+        contentPadding: EdgeInsets.all(padding),
         counterText: ""
     );
   }
@@ -69,17 +71,18 @@ mixin InputWidget {
     String? labelText,
     bool required = false,
     bool onlyNumber = false,
-    int maxLength = 10,
+    int maxLength = 100,
     bool readOnly = false,
     int maxLines = 1,
     InputDecoration? decoration,
-    double? fontSize,
+    double fontSize = ConstantValues.kBodyFontSize,
     TextEditingController? controller,
-    Function? onChanged
+    Function? onChanged,
+    Function? onTab
   }) {
     decoration ??= const InputDecoration();
     return TextField(
-      style: fontSize != null ? TextStyle(fontSize: fontSize) : null,
+      style: TextStyle(fontSize: fontSize),
       readOnly: readOnly,
       textInputAction: TextInputAction.newline,
       decoration: decoration,
@@ -93,6 +96,7 @@ mixin InputWidget {
           ? [FilteringTextInputFormatter.allow(RegExp('[0-9.,]+'))]
           : [],
       onChanged:(value) => onChanged?.call(value),
+      onTap:() => onTab?.call(),
     );
   }
 
@@ -103,11 +107,11 @@ mixin InputWidget {
     required Function onSelected,
     bool readOnly = false,
     InputDecoration? decoration,
-    double? fontSize
+    double fontSize = ConstantValues.kBodyFontSize
   }) {
     decoration ??= const InputDecoration();
     return TextField(
-      style: fontSize != null ? TextStyle(fontSize: fontSize) : null,
+      style: TextStyle(fontSize: fontSize),
       decoration: decoration,
       readOnly: readOnly,
       controller: controller,
@@ -142,12 +146,12 @@ mixin InputWidget {
     Function? onSelected,
     bool readOnly = false,
     InputDecoration? decoration,
-    double? fontSize,
+    double fontSize = ConstantValues.kBodyFontSize,
     bool disabled = false
   }) {
     decoration ??= const InputDecoration();
     return TextField(
-        style: fontSize != null ? TextStyle(fontSize: fontSize) : null,
+        style: TextStyle(fontSize: fontSize),
         decoration: decoration,
         readOnly: readOnly,
         controller: controller,

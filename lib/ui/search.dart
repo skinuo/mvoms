@@ -19,7 +19,7 @@ class MVOMSSearch extends StatefulWidget {
 class _MVOMSSearchState extends State<MVOMSSearch> with InputWidget {
 
   // 검색조건
-  OperationEventSearchCondition _cond = OperationEventSearchCondition();
+  final OperationEventSearchCondition _cond = OperationEventSearchCondition();
 
   // 발생일시
   String _evntTimeStart = "";
@@ -29,7 +29,7 @@ class _MVOMSSearchState extends State<MVOMSSearch> with InputWidget {
   String _closeTimeEnd = "";
 
   // 상태 코드
-  late final List<String> _stateCodeNames;
+  late List<String> _stateCodeNames;
   String _stateCodeName = "";
 
   @override
@@ -70,19 +70,18 @@ class _MVOMSSearchState extends State<MVOMSSearch> with InputWidget {
                             width: 60,
                             child: const Text("검색어", style: TextStyle(fontWeight: FontWeight.bold))
                         ),
-                        SizedBox(
-                            width: 250,
+                        Expanded(
                             child: makeTextCell(
                               controller: TextEditingController(text: _cond.titleLike),
                               maxLength: 50,
                               decoration: makeInputDecoration(),
-                              fontSize: ConstantValues.kBodyFontSize,
                               onChanged: (v) {
                                 _cond.titleLike = v;
                               }
                             )),
                         Expanded(
                           child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Checkbox(value: false, onChanged: (value){}),
                               const Text("제목"),
@@ -97,20 +96,7 @@ class _MVOMSSearchState extends State<MVOMSSearch> with InputWidget {
                             ],
                           ),
                         ),
-                        Container(
-                            alignment: Alignment.center,
-                            width: 60,
-                            child: const Text("상태", style: TextStyle(fontWeight: FontWeight.bold))
-                        ),
-                        SizedBox(
-                          width: 200,
-                          child: makeCellWithDropdown(
-                              item: _stateCodeNames,
-                              value: _stateCodeName,
-                              decoration: makeInputDecoration(),
-                              fontSize: ConstantValues.kBodyFontSize,
-                              callback: (){}),
-                        )
+
                       ],
                     ),
                     // 간격
@@ -136,7 +122,6 @@ class _MVOMSSearchState extends State<MVOMSSearch> with InputWidget {
                                       },
                                       readOnly: true,
                                       decoration: makeInputDecoration(),
-                                      fontSize: ConstantValues.kBodyFontSize
                                   )
                               ),
                               Container(
@@ -155,7 +140,6 @@ class _MVOMSSearchState extends State<MVOMSSearch> with InputWidget {
                                       },
                                       readOnly: true,
                                       decoration: makeInputDecoration(),
-                                      fontSize: ConstantValues.kBodyFontSize
                                   )
                               ),
                             ],
@@ -179,7 +163,6 @@ class _MVOMSSearchState extends State<MVOMSSearch> with InputWidget {
                                       },
                                       readOnly: true,
                                       decoration: makeInputDecoration(),
-                                      fontSize: ConstantValues.kBodyFontSize
                                   )
                               ),
                               Container(
@@ -198,11 +181,22 @@ class _MVOMSSearchState extends State<MVOMSSearch> with InputWidget {
                                       },
                                       readOnly: true,
                                       decoration: makeInputDecoration(),
-                                      fontSize: ConstantValues.kBodyFontSize
                                   )
                               )
                             ],
                             )
+                        ),
+                        Container(
+                            alignment: Alignment.center,
+                            width: 60,
+                            child: const Text("상태", style: TextStyle(fontWeight: FontWeight.bold))
+                        ),
+                        Expanded(
+                          child: makeCellWithDropdown(
+                              item: _stateCodeNames,
+                              value: _stateCodeName,
+                              decoration: makeInputDecoration(padding: 9),
+                              onChanged: (){}),
                         ),
                         // 간격
                         const SizedBox(width: 10),

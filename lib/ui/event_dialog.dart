@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mvoms/models/operation_event.dart';
+import 'package:mvoms/models/target_system.dart';
 import '../utilities/global.dart';
 import '../utilities/input_widget.dart';
 import '../utilities/constants.dart';
 import '../utilities/rest_repository.dart';
+import 'member_dialog.dart';
+import 'new_member_dialog.dart';
 
 /// 이벤트 다이얼로그 구현
-class MvEventDialog extends StatefulWidget {
-  const MvEventDialog({super.key, required this.readOnly, this.evntId});
+class MVOMSEventDialog extends StatefulWidget {
+  const MVOMSEventDialog({super.key, required this.readOnly, this.evntId});
 
   // 이벤트 아이디
   final String? evntId;
@@ -16,10 +19,10 @@ class MvEventDialog extends StatefulWidget {
   final bool readOnly;
 
   @override
-  State<MvEventDialog> createState() => _MvEventDialogState();
+  State<MVOMSEventDialog> createState() => _MVOMSEventDialogState();
 }
 
-class _MvEventDialogState extends State<MvEventDialog> with InputWidget {
+class _MVOMSEventDialogState extends State<MVOMSEventDialog> with InputWidget {
 
   final _rest = RestRepogitory();
 
@@ -27,8 +30,8 @@ class _MvEventDialogState extends State<MvEventDialog> with InputWidget {
   String _reqDatetimeValue = "";
 
   // 시스템 콤보박스 아이템
-  List<String> _systemDropdownItem = ["정보", "정보2", "정보3"];
-  String _systemDropdownVal = "";
+  final List<TargetSystem> _targetSystems = [];
+  final List<String> _systemDropdownItem = [];
 
   // 요청 경로 아이템
   late final List<String> _reqMethodDropdownItem;
@@ -46,14 +49,25 @@ class _MvEventDialogState extends State<MvEventDialog> with InputWidget {
     // TODO: implement initState
     super.initState();
 
-    // 초기값
+    // 드롭다운 아이템 세팅
     _reqMethodDropdownItem = getCodeList(ConstantValues.kCodeReqMethod);
     _reqTypeDropdownItem = getCodeList(ConstantValues.kCodeReqType);
-
-    _systemDropdownVal = _systemDropdownItem[0];
     _reqMethodDropdownVal = _reqMethodDropdownItem[0];
     _reqTypeDropdownVal = _reqTypeDropdownItem[0];
     _reqDatetimeValue = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      // 시스템 조회
+      var systems = await _rest.getAllTargetSystems();
+      setState(() {
+        // 시스템 코드
+        for(var sysJson in systems) {
+          var system = TargetSystem.fromJson(sysJson);
+          _targetSystems.add(system);
+          _systemDropdownItem.add(system.name);
+        }
+      });
+    });
 
     print('readOnly: ${widget.readOnly}');
     // 이벤트 정보 초기화
@@ -85,11 +99,15 @@ class _MvEventDialogState extends State<MvEventDialog> with InputWidget {
                 children: [
                   Row(
                     children: [
-                      Expanded(child: makeTextCell(readOnly: true, required: true,
-                          decoration: makeInputDecoration(required: true, labelText: "이름"), fontSize:ConstantValues.kBodyFontSize)),
-                      const SizedBox(width: 15),
-                      Expanded(child: makeTextCell(readOnly: true, required: true,
-                          decoration: makeInputDecoration(required: true, labelText: "소속"), fontSize:ConstantValues.kBodyFontSize)),
+                      Expanded(child: makeTextCell(
+                          readOnly: true, required: true, decoration: makeInputDecoration(required: true, labelText: "이름"),
+                          onTab:()=>showMemberPop())),
+                      const SizedBox(width: 10),
+                      Expanded(child: makeTextCell(
+                          readOnly: true, required: true, decoration: makeInputDecoration(required: true, labelText: "소속"),
+                          onTab:()=>showMemberPop())),
+                      const SizedBox(width: 10),
+                      SizedBox(width: 80, child: ElevatedButton(onPressed: ()=>showNewMemberPop(), child: Text("신규")))
                     ],
                   ),
                 ],
@@ -123,20 +141,23 @@ class _MvEventDialogState extends State<MvEventDialog> with InputWidget {
                             });
                           },
                           controller: TextEditingController(text: _reqDatetimeValue),
-                          context: context,
-                          fontSize:ConstantValues.kBodyFontSize)),
+                          context: context)),
                     ],
                   ),
                   const SizedBox(height: 15),
                   Row(
                     children: [
-                      Expanded(child: makeTextCell(readOnly: true, required: true,
+                      Expanded(child:
+                        makeTextCell(
+                          readOnly: true, required: true,
                           decoration: makeInputDecoration(required: true, labelText: "처리자"),
-                          fontSize:ConstantValues.kBodyFontSize, controller: TextEditingController(text: _event?.charger?.name))),
+                          onTab:()=>showMemberPop(),
+                          controller: TextEditingController(text: _event?.charger?.name))),
                       const SizedBox(width: 15),
                       Expanded(
-                        child: makeCellWithDropdown(decoration: makeInputDecoration(required: true, labelText: "시스템"),
-                          item: _systemDropdownItem, value: _systemDropdownVal, callback: (){}, fontSize:ConstantValues.kBodyFontSize,
+                        child: makeCellWithDropdown(decoration: makeInputDecoration(required: true, labelText: "시스템", padding: 9),
+                          item: _systemDropdownItem, value: _systemDropdownItem.isNotEmpty ? _systemDropdownItem[0] : '',
+                            onChanged: (){},
                           disabled: widget.readOnly)
                       )
                     ],
@@ -145,14 +166,14 @@ class _MvEventDialogState extends State<MvEventDialog> with InputWidget {
                   Row(
                     children: [
                       Expanded(
-                          child: makeCellWithDropdown(decoration: makeInputDecoration(required: true, labelText: "요청유형"),
-                            item: _reqTypeDropdownItem, value: _reqTypeDropdownVal, callback: (){}, fontSize:ConstantValues.kBodyFontSize,
+                          child: makeCellWithDropdown(decoration: makeInputDecoration(required: true, labelText: "요청유형", padding: 9),
+                            item: _reqTypeDropdownItem, value: _reqTypeDropdownVal, onChanged: (){},
                             disabled: widget.readOnly)
                       ),
                       const SizedBox(width: 15),
                       Expanded(
-                          child: makeCellWithDropdown(decoration: makeInputDecoration(required: true, labelText: "요청경로"),
-                            item: _reqMethodDropdownItem, value: _reqMethodDropdownVal, callback: (){}, fontSize:ConstantValues.kBodyFontSize,
+                          child: makeCellWithDropdown(decoration: makeInputDecoration(required: true, labelText: "요청경로", padding: 9),
+                            item: _reqMethodDropdownItem, value: _reqMethodDropdownVal, onChanged: (){},
                             disabled: widget.readOnly)
                       )
                     ],
@@ -161,7 +182,7 @@ class _MvEventDialogState extends State<MvEventDialog> with InputWidget {
                   Row(
                     children: [
                       Expanded(child: makeTextCell(decoration: makeInputDecoration(labelText: "제목"),
-                          controller: TextEditingController(text: _event?.title), fontSize:ConstantValues.kBodyFontSize,
+                          controller: TextEditingController(text: _event?.title),
                           maxLines: 2, maxLength: 100, readOnly: widget.readOnly)),
                     ],
                   ),
@@ -170,20 +191,20 @@ class _MvEventDialogState extends State<MvEventDialog> with InputWidget {
                     children: [
                       Expanded(child: makeTextCell(decoration: makeInputDecoration(required: true, labelText: "요청내용"),
                           maxLines: 8, maxLength: 500, controller: TextEditingController(text: _event?.evntDesc),
-                          fontSize:ConstantValues.kBodyFontSize, readOnly: widget.readOnly)),
+                          readOnly: widget.readOnly)),
                     ]
                   ),
                   const SizedBox(height: 15),
                   Row(
                     children: [
-                      Expanded(child: makeTextCell(decoration: makeInputDecoration(labelText: "첨부파일"), fontSize:ConstantValues.kBodyFontSize)),
+                      Expanded(child: makeTextCell(decoration: makeInputDecoration(labelText: "첨부파일"))),
                     ],
                   ),
                   const SizedBox(height: 15),
                   Row(
                     children: [
                       Expanded(child: makeTextCell(decoration: makeInputDecoration(labelText: "태그"),
-                          fontSize:ConstantValues.kBodyFontSize, readOnly: widget.readOnly)),
+                        readOnly: widget.readOnly)),
                     ],
                   )
                 ],
@@ -194,7 +215,8 @@ class _MvEventDialogState extends State<MvEventDialog> with InputWidget {
     );
   }
 
-  void showUserPop() {
+  /// 멤버 조회 팝업
+  void showMemberPop() {
     showDialog(
         context: context,
         barrierDismissible: true,
@@ -202,7 +224,29 @@ class _MvEventDialogState extends State<MvEventDialog> with InputWidget {
           return AlertDialog(
             surfaceTintColor: Colors.transparent,
             title: const Text("사용자 조회"),
-            content: Text("aaa"),
+            content: MVOMSMemberDialog(),
+            actions: [
+              ElevatedButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text('취소')),
+              ElevatedButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text('저장')),
+            ],
+          );
+        }));
+  }
+
+  // 신규 멤버 추가 팝업 열기
+  void showNewMemberPop() {
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: ((context) {
+          return AlertDialog(
+            surfaceTintColor: Colors.transparent,
+            title: const Text("조직원 추가"),
+            content: MVOMSNewMemberDialog(),
             actions: [
               ElevatedButton(
                   onPressed: () => Navigator.of(context).pop(),
@@ -226,7 +270,7 @@ class _MvEventDialogState extends State<MvEventDialog> with InputWidget {
   }
 
   List<String> getCodeList(String id) {
-    var list = Global.getComCode(id)?.map((c) => c.name).toList();
+    var list = Global.getComCode(id).map((c) => c.name).toList();
     return list ?? [];
   }
 }

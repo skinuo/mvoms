@@ -20,7 +20,7 @@ OperationEvent _$OperationEventFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$OperationEvent {
-  String get evntId => throw _privateConstructorUsedError;
+  String? get evntId => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
   String get stateCd => throw _privateConstructorUsedError;
   String get evntDesc => throw _privateConstructorUsedError;
@@ -33,6 +33,9 @@ mixin _$OperationEvent {
   String get useYn => throw _privateConstructorUsedError;
   String get editorId => throw _privateConstructorUsedError;
   DateTime get editTime => throw _privateConstructorUsedError;
+  Requester get requester => throw _privateConstructorUsedError;
+  String get reqMthdCd => throw _privateConstructorUsedError;
+  String get reqTpCd => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -47,7 +50,7 @@ abstract class $OperationEventCopyWith<$Res> {
       _$OperationEventCopyWithImpl<$Res, OperationEvent>;
   @useResult
   $Res call(
-      {String evntId,
+      {String? evntId,
       String title,
       String stateCd,
       String evntDesc,
@@ -59,10 +62,14 @@ abstract class $OperationEventCopyWith<$Res> {
       DateTime registerTime,
       String useYn,
       String editorId,
-      DateTime editTime});
+      DateTime editTime,
+      Requester requester,
+      String reqMthdCd,
+      String reqTpCd});
 
   $MemberCopyWith<$Res>? get charger;
   $TargetSystemCopyWith<$Res>? get targetSystem;
+  $RequesterCopyWith<$Res> get requester;
 }
 
 /// @nodoc
@@ -78,7 +85,7 @@ class _$OperationEventCopyWithImpl<$Res, $Val extends OperationEvent>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? evntId = null,
+    Object? evntId = freezed,
     Object? title = null,
     Object? stateCd = null,
     Object? evntDesc = null,
@@ -91,12 +98,15 @@ class _$OperationEventCopyWithImpl<$Res, $Val extends OperationEvent>
     Object? useYn = null,
     Object? editorId = null,
     Object? editTime = null,
+    Object? requester = null,
+    Object? reqMthdCd = null,
+    Object? reqTpCd = null,
   }) {
     return _then(_value.copyWith(
-      evntId: null == evntId
+      evntId: freezed == evntId
           ? _value.evntId
           : evntId // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -145,6 +155,18 @@ class _$OperationEventCopyWithImpl<$Res, $Val extends OperationEvent>
           ? _value.editTime
           : editTime // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      requester: null == requester
+          ? _value.requester
+          : requester // ignore: cast_nullable_to_non_nullable
+              as Requester,
+      reqMthdCd: null == reqMthdCd
+          ? _value.reqMthdCd
+          : reqMthdCd // ignore: cast_nullable_to_non_nullable
+              as String,
+      reqTpCd: null == reqTpCd
+          ? _value.reqTpCd
+          : reqTpCd // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 
@@ -171,6 +193,14 @@ class _$OperationEventCopyWithImpl<$Res, $Val extends OperationEvent>
       return _then(_value.copyWith(targetSystem: value) as $Val);
     });
   }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $RequesterCopyWith<$Res> get requester {
+    return $RequesterCopyWith<$Res>(_value.requester, (value) {
+      return _then(_value.copyWith(requester: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -182,7 +212,7 @@ abstract class _$$OperationEventImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String evntId,
+      {String? evntId,
       String title,
       String stateCd,
       String evntDesc,
@@ -194,12 +224,17 @@ abstract class _$$OperationEventImplCopyWith<$Res>
       DateTime registerTime,
       String useYn,
       String editorId,
-      DateTime editTime});
+      DateTime editTime,
+      Requester requester,
+      String reqMthdCd,
+      String reqTpCd});
 
   @override
   $MemberCopyWith<$Res>? get charger;
   @override
   $TargetSystemCopyWith<$Res>? get targetSystem;
+  @override
+  $RequesterCopyWith<$Res> get requester;
 }
 
 /// @nodoc
@@ -213,7 +248,7 @@ class __$$OperationEventImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? evntId = null,
+    Object? evntId = freezed,
     Object? title = null,
     Object? stateCd = null,
     Object? evntDesc = null,
@@ -226,12 +261,15 @@ class __$$OperationEventImplCopyWithImpl<$Res>
     Object? useYn = null,
     Object? editorId = null,
     Object? editTime = null,
+    Object? requester = null,
+    Object? reqMthdCd = null,
+    Object? reqTpCd = null,
   }) {
     return _then(_$OperationEventImpl(
-      evntId: null == evntId
+      evntId: freezed == evntId
           ? _value.evntId
           : evntId // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -280,6 +318,18 @@ class __$$OperationEventImplCopyWithImpl<$Res>
           ? _value.editTime
           : editTime // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      requester: null == requester
+          ? _value.requester
+          : requester // ignore: cast_nullable_to_non_nullable
+              as Requester,
+      reqMthdCd: null == reqMthdCd
+          ? _value.reqMthdCd
+          : reqMthdCd // ignore: cast_nullable_to_non_nullable
+              as String,
+      reqTpCd: null == reqTpCd
+          ? _value.reqTpCd
+          : reqTpCd // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -288,7 +338,7 @@ class __$$OperationEventImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$OperationEventImpl implements _OperationEvent {
   _$OperationEventImpl(
-      {required this.evntId,
+      {this.evntId,
       required this.title,
       required this.stateCd,
       required this.evntDesc,
@@ -300,13 +350,16 @@ class _$OperationEventImpl implements _OperationEvent {
       required this.registerTime,
       required this.useYn,
       required this.editorId,
-      required this.editTime});
+      required this.editTime,
+      required this.requester,
+      required this.reqMthdCd,
+      required this.reqTpCd});
 
   factory _$OperationEventImpl.fromJson(Map<String, dynamic> json) =>
       _$$OperationEventImplFromJson(json);
 
   @override
-  final String evntId;
+  final String? evntId;
   @override
   final String title;
   @override
@@ -331,10 +384,16 @@ class _$OperationEventImpl implements _OperationEvent {
   final String editorId;
   @override
   final DateTime editTime;
+  @override
+  final Requester requester;
+  @override
+  final String reqMthdCd;
+  @override
+  final String reqTpCd;
 
   @override
   String toString() {
-    return 'OperationEvent(evntId: $evntId, title: $title, stateCd: $stateCd, evntDesc: $evntDesc, evntTime: $evntTime, charger: $charger, closeTime: $closeTime, targetSystem: $targetSystem, registerId: $registerId, registerTime: $registerTime, useYn: $useYn, editorId: $editorId, editTime: $editTime)';
+    return 'OperationEvent(evntId: $evntId, title: $title, stateCd: $stateCd, evntDesc: $evntDesc, evntTime: $evntTime, charger: $charger, closeTime: $closeTime, targetSystem: $targetSystem, registerId: $registerId, registerTime: $registerTime, useYn: $useYn, editorId: $editorId, editTime: $editTime, requester: $requester, reqMthdCd: $reqMthdCd, reqTpCd: $reqTpCd)';
   }
 
   @override
@@ -362,7 +421,12 @@ class _$OperationEventImpl implements _OperationEvent {
             (identical(other.editorId, editorId) ||
                 other.editorId == editorId) &&
             (identical(other.editTime, editTime) ||
-                other.editTime == editTime));
+                other.editTime == editTime) &&
+            (identical(other.requester, requester) ||
+                other.requester == requester) &&
+            (identical(other.reqMthdCd, reqMthdCd) ||
+                other.reqMthdCd == reqMthdCd) &&
+            (identical(other.reqTpCd, reqTpCd) || other.reqTpCd == reqTpCd));
   }
 
   @JsonKey(ignore: true)
@@ -381,7 +445,10 @@ class _$OperationEventImpl implements _OperationEvent {
       registerTime,
       useYn,
       editorId,
-      editTime);
+      editTime,
+      requester,
+      reqMthdCd,
+      reqTpCd);
 
   @JsonKey(ignore: true)
   @override
@@ -400,7 +467,7 @@ class _$OperationEventImpl implements _OperationEvent {
 
 abstract class _OperationEvent implements OperationEvent {
   factory _OperationEvent(
-      {required final String evntId,
+      {final String? evntId,
       required final String title,
       required final String stateCd,
       required final String evntDesc,
@@ -412,13 +479,16 @@ abstract class _OperationEvent implements OperationEvent {
       required final DateTime registerTime,
       required final String useYn,
       required final String editorId,
-      required final DateTime editTime}) = _$OperationEventImpl;
+      required final DateTime editTime,
+      required final Requester requester,
+      required final String reqMthdCd,
+      required final String reqTpCd}) = _$OperationEventImpl;
 
   factory _OperationEvent.fromJson(Map<String, dynamic> json) =
       _$OperationEventImpl.fromJson;
 
   @override
-  String get evntId;
+  String? get evntId;
   @override
   String get title;
   @override
@@ -443,6 +513,12 @@ abstract class _OperationEvent implements OperationEvent {
   String get editorId;
   @override
   DateTime get editTime;
+  @override
+  Requester get requester;
+  @override
+  String get reqMthdCd;
+  @override
+  String get reqTpCd;
   @override
   @JsonKey(ignore: true)
   _$$OperationEventImplCopyWith<_$OperationEventImpl> get copyWith =>

@@ -8,7 +8,7 @@ part of 'operation_event.dart';
 
 _$OperationEventImpl _$$OperationEventImplFromJson(Map<String, dynamic> json) =>
     _$OperationEventImpl(
-      evntId: json['evntId'] as String,
+      evntId: json['evntId'] as String?,
       title: json['title'] as String,
       stateCd: json['stateCd'] as String,
       evntDesc: json['evntDesc'] as String,
@@ -25,6 +25,9 @@ _$OperationEventImpl _$$OperationEventImplFromJson(Map<String, dynamic> json) =>
       useYn: json['useYn'] as String,
       editorId: json['editorId'] as String,
       editTime: DateTime.parse(json['editTime'] as String),
+      requester: Requester.fromJson(json['requester'] as Map<String, dynamic>),
+      reqMthdCd: json['reqMthdCd'] as String,
+      reqTpCd: json['reqTpCd'] as String,
     );
 
 Map<String, dynamic> _$$OperationEventImplToJson(
@@ -43,4 +46,7 @@ Map<String, dynamic> _$$OperationEventImplToJson(
       'useYn': instance.useYn,
       'editorId': instance.editorId,
       'editTime': instance.editTime.toIso8601String(),
+      'requester': instance.requester,
+      'reqMthdCd': instance.reqMthdCd,
+      'reqTpCd': instance.reqTpCd,
     };

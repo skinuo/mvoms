@@ -1,7 +1,7 @@
 import '../models/common_code.dart';
 
 // 전역 객체 관리
-abstract class Global {
+class Global {
   // 공통코드
   static final Map<String, List<CommonCode>> _comCodes = {};
   static final Map<String, Map<String,CommonCode>> _comCodeMap = {};

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:mvoms/models/department.dart';
 import 'package:mvoms/models/operation_event.dart';
+import 'package:mvoms/models/organization.dart';
 import 'package:mvoms/models/pagination.dart';
 import 'package:mvoms/ui/search.dart';
 
+import '../models/member.dart';
 import '../utilities/global.dart';
 import '../utilities/input_widget.dart';
 import '../utilities/constants.dart';
@@ -19,9 +22,9 @@ class MVOMSEvent extends StatefulWidget {
 }
 
 class _MVOMSEventState extends State<MVOMSEvent> with InputWidget {
-  late final int _newEventCount;
-  late final int _notCompleteEventCount;
-  late final String _eventCountValue;
+  int _newEventCount = 0;
+  int _notCompleteEventCount = 0;
+  String _eventCountValue = "";
   final _rest = RestRepogitory();
 
   // 이벤트 목록
@@ -42,10 +45,6 @@ class _MVOMSEventState extends State<MVOMSEvent> with InputWidget {
 
     // 이벤트 목록 가져오기
     getEventList();
-
-    _newEventCount = 0;
-    _notCompleteEventCount = 0;
-    _eventCountValue = "";
   }
 
   @override
@@ -216,7 +215,6 @@ class _MVOMSEventState extends State<MVOMSEvent> with InputWidget {
     print("목록 조회: $page");
     // 목록 조회
     var resMap = await _rest.getEventList(page: page, size: _recordSize);
-
     setState(() {
       // 목록 업데이트
       _rows.clear();
@@ -234,6 +232,8 @@ class _MVOMSEventState extends State<MVOMSEvent> with InputWidget {
   /// - [resMap]: 응답받은 페이지 Map 객체
   void makePagination(Map<String, dynamic> resMap) {
     Pagination pg = Pagination.fromJson(resMap);
+    // 건수
+    _eventCountValue = "전체 ${pg.totalElements}건";
     print(pg.toJson());
 
     // 초기화 후 추가
@@ -294,14 +294,29 @@ class _MVOMSEventState extends State<MVOMSEvent> with InputWidget {
   void showEventPop(BuildContext context, String title, bool readOnly, [String? evntId]) {
     List<Widget> actions = [
       ElevatedButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: const Text('취소'))
+        onPressed: () => Navigator.of(context).pop(),
+        child: const Text('취소'))
     ];
     // 수정가능시 저장버튼 추가
     if (!readOnly) {
       actions.add(ElevatedButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: const Text('저장')));
+        onPressed: () async {
+          var now = DateTime.now();
+          var userId = "tester";
+          /*var event = OperationEvent(title: "test", stateCd:"REQ", evntDesc:"tt", evntTime:now, registerId: userId,
+            registerTime:now, useYn:"Y", editorId: userId, editTime: now, requester: Member(
+                id: userId, name: userId, department: Department(
+                    id: "", name: "", registerId: "", registerTime: now, organization: Organization(
+                      id: "", name: "", registerId: userId, registerTime: now, useYn: "Y", editorId: userId, editTime: now
+                    ), useYn: 'Y', editorId: userId, editTime: now
+                ), registerId: userId, registerTime: now, useYn: "Y", editorId: userId, editTime: now
+              ),
+            reqMthdCd: "PHONE", reqTpCd: "REQ_REG");
+          print(event);*/
+          //await _rest.addEvent(event: event);
+          Navigator.of(context).pop();
+        },
+        child: const Text('저장')));
     }
     
     // 다이얼로그호출
@@ -312,7 +327,7 @@ class _MVOMSEventState extends State<MVOMSEvent> with InputWidget {
           return AlertDialog(
             surfaceTintColor: Colors.transparent,
             title: Text(title),
-            content: MvEventDialog(evntId: evntId, readOnly: readOnly),
+            content: MVOMSEventDialog(evntId: evntId, readOnly: readOnly),
             actions: actions,
           );
         }));

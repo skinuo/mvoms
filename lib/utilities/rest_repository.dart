@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
+import 'package:mvoms/models/operation_event.dart';
 import 'package:mvoms/utilities/auth_updater.dart';
 import 'package:mvoms/utilities/constants.dart';
 
@@ -51,14 +52,14 @@ class RestRepogitory {
     return req(get: true, uri: "/auth-aes256-iv");
   }
 
-  Future<dynamic> mytest() {
-    return req(get: true, uri:'/mytest');
-  }
-
+  /// 상세 이벤트 조회
+  ///
+  /// - [evntId]: 이벤트아이디
   Future<dynamic> getEventById(String evntId) {
     return req(get: true, uri:'/op-evnet/$evntId');
   }
 
+  /// 이벤트 목록 조회
   Future<dynamic> getEventList({
       required int page,
       int size = 10,
@@ -69,11 +70,40 @@ class RestRepogitory {
     return req(get: true, uri:'/op-event/list?pg_page=$page&pg_size=$size');
   }
 
+  /// 이벤트 등록
+  ///
+  /// - [event]: 이벤트
+  Future<dynamic> addEvent({required OperationEvent event}) {
+    return req(get: false, uri:'/op-event', data:event);
+  }
+
+  /// 기관 모든 목록 조회
+  Future<dynamic> getAllOrganizations() {
+    return req(get: true, uri:'/org/org/list/all');
+  }
+
+  /// 사용자 목록 조회
+  ///
+  /// - [id]: 부서아이디
+  Future<dynamic> getUsersByDepartment(String id) {
+    return req(get: true, uri:'');
+  }
+
+  /// 모든 대상 시스템 목록 조회
+  Future<dynamic> getAllTargetSystems() {
+    return req(get: true, uri:'/org/system/all');
+  }
+
+  /// 기관 ID로 부서목록 조회
+  Future<dynamic> getDepartmentsByOrgId(String orgId) {
+    return req(get: true, uri:'/org/dept/list-by-org/$orgId');
+  }
+
   /// 요청 전송
   ///
   /// - [get]: get방식여부
   /// - [uri]: 요청주소
-  Future<dynamic> req({required bool get, required String uri}) async {
+  Future<dynamic> req({required bool get, required String uri, Object? data}) async {
     late Future<Response<dynamic>> res;
     Options options = Options(headers: {"mvoms.auth.token": _ahtoToken});
     if (get) {
@@ -81,7 +111,7 @@ class RestRepogitory {
       res = _dio.get(uri, options: options);
     } else {
       // post 방식
-      res = _dio.post(uri, options: options);
+      res = _dio.post(uri, options: options, data: data);
     }
     return res.then((response) {
       // TODO.. 상태코드별 오류 처리
