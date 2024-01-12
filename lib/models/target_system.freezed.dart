@@ -21,12 +21,19 @@ TargetSystem _$TargetSystemFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$TargetSystem {
   String get id => throw _privateConstructorUsedError;
+  set id(String value) => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
+  set name(String value) => throw _privateConstructorUsedError;
   String get registerId => throw _privateConstructorUsedError;
+  set registerId(String value) => throw _privateConstructorUsedError;
   DateTime get registerTime => throw _privateConstructorUsedError;
+  set registerTime(DateTime value) => throw _privateConstructorUsedError;
   String get useYn => throw _privateConstructorUsedError;
+  set useYn(String value) => throw _privateConstructorUsedError;
   String get editorId => throw _privateConstructorUsedError;
+  set editorId(String value) => throw _privateConstructorUsedError;
   DateTime get editTime => throw _privateConstructorUsedError;
+  set editTime(DateTime value) => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -190,47 +197,24 @@ class _$TargetSystemImpl implements _TargetSystem {
       _$$TargetSystemImplFromJson(json);
 
   @override
-  final String id;
+  String id;
   @override
-  final String name;
+  String name;
   @override
-  final String registerId;
+  String registerId;
   @override
-  final DateTime registerTime;
+  DateTime registerTime;
   @override
-  final String useYn;
+  String useYn;
   @override
-  final String editorId;
+  String editorId;
   @override
-  final DateTime editTime;
+  DateTime editTime;
 
   @override
   String toString() {
     return 'TargetSystem(id: $id, name: $name, registerId: $registerId, registerTime: $registerTime, useYn: $useYn, editorId: $editorId, editTime: $editTime)';
   }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$TargetSystemImpl &&
-            (identical(other.id, id) || other.id == id) &&
-            (identical(other.name, name) || other.name == name) &&
-            (identical(other.registerId, registerId) ||
-                other.registerId == registerId) &&
-            (identical(other.registerTime, registerTime) ||
-                other.registerTime == registerTime) &&
-            (identical(other.useYn, useYn) || other.useYn == useYn) &&
-            (identical(other.editorId, editorId) ||
-                other.editorId == editorId) &&
-            (identical(other.editTime, editTime) ||
-                other.editTime == editTime));
-  }
-
-  @JsonKey(ignore: true)
-  @override
-  int get hashCode => Object.hash(runtimeType, id, name, registerId,
-      registerTime, useYn, editorId, editTime);
 
   @JsonKey(ignore: true)
   @override
@@ -248,31 +232,38 @@ class _$TargetSystemImpl implements _TargetSystem {
 
 abstract class _TargetSystem implements TargetSystem {
   factory _TargetSystem(
-      {required final String id,
-      required final String name,
-      required final String registerId,
-      required final DateTime registerTime,
-      required final String useYn,
-      required final String editorId,
-      required final DateTime editTime}) = _$TargetSystemImpl;
+      {required String id,
+      required String name,
+      required String registerId,
+      required DateTime registerTime,
+      required String useYn,
+      required String editorId,
+      required DateTime editTime}) = _$TargetSystemImpl;
 
   factory _TargetSystem.fromJson(Map<String, dynamic> json) =
       _$TargetSystemImpl.fromJson;
 
   @override
   String get id;
+  set id(String value);
   @override
   String get name;
+  set name(String value);
   @override
   String get registerId;
+  set registerId(String value);
   @override
   DateTime get registerTime;
+  set registerTime(DateTime value);
   @override
   String get useYn;
+  set useYn(String value);
   @override
   String get editorId;
+  set editorId(String value);
   @override
   DateTime get editTime;
+  set editTime(DateTime value);
   @override
   @JsonKey(ignore: true)
   _$$TargetSystemImplCopyWith<_$TargetSystemImpl> get copyWith =>

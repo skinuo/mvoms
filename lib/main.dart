@@ -60,7 +60,9 @@ class _MVOMSMainState extends State<MVOMSMain> with InputWidget {
       // 공통 코드 세팅
       await initComCode();
       // 로딩바 걷고 메인 보이기
-      loaded = true;
+      setState(() {
+        loaded = true;
+      });
     });
   }
 

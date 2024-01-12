@@ -6,10 +6,10 @@ part 'department.freezed.dart';
 part 'department.g.dart';
 
 /// 부서 관리
-@freezed
+@unfreezed
 class Department with _$Department {
   factory Department({
-    required String id,
+    String? id,
     required String name,
     required Organization organization,
     Department? superDepartment,
@@ -20,6 +20,9 @@ class Department with _$Department {
     required String editorId,
     required DateTime editTime
   }) = _Department;
+
+  factory Department.create() => Department(name: "", registerId: "", registerTime: DateTime.now(),
+      useYn: "Y", editorId: "", editTime: DateTime.now(), organization: Organization.create());
 
   factory Department.fromJson(Map<String, dynamic> json) => _$DepartmentFromJson(json);
 }

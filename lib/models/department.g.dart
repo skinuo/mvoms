@@ -8,7 +8,7 @@ part of 'department.dart';
 
 _$DepartmentImpl _$$DepartmentImplFromJson(Map<String, dynamic> json) =>
     _$DepartmentImpl(
-      id: json['id'] as String,
+      id: json['id'] as String?,
       name: json['name'] as String,
       organization:
           Organization.fromJson(json['organization'] as Map<String, dynamic>),

@@ -21,21 +21,37 @@ OperationEvent _$OperationEventFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$OperationEvent {
   String? get evntId => throw _privateConstructorUsedError;
+  set evntId(String? value) => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
+  set title(String value) => throw _privateConstructorUsedError;
   String get stateCd => throw _privateConstructorUsedError;
+  set stateCd(String value) => throw _privateConstructorUsedError;
   String get evntDesc => throw _privateConstructorUsedError;
+  set evntDesc(String value) => throw _privateConstructorUsedError;
   DateTime get evntTime => throw _privateConstructorUsedError;
+  set evntTime(DateTime value) => throw _privateConstructorUsedError;
   Member? get charger => throw _privateConstructorUsedError;
+  set charger(Member? value) => throw _privateConstructorUsedError;
   String? get closeTime => throw _privateConstructorUsedError;
+  set closeTime(String? value) => throw _privateConstructorUsedError;
   TargetSystem? get targetSystem => throw _privateConstructorUsedError;
+  set targetSystem(TargetSystem? value) => throw _privateConstructorUsedError;
   String get registerId => throw _privateConstructorUsedError;
+  set registerId(String value) => throw _privateConstructorUsedError;
   DateTime get registerTime => throw _privateConstructorUsedError;
+  set registerTime(DateTime value) => throw _privateConstructorUsedError;
   String get useYn => throw _privateConstructorUsedError;
+  set useYn(String value) => throw _privateConstructorUsedError;
   String get editorId => throw _privateConstructorUsedError;
+  set editorId(String value) => throw _privateConstructorUsedError;
   DateTime get editTime => throw _privateConstructorUsedError;
-  Requester get requester => throw _privateConstructorUsedError;
+  set editTime(DateTime value) => throw _privateConstructorUsedError;
+  Member get requester => throw _privateConstructorUsedError;
+  set requester(Member value) => throw _privateConstructorUsedError;
   String get reqMthdCd => throw _privateConstructorUsedError;
+  set reqMthdCd(String value) => throw _privateConstructorUsedError;
   String get reqTpCd => throw _privateConstructorUsedError;
+  set reqTpCd(String value) => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -63,13 +79,13 @@ abstract class $OperationEventCopyWith<$Res> {
       String useYn,
       String editorId,
       DateTime editTime,
-      Requester requester,
+      Member requester,
       String reqMthdCd,
       String reqTpCd});
 
   $MemberCopyWith<$Res>? get charger;
   $TargetSystemCopyWith<$Res>? get targetSystem;
-  $RequesterCopyWith<$Res> get requester;
+  $MemberCopyWith<$Res> get requester;
 }
 
 /// @nodoc
@@ -158,7 +174,7 @@ class _$OperationEventCopyWithImpl<$Res, $Val extends OperationEvent>
       requester: null == requester
           ? _value.requester
           : requester // ignore: cast_nullable_to_non_nullable
-              as Requester,
+              as Member,
       reqMthdCd: null == reqMthdCd
           ? _value.reqMthdCd
           : reqMthdCd // ignore: cast_nullable_to_non_nullable
@@ -196,8 +212,8 @@ class _$OperationEventCopyWithImpl<$Res, $Val extends OperationEvent>
 
   @override
   @pragma('vm:prefer-inline')
-  $RequesterCopyWith<$Res> get requester {
-    return $RequesterCopyWith<$Res>(_value.requester, (value) {
+  $MemberCopyWith<$Res> get requester {
+    return $MemberCopyWith<$Res>(_value.requester, (value) {
       return _then(_value.copyWith(requester: value) as $Val);
     });
   }
@@ -225,7 +241,7 @@ abstract class _$$OperationEventImplCopyWith<$Res>
       String useYn,
       String editorId,
       DateTime editTime,
-      Requester requester,
+      Member requester,
       String reqMthdCd,
       String reqTpCd});
 
@@ -234,7 +250,7 @@ abstract class _$$OperationEventImplCopyWith<$Res>
   @override
   $TargetSystemCopyWith<$Res>? get targetSystem;
   @override
-  $RequesterCopyWith<$Res> get requester;
+  $MemberCopyWith<$Res> get requester;
 }
 
 /// @nodoc
@@ -321,7 +337,7 @@ class __$$OperationEventImplCopyWithImpl<$Res>
       requester: null == requester
           ? _value.requester
           : requester // ignore: cast_nullable_to_non_nullable
-              as Requester,
+              as Member,
       reqMthdCd: null == reqMthdCd
           ? _value.reqMthdCd
           : reqMthdCd // ignore: cast_nullable_to_non_nullable
@@ -359,96 +375,42 @@ class _$OperationEventImpl implements _OperationEvent {
       _$$OperationEventImplFromJson(json);
 
   @override
-  final String? evntId;
+  String? evntId;
   @override
-  final String title;
+  String title;
   @override
-  final String stateCd;
+  String stateCd;
   @override
-  final String evntDesc;
+  String evntDesc;
   @override
-  final DateTime evntTime;
+  DateTime evntTime;
   @override
-  final Member? charger;
+  Member? charger;
   @override
-  final String? closeTime;
+  String? closeTime;
   @override
-  final TargetSystem? targetSystem;
+  TargetSystem? targetSystem;
   @override
-  final String registerId;
+  String registerId;
   @override
-  final DateTime registerTime;
+  DateTime registerTime;
   @override
-  final String useYn;
+  String useYn;
   @override
-  final String editorId;
+  String editorId;
   @override
-  final DateTime editTime;
+  DateTime editTime;
   @override
-  final Requester requester;
+  Member requester;
   @override
-  final String reqMthdCd;
+  String reqMthdCd;
   @override
-  final String reqTpCd;
+  String reqTpCd;
 
   @override
   String toString() {
     return 'OperationEvent(evntId: $evntId, title: $title, stateCd: $stateCd, evntDesc: $evntDesc, evntTime: $evntTime, charger: $charger, closeTime: $closeTime, targetSystem: $targetSystem, registerId: $registerId, registerTime: $registerTime, useYn: $useYn, editorId: $editorId, editTime: $editTime, requester: $requester, reqMthdCd: $reqMthdCd, reqTpCd: $reqTpCd)';
   }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$OperationEventImpl &&
-            (identical(other.evntId, evntId) || other.evntId == evntId) &&
-            (identical(other.title, title) || other.title == title) &&
-            (identical(other.stateCd, stateCd) || other.stateCd == stateCd) &&
-            (identical(other.evntDesc, evntDesc) ||
-                other.evntDesc == evntDesc) &&
-            (identical(other.evntTime, evntTime) ||
-                other.evntTime == evntTime) &&
-            (identical(other.charger, charger) || other.charger == charger) &&
-            (identical(other.closeTime, closeTime) ||
-                other.closeTime == closeTime) &&
-            (identical(other.targetSystem, targetSystem) ||
-                other.targetSystem == targetSystem) &&
-            (identical(other.registerId, registerId) ||
-                other.registerId == registerId) &&
-            (identical(other.registerTime, registerTime) ||
-                other.registerTime == registerTime) &&
-            (identical(other.useYn, useYn) || other.useYn == useYn) &&
-            (identical(other.editorId, editorId) ||
-                other.editorId == editorId) &&
-            (identical(other.editTime, editTime) ||
-                other.editTime == editTime) &&
-            (identical(other.requester, requester) ||
-                other.requester == requester) &&
-            (identical(other.reqMthdCd, reqMthdCd) ||
-                other.reqMthdCd == reqMthdCd) &&
-            (identical(other.reqTpCd, reqTpCd) || other.reqTpCd == reqTpCd));
-  }
-
-  @JsonKey(ignore: true)
-  @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      evntId,
-      title,
-      stateCd,
-      evntDesc,
-      evntTime,
-      charger,
-      closeTime,
-      targetSystem,
-      registerId,
-      registerTime,
-      useYn,
-      editorId,
-      editTime,
-      requester,
-      reqMthdCd,
-      reqTpCd);
 
   @JsonKey(ignore: true)
   @override
@@ -467,58 +429,74 @@ class _$OperationEventImpl implements _OperationEvent {
 
 abstract class _OperationEvent implements OperationEvent {
   factory _OperationEvent(
-      {final String? evntId,
-      required final String title,
-      required final String stateCd,
-      required final String evntDesc,
-      required final DateTime evntTime,
-      final Member? charger,
-      final String? closeTime,
-      final TargetSystem? targetSystem,
-      required final String registerId,
-      required final DateTime registerTime,
-      required final String useYn,
-      required final String editorId,
-      required final DateTime editTime,
-      required final Requester requester,
-      required final String reqMthdCd,
-      required final String reqTpCd}) = _$OperationEventImpl;
+      {String? evntId,
+      required String title,
+      required String stateCd,
+      required String evntDesc,
+      required DateTime evntTime,
+      Member? charger,
+      String? closeTime,
+      TargetSystem? targetSystem,
+      required String registerId,
+      required DateTime registerTime,
+      required String useYn,
+      required String editorId,
+      required DateTime editTime,
+      required Member requester,
+      required String reqMthdCd,
+      required String reqTpCd}) = _$OperationEventImpl;
 
   factory _OperationEvent.fromJson(Map<String, dynamic> json) =
       _$OperationEventImpl.fromJson;
 
   @override
   String? get evntId;
+  set evntId(String? value);
   @override
   String get title;
+  set title(String value);
   @override
   String get stateCd;
+  set stateCd(String value);
   @override
   String get evntDesc;
+  set evntDesc(String value);
   @override
   DateTime get evntTime;
+  set evntTime(DateTime value);
   @override
   Member? get charger;
+  set charger(Member? value);
   @override
   String? get closeTime;
+  set closeTime(String? value);
   @override
   TargetSystem? get targetSystem;
+  set targetSystem(TargetSystem? value);
   @override
   String get registerId;
+  set registerId(String value);
   @override
   DateTime get registerTime;
+  set registerTime(DateTime value);
   @override
   String get useYn;
+  set useYn(String value);
   @override
   String get editorId;
+  set editorId(String value);
   @override
   DateTime get editTime;
+  set editTime(DateTime value);
   @override
-  Requester get requester;
+  Member get requester;
+  set requester(Member value);
   @override
   String get reqMthdCd;
+  set reqMthdCd(String value);
   @override
   String get reqTpCd;
+  set reqTpCd(String value);
   @override
   @JsonKey(ignore: true)
   _$$OperationEventImplCopyWith<_$OperationEventImpl> get copyWith =>

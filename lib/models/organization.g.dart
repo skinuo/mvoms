@@ -8,7 +8,7 @@ part of 'organization.dart';
 
 _$OrganizationImpl _$$OrganizationImplFromJson(Map<String, dynamic> json) =>
     _$OrganizationImpl(
-      id: json['id'] as String,
+      id: json['id'] as String?,
       name: json['name'] as String,
       email: json['email'] as String?,
       phone: json['phone'] as String?,

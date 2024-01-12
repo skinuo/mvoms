@@ -82,11 +82,14 @@ class RestRepogitory {
     return req(get: true, uri:'/org/org/list/all');
   }
 
-  /// 사용자 목록 조회
+  /// 조직원 검색 요청 수행
   ///
-  /// - [id]: 부서아이디
-  Future<dynamic> getUsersByDepartment(String id) {
-    return req(get: true, uri:'');
+  /// - [orgId]: 기관아이디
+  /// - [depId]: 부서아이디
+  /// - [keyword]: 키워드
+  Future<dynamic> searchMembers({required int page, required int size, String? orgId, String? depId, String? keyword}) {
+    return req(get: true, uri:'/org/mmbr/search?page=$page&size=$size&'
+        'orgId=${orgId??''}&depId=${depId??''}&keyword=${keyword??''}');
   }
 
   /// 모든 대상 시스템 목록 조회

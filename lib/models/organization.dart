@@ -3,10 +3,10 @@ part 'organization.freezed.dart';
 part 'organization.g.dart';
 
 /// 기관 관리
-@freezed
+@unfreezed
 class Organization with _$Organization {
   factory Organization({
-    required String id,
+    String? id,
     required String name,
     String? email,
     String? phone,
@@ -16,6 +16,9 @@ class Organization with _$Organization {
     required String editorId,
     required DateTime editTime,
   }) = _Organization;
+
+  factory Organization.create() => Organization(name: "", registerId: "",
+      registerTime: DateTime.now(), useYn: "Y", editorId: "", editTime: DateTime.now());
 
   factory Organization.fromJson(Map<String, dynamic> json) => _$OrganizationFromJson(json);
 }

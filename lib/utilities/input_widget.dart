@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 
+import '../models/pagination.dart';
 import 'constants.dart';
 
 /// 공통 입력 위젯 생성 mixin
@@ -107,7 +108,9 @@ mixin InputWidget {
     required Function onSelected,
     bool readOnly = false,
     InputDecoration? decoration,
-    double fontSize = ConstantValues.kBodyFontSize
+    double fontSize = ConstantValues.kBodyFontSize,
+    DateTime? firstDate,
+    DateTime? lastDate
   }) {
     decoration ??= const InputDecoration();
     return TextField(
@@ -116,15 +119,20 @@ mixin InputWidget {
       readOnly: readOnly,
       controller: controller,
       onTap: () async {
-        // 1년전 까지 검색
-        DateTime past = DateTime.now();
-        past = past.subtract(const Duration(days: 365));
+        // 시작일
+        if (firstDate == null) {
+          // 1년전 까지 검색
+          DateTime past = DateTime.now();
+          firstDate = past.subtract(const Duration(days: 365));
+        }
+        // 종료일
+        lastDate ??= DateTime.now();
         // 시간 피처
         DateTime? now = await showDatePicker(
           context: context,
-          firstDate: past,
-          lastDate: DateTime.now(),
-          initialDate: DateTime.now()
+          firstDate: firstDate!,
+          lastDate: lastDate!,
+          //initialDate: DateTime.now()
         );
         onSelected.call(now);
       },
@@ -168,4 +176,57 @@ mixin InputWidget {
         },
     );
   }
+/*
+  void makePagination1(Pagination pg) {
+    print(pg.toString());
+
+    // 초기화 후 추가
+    //_pageButtons.clear();
+
+    // 버튼 생성
+    int firstPage = (pg.number ~/ pg.p pageSize) * _pageSize;
+    int lastPage = firstPage;
+    // 이전으로
+    if (pg.number >= _pageSize) {
+      _pageButtons.add(makePageButton1("<<", firstPage-_pageSize, false));
+      _pageButtons.add(makePageButton1("<", pg.number-1, false));
+    }
+    for (int i = 0; i < _pageSize; i++) {
+      int pageNum = firstPage + i;
+      if (pageNum >= pg.totalPages) {
+        // 최대 페이지 도달, 다음페이지 없음
+        lastPage = -1;
+        break;
+      }
+      // 현재 페이지 여부
+      bool curr = pageNum == pg.number;
+      _pageButtons.add(makePageButton1((pageNum+1).toString(), pageNum, curr));
+      // 마지막 페이지
+      lastPage = pageNum;
+    }
+    // 다음으로
+    if (lastPage > -1 && lastPage+1 <= pg.totalPages) {
+      _pageButtons.add(makePageButton1(">", pg.number+1, false));
+      _pageButtons.add(makePageButton1(">>", lastPage+1, false));
+    }
+  }
+
+  /// 페이지 버튼 생성
+  ///
+  /// - [pageTxt]: 페이지텍스트
+  /// - [pageNum]: 페이지번호
+  /// - [highlighting]: 강조여부
+  Widget makePageButton1(String pageTxt, int pageNum, bool highlighting) {
+    return Flexible(
+      child: TextButton(
+          child: Text(pageTxt, style: TextStyle(
+              decoration: highlighting ? TextDecoration.underline : null,
+              fontWeight: highlighting ? FontWeight.bold: FontWeight.normal)),
+          onPressed: () {
+            // 목록 요청
+            getEventList(page: pageNum);
+          }
+      ),
+    );
+  }*/
 }

@@ -232,6 +232,7 @@ class _MVOMSEventState extends State<MVOMSEvent> with InputWidget {
   /// - [resMap]: 응답받은 페이지 Map 객체
   void makePagination(Map<String, dynamic> resMap) {
     Pagination pg = Pagination.fromJson(resMap);
+
     // 건수
     _eventCountValue = "전체 ${pg.totalElements}건";
     print(pg.toJson());
@@ -292,44 +293,10 @@ class _MVOMSEventState extends State<MVOMSEvent> with InputWidget {
   /// - [readOnly]: 조회만가능
   /// - [evntId]: 이벤트아이디(상세조회시사용)
   void showEventPop(BuildContext context, String title, bool readOnly, [String? evntId]) {
-    List<Widget> actions = [
-      ElevatedButton(
-        onPressed: () => Navigator.of(context).pop(),
-        child: const Text('취소'))
-    ];
-    // 수정가능시 저장버튼 추가
-    if (!readOnly) {
-      actions.add(ElevatedButton(
-        onPressed: () async {
-          var now = DateTime.now();
-          var userId = "tester";
-          /*var event = OperationEvent(title: "test", stateCd:"REQ", evntDesc:"tt", evntTime:now, registerId: userId,
-            registerTime:now, useYn:"Y", editorId: userId, editTime: now, requester: Member(
-                id: userId, name: userId, department: Department(
-                    id: "", name: "", registerId: "", registerTime: now, organization: Organization(
-                      id: "", name: "", registerId: userId, registerTime: now, useYn: "Y", editorId: userId, editTime: now
-                    ), useYn: 'Y', editorId: userId, editTime: now
-                ), registerId: userId, registerTime: now, useYn: "Y", editorId: userId, editTime: now
-              ),
-            reqMthdCd: "PHONE", reqTpCd: "REQ_REG");
-          print(event);*/
-          //await _rest.addEvent(event: event);
-          Navigator.of(context).pop();
-        },
-        child: const Text('저장')));
-    }
-    
     // 다이얼로그호출
     showDialog(
         context: context,
         barrierDismissible: true,
-        builder: ((context) {
-          return AlertDialog(
-            surfaceTintColor: Colors.transparent,
-            title: Text(title),
-            content: MVOMSEventDialog(evntId: evntId, readOnly: readOnly),
-            actions: actions,
-          );
-        }));
+        builder: ((context) => MVOMSEventDialog(evntId: evntId, readOnly: readOnly, title: title)));
   }
 }

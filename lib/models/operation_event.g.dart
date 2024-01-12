@@ -25,7 +25,7 @@ _$OperationEventImpl _$$OperationEventImplFromJson(Map<String, dynamic> json) =>
       useYn: json['useYn'] as String,
       editorId: json['editorId'] as String,
       editTime: DateTime.parse(json['editTime'] as String),
-      requester: Requester.fromJson(json['requester'] as Map<String, dynamic>),
+      requester: Member.fromJson(json['requester'] as Map<String, dynamic>),
       reqMthdCd: json['reqMthdCd'] as String,
       reqTpCd: json['reqTpCd'] as String,
     );

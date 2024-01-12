@@ -20,16 +20,26 @@ Department _$DepartmentFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Department {
-  String get id => throw _privateConstructorUsedError;
+  String? get id => throw _privateConstructorUsedError;
+  set id(String? value) => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
+  set name(String value) => throw _privateConstructorUsedError;
   Organization get organization => throw _privateConstructorUsedError;
+  set organization(Organization value) => throw _privateConstructorUsedError;
   Department? get superDepartment => throw _privateConstructorUsedError;
+  set superDepartment(Department? value) => throw _privateConstructorUsedError;
   Member? get member => throw _privateConstructorUsedError;
+  set member(Member? value) => throw _privateConstructorUsedError;
   String get registerId => throw _privateConstructorUsedError;
+  set registerId(String value) => throw _privateConstructorUsedError;
   DateTime get registerTime => throw _privateConstructorUsedError;
+  set registerTime(DateTime value) => throw _privateConstructorUsedError;
   String get useYn => throw _privateConstructorUsedError;
+  set useYn(String value) => throw _privateConstructorUsedError;
   String get editorId => throw _privateConstructorUsedError;
+  set editorId(String value) => throw _privateConstructorUsedError;
   DateTime get editTime => throw _privateConstructorUsedError;
+  set editTime(DateTime value) => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -44,7 +54,7 @@ abstract class $DepartmentCopyWith<$Res> {
       _$DepartmentCopyWithImpl<$Res, Department>;
   @useResult
   $Res call(
-      {String id,
+      {String? id,
       String name,
       Organization organization,
       Department? superDepartment,
@@ -73,7 +83,7 @@ class _$DepartmentCopyWithImpl<$Res, $Val extends Department>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
+    Object? id = freezed,
     Object? name = null,
     Object? organization = null,
     Object? superDepartment = freezed,
@@ -85,10 +95,10 @@ class _$DepartmentCopyWithImpl<$Res, $Val extends Department>
     Object? editTime = null,
   }) {
     return _then(_value.copyWith(
-      id: null == id
+      id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -170,7 +180,7 @@ abstract class _$$DepartmentImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String id,
+      {String? id,
       String name,
       Organization organization,
       Department? superDepartment,
@@ -200,7 +210,7 @@ class __$$DepartmentImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
+    Object? id = freezed,
     Object? name = null,
     Object? organization = null,
     Object? superDepartment = freezed,
@@ -212,10 +222,10 @@ class __$$DepartmentImplCopyWithImpl<$Res>
     Object? editTime = null,
   }) {
     return _then(_$DepartmentImpl(
-      id: null == id
+      id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -260,7 +270,7 @@ class __$$DepartmentImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$DepartmentImpl implements _Department {
   _$DepartmentImpl(
-      {required this.id,
+      {this.id,
       required this.name,
       required this.organization,
       this.superDepartment,
@@ -275,68 +285,30 @@ class _$DepartmentImpl implements _Department {
       _$$DepartmentImplFromJson(json);
 
   @override
-  final String id;
+  String? id;
   @override
-  final String name;
+  String name;
   @override
-  final Organization organization;
+  Organization organization;
   @override
-  final Department? superDepartment;
+  Department? superDepartment;
   @override
-  final Member? member;
+  Member? member;
   @override
-  final String registerId;
+  String registerId;
   @override
-  final DateTime registerTime;
+  DateTime registerTime;
   @override
-  final String useYn;
+  String useYn;
   @override
-  final String editorId;
+  String editorId;
   @override
-  final DateTime editTime;
+  DateTime editTime;
 
   @override
   String toString() {
     return 'Department(id: $id, name: $name, organization: $organization, superDepartment: $superDepartment, member: $member, registerId: $registerId, registerTime: $registerTime, useYn: $useYn, editorId: $editorId, editTime: $editTime)';
   }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$DepartmentImpl &&
-            (identical(other.id, id) || other.id == id) &&
-            (identical(other.name, name) || other.name == name) &&
-            (identical(other.organization, organization) ||
-                other.organization == organization) &&
-            (identical(other.superDepartment, superDepartment) ||
-                other.superDepartment == superDepartment) &&
-            (identical(other.member, member) || other.member == member) &&
-            (identical(other.registerId, registerId) ||
-                other.registerId == registerId) &&
-            (identical(other.registerTime, registerTime) ||
-                other.registerTime == registerTime) &&
-            (identical(other.useYn, useYn) || other.useYn == useYn) &&
-            (identical(other.editorId, editorId) ||
-                other.editorId == editorId) &&
-            (identical(other.editTime, editTime) ||
-                other.editTime == editTime));
-  }
-
-  @JsonKey(ignore: true)
-  @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      name,
-      organization,
-      superDepartment,
-      member,
-      registerId,
-      registerTime,
-      useYn,
-      editorId,
-      editTime);
 
   @JsonKey(ignore: true)
   @override
@@ -354,40 +326,50 @@ class _$DepartmentImpl implements _Department {
 
 abstract class _Department implements Department {
   factory _Department(
-      {required final String id,
-      required final String name,
-      required final Organization organization,
-      final Department? superDepartment,
-      final Member? member,
-      required final String registerId,
-      required final DateTime registerTime,
-      required final String useYn,
-      required final String editorId,
-      required final DateTime editTime}) = _$DepartmentImpl;
+      {String? id,
+      required String name,
+      required Organization organization,
+      Department? superDepartment,
+      Member? member,
+      required String registerId,
+      required DateTime registerTime,
+      required String useYn,
+      required String editorId,
+      required DateTime editTime}) = _$DepartmentImpl;
 
   factory _Department.fromJson(Map<String, dynamic> json) =
       _$DepartmentImpl.fromJson;
 
   @override
-  String get id;
+  String? get id;
+  set id(String? value);
   @override
   String get name;
+  set name(String value);
   @override
   Organization get organization;
+  set organization(Organization value);
   @override
   Department? get superDepartment;
+  set superDepartment(Department? value);
   @override
   Member? get member;
+  set member(Member? value);
   @override
   String get registerId;
+  set registerId(String value);
   @override
   DateTime get registerTime;
+  set registerTime(DateTime value);
   @override
   String get useYn;
+  set useYn(String value);
   @override
   String get editorId;
+  set editorId(String value);
   @override
   DateTime get editTime;
+  set editTime(DateTime value);
   @override
   @JsonKey(ignore: true)
   _$$DepartmentImplCopyWith<_$DepartmentImpl> get copyWith =>

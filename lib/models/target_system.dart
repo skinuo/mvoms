@@ -4,7 +4,7 @@ part 'target_system.freezed.dart';
 part 'target_system.g.dart';
 
 /// 대상 시스템 관리
-@freezed
+@unfreezed
 class TargetSystem with _$TargetSystem {
   factory TargetSystem({
     required String id,
@@ -16,5 +16,9 @@ class TargetSystem with _$TargetSystem {
     required String editorId,
     required DateTime editTime
   }) = _TargetSystem;
+
+  factory TargetSystem.create() => TargetSystem(id: "", name: "", registerId: "",
+      registerTime: DateTime.now(), useYn: "Y", editorId: "", editTime: DateTime.now());
+
   factory TargetSystem.fromJson(Map<String, dynamic> json) => _$TargetSystemFromJson(json);
 }

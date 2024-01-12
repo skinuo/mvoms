@@ -20,15 +20,24 @@ Organization _$OrganizationFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Organization {
-  String get id => throw _privateConstructorUsedError;
+  String? get id => throw _privateConstructorUsedError;
+  set id(String? value) => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
+  set name(String value) => throw _privateConstructorUsedError;
   String? get email => throw _privateConstructorUsedError;
+  set email(String? value) => throw _privateConstructorUsedError;
   String? get phone => throw _privateConstructorUsedError;
+  set phone(String? value) => throw _privateConstructorUsedError;
   String get registerId => throw _privateConstructorUsedError;
+  set registerId(String value) => throw _privateConstructorUsedError;
   DateTime get registerTime => throw _privateConstructorUsedError;
+  set registerTime(DateTime value) => throw _privateConstructorUsedError;
   String get useYn => throw _privateConstructorUsedError;
+  set useYn(String value) => throw _privateConstructorUsedError;
   String get editorId => throw _privateConstructorUsedError;
+  set editorId(String value) => throw _privateConstructorUsedError;
   DateTime get editTime => throw _privateConstructorUsedError;
+  set editTime(DateTime value) => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -43,7 +52,7 @@ abstract class $OrganizationCopyWith<$Res> {
       _$OrganizationCopyWithImpl<$Res, Organization>;
   @useResult
   $Res call(
-      {String id,
+      {String? id,
       String name,
       String? email,
       String? phone,
@@ -67,7 +76,7 @@ class _$OrganizationCopyWithImpl<$Res, $Val extends Organization>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
+    Object? id = freezed,
     Object? name = null,
     Object? email = freezed,
     Object? phone = freezed,
@@ -78,10 +87,10 @@ class _$OrganizationCopyWithImpl<$Res, $Val extends Organization>
     Object? editTime = null,
   }) {
     return _then(_value.copyWith(
-      id: null == id
+      id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -127,7 +136,7 @@ abstract class _$$OrganizationImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String id,
+      {String? id,
       String name,
       String? email,
       String? phone,
@@ -149,7 +158,7 @@ class __$$OrganizationImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
+    Object? id = freezed,
     Object? name = null,
     Object? email = freezed,
     Object? phone = freezed,
@@ -160,10 +169,10 @@ class __$$OrganizationImplCopyWithImpl<$Res>
     Object? editTime = null,
   }) {
     return _then(_$OrganizationImpl(
-      id: null == id
+      id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -204,7 +213,7 @@ class __$$OrganizationImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$OrganizationImpl implements _Organization {
   _$OrganizationImpl(
-      {required this.id,
+      {this.id,
       required this.name,
       this.email,
       this.phone,
@@ -218,53 +227,28 @@ class _$OrganizationImpl implements _Organization {
       _$$OrganizationImplFromJson(json);
 
   @override
-  final String id;
+  String? id;
   @override
-  final String name;
+  String name;
   @override
-  final String? email;
+  String? email;
   @override
-  final String? phone;
+  String? phone;
   @override
-  final String registerId;
+  String registerId;
   @override
-  final DateTime registerTime;
+  DateTime registerTime;
   @override
-  final String useYn;
+  String useYn;
   @override
-  final String editorId;
+  String editorId;
   @override
-  final DateTime editTime;
+  DateTime editTime;
 
   @override
   String toString() {
     return 'Organization(id: $id, name: $name, email: $email, phone: $phone, registerId: $registerId, registerTime: $registerTime, useYn: $useYn, editorId: $editorId, editTime: $editTime)';
   }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$OrganizationImpl &&
-            (identical(other.id, id) || other.id == id) &&
-            (identical(other.name, name) || other.name == name) &&
-            (identical(other.email, email) || other.email == email) &&
-            (identical(other.phone, phone) || other.phone == phone) &&
-            (identical(other.registerId, registerId) ||
-                other.registerId == registerId) &&
-            (identical(other.registerTime, registerTime) ||
-                other.registerTime == registerTime) &&
-            (identical(other.useYn, useYn) || other.useYn == useYn) &&
-            (identical(other.editorId, editorId) ||
-                other.editorId == editorId) &&
-            (identical(other.editTime, editTime) ||
-                other.editTime == editTime));
-  }
-
-  @JsonKey(ignore: true)
-  @override
-  int get hashCode => Object.hash(runtimeType, id, name, email, phone,
-      registerId, registerTime, useYn, editorId, editTime);
 
   @JsonKey(ignore: true)
   @override
@@ -282,37 +266,46 @@ class _$OrganizationImpl implements _Organization {
 
 abstract class _Organization implements Organization {
   factory _Organization(
-      {required final String id,
-      required final String name,
-      final String? email,
-      final String? phone,
-      required final String registerId,
-      required final DateTime registerTime,
-      required final String useYn,
-      required final String editorId,
-      required final DateTime editTime}) = _$OrganizationImpl;
+      {String? id,
+      required String name,
+      String? email,
+      String? phone,
+      required String registerId,
+      required DateTime registerTime,
+      required String useYn,
+      required String editorId,
+      required DateTime editTime}) = _$OrganizationImpl;
 
   factory _Organization.fromJson(Map<String, dynamic> json) =
       _$OrganizationImpl.fromJson;
 
   @override
-  String get id;
+  String? get id;
+  set id(String? value);
   @override
   String get name;
+  set name(String value);
   @override
   String? get email;
+  set email(String? value);
   @override
   String? get phone;
+  set phone(String? value);
   @override
   String get registerId;
+  set registerId(String value);
   @override
   DateTime get registerTime;
+  set registerTime(DateTime value);
   @override
   String get useYn;
+  set useYn(String value);
   @override
   String get editorId;
+  set editorId(String value);
   @override
   DateTime get editTime;
+  set editTime(DateTime value);
   @override
   @JsonKey(ignore: true)
   _$$OrganizationImplCopyWith<_$OrganizationImpl> get copyWith =>

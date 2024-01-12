@@ -17,16 +17,8 @@ class MVOMSSearch extends StatefulWidget {
 }
 
 class _MVOMSSearchState extends State<MVOMSSearch> with InputWidget {
-
   // 검색조건
   final OperationEventSearchCondition _cond = OperationEventSearchCondition();
-
-  // 발생일시
-  String _evntTimeStart = "";
-  String _evntTimeEnd = "";
-  // 종결일시
-  String _closeTimeStart = "";
-  String _closeTimeEnd = "";
 
   // 상태 코드
   late List<String> _stateCodeNames;
@@ -111,15 +103,15 @@ class _MVOMSSearchState extends State<MVOMSSearch> with InputWidget {
                         Expanded(
                           child: Row(
                             children: [
+                              // 발생시작
                               Expanded(
                                   child: makeDateCell(
                                       context: context,
-                                      controller: TextEditingController(text: _evntTimeStart),
+                                      controller: TextEditingController(text: _cond.evntTimeStart != null ? DateFormat('yyyy-MM-dd').format(_cond.evntTimeStart!) : ""),
                                       onSelected: (value) {
-                                        setState(() {
-                                          _evntTimeStart = DateFormat('yyyy-MM-dd').format(value);
-                                        });
+                                        setState(() => _cond.evntTimeStart = value);
                                       },
+                                      lastDate: _cond.evntTimeEnd,
                                       readOnly: true,
                                       decoration: makeInputDecoration(),
                                   )
@@ -129,15 +121,15 @@ class _MVOMSSearchState extends State<MVOMSSearch> with InputWidget {
                                   width: 20,
                                   child: const Text("~")
                               ),
+                              // 발생종료
                               Expanded(
                                   child: makeDateCell(
                                       context: context,
-                                      controller: TextEditingController(text: _evntTimeEnd),
+                                      controller: TextEditingController(text: _cond.evntTimeEnd != null ? DateFormat('yyyy-MM-dd').format(_cond.evntTimeEnd!) : ""),
                                       onSelected: (value) {
-                                        setState(() {
-                                          _evntTimeEnd = DateFormat('yyyy-MM-dd').format(value);
-                                        });
+                                        setState(() => _cond.evntTimeEnd = value);
                                       },
+                                      firstDate: _cond.evntTimeStart,
                                       readOnly: true,
                                       decoration: makeInputDecoration(),
                                   )
@@ -155,10 +147,10 @@ class _MVOMSSearchState extends State<MVOMSSearch> with InputWidget {
                               Expanded(
                                   child: makeDateCell(
                                       context: context,
-                                      controller: TextEditingController(text: _closeTimeStart),
+                                      controller: TextEditingController(text: _cond.closeTimeStart != null ? DateFormat('yyyy-MM-dd').format(_cond.closeTimeStart!) : ""),
                                       onSelected: (value) {
                                         setState(() {
-                                          _closeTimeStart = DateFormat('yyyy-MM-dd').format(value);
+                                          _cond.closeTimeStart = value;
                                         });
                                       },
                                       readOnly: true,
@@ -173,10 +165,10 @@ class _MVOMSSearchState extends State<MVOMSSearch> with InputWidget {
                               Expanded(
                                   child: makeDateCell(
                                       context: context,
-                                      controller: TextEditingController(text: _closeTimeEnd),
+                                      controller: TextEditingController(text: _cond.closeTimeEnd != null ? DateFormat('yyyy-MM-dd').format(_cond.closeTimeEnd!) : ""),
                                       onSelected: (value) {
                                         setState(() {
-                                          _closeTimeEnd = DateFormat('yyyy-MM-dd').format(value);
+                                          _cond.closeTimeEnd = value;
                                         });
                                       },
                                       readOnly: true,
