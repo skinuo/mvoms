@@ -1,6 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:mvoms/utilities/global.dart';
-
 part 'target_system.freezed.dart';
 part 'target_system.g.dart';
 

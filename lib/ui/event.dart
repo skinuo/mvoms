@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mvoms/models/operation_event.dart';
+import 'package:mvoms/models/operation_event_search_condition.dart';
 import 'package:mvoms/models/pagination.dart';
 import 'package:mvoms/ui/search.dart';
 
@@ -19,6 +20,7 @@ class MVOMSEvent extends StatefulWidget {
 }
 
 class _MVOMSEventState extends State<MVOMSEvent> with InputWidget {
+
   int _newEventCount = 0;
   int _notCompleteEventCount = 0;
   String _eventCountValue = "";
@@ -95,7 +97,7 @@ class _MVOMSEventState extends State<MVOMSEvent> with InputWidget {
           // 간격
           const SizedBox(height: 10),
           // 검색바
-          const MVOMSSearch(),
+          MVOMSSearch(searchFunc: getEventList),
           // 간격
           const SizedBox(height: 10),
           // 이벤트 테이블 헤더 (헤더 고정을 위해 분리)
@@ -212,12 +214,12 @@ class _MVOMSEventState extends State<MVOMSEvent> with InputWidget {
   /// 이벤트 목록 조회
   ///
   /// - [page]: 조회 페이지 번호, 0부터 시작
-  void getEventList({int page = 0}) async {
+  void getEventList({int page = 0, OperationEventSearchCondition? cond}) async {
     // 현재 페이지 저장
     _curPageNo = page;
     print("목록 조회: $page");
     // 목록 조회
-    var resMap = await _rest.getEventList(page: page, size: _recordSize);
+    var resMap = await _rest.getEventList(page: page, size: _recordSize, cond: cond);
     setState(() {
       // 목록 업데이트
       _rows.clear();

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:mvoms/models/operation_event.dart';
+import 'package:mvoms/models/operation_event_search_condition.dart';
 import 'package:mvoms/utilities/auth_updater.dart';
 import 'package:mvoms/utilities/constants.dart';
 
@@ -75,9 +76,30 @@ class RestRepogitory {
       int size = 10,
       String? sort,
       String? direction,
-      String? title,
+      OperationEventSearchCondition? cond
     }) {
-    return req(uri:'/op-event/list?pg_page=$page&pg_size=$size');
+    var uri = '/op-event/list?pg_page=$page&pg_size=$size';
+    // 키워드로 검색
+    if (cond?.keyword != null && cond?.keyword?.replaceAll(" ", "") != "") {
+      // 제목
+      if (cond?.checkedTitle == true) {
+        uri += "&titleLike=${cond?.keyword}";
+      }
+      // 설명
+      if (cond?.checkedDesc == true) {
+        uri += "&evntDescLike=${cond?.keyword}";
+      }
+      // 처리자
+      if (cond?.checkedCharger == true) {
+        uri += "&requesterNameLike=${cond?.keyword}";
+      }
+      // 의뢰자
+      if (cond?.checkedRequester == true) {
+        uri += "&chargerNameLike=${cond?.keyword}";
+      }
+    }
+    print("검색 : $uri");
+    return req(uri: uri);
   }
 
   /// 이벤트 등록
@@ -144,6 +166,7 @@ class RestRepogitory {
         res = _dio.post(uri, options: options, data: data);
         break;
       case HttpMethodType.put:
+        print("pnt: ${uri}");
         res = _dio.put(uri, options: options, data: data);
     }
 

@@ -163,6 +163,7 @@ class _MVOMSNewMemberDialogState extends State<MVOMSNewMemberDialog> with InputW
                         isDense: true,
                         filled: true,
                         fillColor: _readonlyOrg ? ConstantValues.kColorGray : Colors.white,
+                        focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.blue.shade800, width: 2)),
                         enabledBorder: const OutlineInputBorder(borderSide: BorderSide(color: Colors.grey))),
                     )),
                   ]),

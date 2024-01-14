@@ -56,9 +56,9 @@ mixin InputWidget {
               color: Colors.grey,
               width: 1),
         ),
-        focusedBorder: const OutlineInputBorder(borderSide: BorderSide(
-            color: Colors.indigo,
-            width: 1),
+        focusedBorder: OutlineInputBorder(borderSide: BorderSide(
+            color: Colors.blue.shade800,
+            width: 2),
         ),
         isDense: true,
         contentPadding: EdgeInsets.all(padding),

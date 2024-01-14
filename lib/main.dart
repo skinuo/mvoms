@@ -190,6 +190,7 @@ class _MVOMSMainState extends State<MVOMSMain> with InputWidget {
       // 스토리지에서 사용자 정보 가져오기
       var userJson = _localStorage["user"];
       var m = json.decode(userJson!);
+
       Global.user = Member.fromJson(m);
       print(Global.user.toString());
       // 사용자 정보 출력

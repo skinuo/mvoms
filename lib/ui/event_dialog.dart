@@ -118,7 +118,7 @@ class _MVOMSEventDialogState extends State<MVOMSEventDialog> with InputWidget {
                             // 이름
                             Expanded(
                               child: TextFormField(
-                                style: TextStyle(fontSize: ConstantValues.kDialogFontSize),
+                                style: const TextStyle(fontSize: ConstantValues.kDialogFontSize),
                                 readOnly: true,
                                 decoration: makeInputDecoration(labelText: "요청자", required: true),
                                 controller: TextEditingController(text: _event.requester.name !=  "" ? "${_event.requester.name} (${_event.requester.department.name}, ${_event.requester.department.organization.name})" : ""),
@@ -136,7 +136,7 @@ class _MVOMSEventDialogState extends State<MVOMSEventDialog> with InputWidget {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 15),
+                  const SizedBox(height: 10),
                   Container(
                       width: double.infinity,
                       padding: const EdgeInsets.all(8),
@@ -336,7 +336,7 @@ class _MVOMSEventDialogState extends State<MVOMSEventDialog> with InputWidget {
     if (_formKey.currentState!.validate()) {
       if (widget.evntId != null) {
         // 이벤트 수정
-        _rest.addEvent(_event);
+        _rest.updateEvent(_event);
       } else {
         // 이벤트 저장
         _rest.addEvent(_event)

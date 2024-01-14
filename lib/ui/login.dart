@@ -31,8 +31,7 @@ class _MVOMSLoginState extends State<MVOMSLogin> {
   // 폼 유효성 검사를 위한 키
   final _formKey = GlobalKey<FormState>();
   // 세션 스토리지
-  static final _storage = new FlutterSecureStorage();
-  final _rest = new RestRepogitory();
+  final _rest = RestRepogitory();
   // 암호화 초기 벡터
   String _ivStr = "";
 
