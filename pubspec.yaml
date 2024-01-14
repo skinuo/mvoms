@@ -30,11 +30,13 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
 
   # datetime
   omni_datetime_picker: ^1.0.9
   # datetimeforamt
-  intl: ^0.19.0
+  intl: ^0.18.1
   # dropdown
   dropdown_button2: ^2.3.9
   # session

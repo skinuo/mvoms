@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:mvoms/utilities/global.dart';
 
 part 'target_system.freezed.dart';
 part 'target_system.g.dart';
@@ -17,8 +18,8 @@ class TargetSystem with _$TargetSystem {
     required DateTime editTime
   }) = _TargetSystem;
 
-  factory TargetSystem.create() => TargetSystem(id: "", name: "", registerId: "",
-      registerTime: DateTime.now(), useYn: "Y", editorId: "", editTime: DateTime.now());
+  factory TargetSystem.create() => TargetSystem(id: "", name: "", registerId: Global.user.id!,
+      registerTime: DateTime.now(), useYn: "Y", editorId: Global.user.id!, editTime: DateTime.now());
 
   factory TargetSystem.fromJson(Map<String, dynamic> json) => _$TargetSystemFromJson(json);
 }

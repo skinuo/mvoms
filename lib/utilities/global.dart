@@ -6,7 +6,8 @@ import '../models/common_code.dart';
 
 // 전역 객체 관리
 class Global {
-  static final Member user = Member(id:"heo",
+  static late Member user = Member.create();
+  static final Member user1 = Member(id:"heo",
       name: "허수경", department: Department(id: 'kfism', name: "국가산림통합정보체계 유지관리",
         organization: Organization(id: "mvst", name: "국가산림통합정보체계 유지관리", registerId: "admin",
             registerTime: DateTime.now(), useYn: "Y", editorId: "admin", editTime: DateTime.now()),

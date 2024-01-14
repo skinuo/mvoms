@@ -1,16 +1,14 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:mvoms/models/common_code.dart';
-import 'package:mvoms/models/user.dart';
-import 'package:mvoms/providers/global_provider.dart';
+import 'package:mvoms/models/member.dart';
 import 'package:mvoms/ui/event.dart';
 import 'package:mvoms/utilities/auth_updater.dart';
 import 'package:mvoms/utilities/global.dart';
 import 'package:mvoms/utilities/constants.dart';
 import 'package:mvoms/utilities/rest_repository.dart';
-import 'package:provider/provider.dart';
 import 'utilities/input_widget.dart';
 import 'ui/login.dart';
 import 'dart:html';
@@ -22,8 +20,18 @@ void main() {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent),
         useMaterial3: true,
       ),
+      // 언어 설정
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate
+      ],
+      supportedLocales: const [
+        Locale('ko', 'KR')
+      ],
+      locale: const Locale('ko'),
       debugShowCheckedModeBanner: false,
-      home: MVOMSMain()));
+      home: const MVOMSMain()));
 }
 
 class MVOMSMain extends StatefulWidget {
@@ -36,17 +44,10 @@ class MVOMSMain extends StatefulWidget {
 class _MVOMSMainState extends State<MVOMSMain> with InputWidget {
   // 요청 관리
   final _rest = RestRepogitory();
-
   // 세션 스토리지
-  Storage _localStorage = window.localStorage;
-  //static const _storage = FlutterSecureStorage();
-
-  // 사용자 정보
-  Map<String, dynamic> _userMap = {};
-
+  final Storage _localStorage = window.localStorage;
   // 사용자 정보 출력 텍스트
   String _userInfoValue = "...";
-
   // 메인 로드 여부
   bool loaded = false;
 
@@ -57,12 +58,8 @@ class _MVOMSMainState extends State<MVOMSMain> with InputWidget {
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       print('main init!');
-      // 공통 코드 세팅
-      await initComCode();
-      // 로딩바 걷고 메인 보이기
-      setState(() {
-        loaded = true;
-      });
+      // 초기화
+      init();
     });
   }
 
@@ -93,7 +90,7 @@ class _MVOMSMainState extends State<MVOMSMain> with InputWidget {
                 ]),
                 title: Row(
                   children: [
-                    Flexible(fit: FlexFit.tight, child: Center(child: Text(""))),
+                    const Flexible(fit: FlexFit.tight, child: Center(child: Text(""))),
                     const Flexible(
                         fit: FlexFit.tight, child: Center(child: Text("MVOMS"))),
                     // 사용자 정보 출력
@@ -102,17 +99,17 @@ class _MVOMSMainState extends State<MVOMSMain> with InputWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          Text(_userInfoValue,
-                              style: const TextStyle(fontSize: 12)),
+                          Text(_userInfoValue, style: const TextStyle(fontSize: 12)),
                           const SizedBox(width: 10),
                           SizedBox(
-                              child: TextButton(
-                                  onPressed: () {
-                                    print("stop");
-                                    AuthUpdater.instance.stop();
-                                  },
-                                  child: const Text("로그아웃",
-                                      style: TextStyle(fontSize: 12))))
+                            child: TextButton(
+                              onPressed: () {
+                                print("stop");
+                                logout();
+
+                              },
+                              child: const Text("로그아웃", style: TextStyle(fontSize: 12)))
+                          )
                         ],
                       ),
                     )
@@ -126,12 +123,11 @@ class _MVOMSMainState extends State<MVOMSMain> with InputWidget {
                 style: const TextStyle(fontSize: ConstantValues.kBodyFontSize),
                 child: const TabBarView(children: [
                   // 탭1
-                  //const Text("home"),
+                  Text("home"),
                   // 탭2
                   MVOMSEvent(),
                   // 탭3
                   Text("b"),
-                  const Text("home"),
                 ]),
               ),
             ),
@@ -142,27 +138,26 @@ class _MVOMSMainState extends State<MVOMSMain> with InputWidget {
   }
 
   /// 사용자 정보를 출력한다.
-/*
-  void printUserInfo() async {
-    String? userJson = await _storage.read(key: "user");
-    if (userJson != null) {
-      _userMap = json.decode(userJson);
+
+  void printUserInfo(Member member) async {
       setState(() {
-        _userInfoValue = "${_userMap["name"]}(${_userMap["id"]}), [기관자리]";
+        _userInfoValue = "${member.name} (${member.id}, ${member.department.name})";
       });
-    }
   }
-*/
+
 
   /// 사용자 로그아웃
-  /*void logout() {
-    _storage.delete(key: "user");
+  void logout() {
+    // 인증 갱신 스톱
+    AuthUpdater.instance.stop();
+    // 스토리지에서 제거
+    _localStorage.remove("user");
     // 모든 페이지 제거 하고 이동
     Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => const MVOMSLogin()),
         (route) => false);
-  }*/
+  }
 
   /// 공통코드 초기화
   Future initComCode() async {
@@ -183,11 +178,27 @@ class _MVOMSMainState extends State<MVOMSMain> with InputWidget {
     }
   }
 
-  void initUser() {
+  void init() async {
     if (!_localStorage.containsKey("user")) {
       // 로그인페이지로 이동
       Navigator.pushAndRemoveUntil(context,
           MaterialPageRoute(builder: (context)=> const MVOMSLogin()), (route) => false);
+    } else {
+      // 공통 코드 세팅
+      await initComCode();
+
+      // 스토리지에서 사용자 정보 가져오기
+      var userJson = _localStorage["user"];
+      var m = json.decode(userJson!);
+      Global.user = Member.fromJson(m);
+      print(Global.user.toString());
+      // 사용자 정보 출력
+      printUserInfo(Global.user);
+
+      // 로딩바 걷고 메인 보이기
+      setState(() {
+        loaded = true;
+      });
     }
   }
 }

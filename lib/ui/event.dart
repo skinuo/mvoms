@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:mvoms/models/department.dart';
 import 'package:mvoms/models/operation_event.dart';
-import 'package:mvoms/models/organization.dart';
 import 'package:mvoms/models/pagination.dart';
 import 'package:mvoms/ui/search.dart';
 
-import '../models/member.dart';
 import '../utilities/global.dart';
 import '../utilities/input_widget.dart';
 import '../utilities/constants.dart';
@@ -140,24 +137,30 @@ class _MVOMSEventState extends State<MVOMSEvent> with InputWidget {
                           child: SizedBox(
                             child: InkWell(
                               onTap: (){
-                                showEventPop(context, "이벤트 상세 조회", true, _rows[idx].evntId);
+                                var readonly = _rows[idx].registerId != Global.user.id;
+                                showEventPop(context, readonly ? "이벤트 상세 조회" : "이벤트 수정", readonly, _rows[idx].evntId);
                               },
                               child: Text("${getRowNum(idx)}, ${_rows[idx].title}",
                                 overflow: TextOverflow.ellipsis,
                               ),
                           ))),
-                      const Expanded(
+                      // 요청자
+                      Expanded(
                           flex: 1,
-                          child: Center(child: Text("-"))),
-                      const Expanded(
+                          child: Center(child: Text(_rows[idx].requester.name))),
+                      // 요청부서
+                      Expanded(
                           flex: 3,
-                          child: Center(child: Text("-"))),
+                          child: Center(child: Text(_rows[idx].requester.department.name))),
+                      // 의뢰일시
                       Expanded(
                           flex: 2,
                           child: Center(child: Text(DateFormat('yyyy-MM-dd HH:mm:ss').format(_rows[idx].evntTime)))),
+                      // 처리자
                       Expanded(
                           flex: 1,
                           child: Center(child: Text(_rows[idx].charger == null ? "" : _rows[idx].charger!.name))),
+                      // 상태
                       Expanded(
                           flex: 1,
                           child: Center(child: Text(Global.getComCodeName(ConstantValues.kCodeState, _rows[idx].stateCd)!))),
@@ -223,67 +226,11 @@ class _MVOMSEventState extends State<MVOMSEvent> with InputWidget {
         _rows.add(event);
       }
       // 페이징 생성
-      makePagination(resMap);
+      Pagination pg = Pagination.fromJson(resMap);
+      _pageButtons = makePageButtons(pg, _pageSize, (pageNum){getEventList(page:pageNum);});
+      // 건수
+      _eventCountValue = "전체 ${pg.totalElements}건";
     });
-  }
-
-  /// 페이지버튼 생성
-  ///
-  /// - [resMap]: 응답받은 페이지 Map 객체
-  void makePagination(Map<String, dynamic> resMap) {
-    Pagination pg = Pagination.fromJson(resMap);
-
-    // 건수
-    _eventCountValue = "전체 ${pg.totalElements}건";
-    print(pg.toJson());
-
-    // 초기화 후 추가
-    _pageButtons.clear();
-    // 버튼 생성
-    int firstPage = (pg.number ~/ _pageSize) * _pageSize;
-    int lastPage = firstPage;
-    // 이전으로
-    if (pg.number >= _pageSize) {
-      _pageButtons.add(makePageButton("<<", firstPage-_pageSize, false));
-      _pageButtons.add(makePageButton("<", pg.number-1, false));
-    }
-    for (int i = 0; i < _pageSize; i++) {
-      int pageNum = firstPage + i;
-      if (pageNum >= pg.totalPages) {
-        // 최대 페이지 도달, 다음페이지 없음
-        lastPage = -1;
-        break;
-      }
-      // 현재 페이지 여부
-      bool curr = pageNum == pg.number;
-      _pageButtons.add(makePageButton((pageNum+1).toString(), pageNum, curr));
-      // 마지막 페이지
-      lastPage = pageNum;
-    }
-    // 다음으로
-    if (lastPage > -1 && lastPage+1 <= pg.totalPages) {
-      _pageButtons.add(makePageButton(">", pg.number+1, false));
-      _pageButtons.add(makePageButton(">>", lastPage+1, false));
-    }
-  }
-
-  /// 페이지 버튼 생성
-  /// 
-  /// - [pageTxt]: 페이지텍스트
-  /// - [pageNum]: 페이지번호
-  /// - [highlighting]: 강조여부
-  Widget makePageButton(String pageTxt, int pageNum, bool highlighting) {
-    return Flexible(
-      child: TextButton(
-          child: Text(pageTxt, style: TextStyle(
-            decoration: highlighting ? TextDecoration.underline : null,
-            fontWeight: highlighting ? FontWeight.bold: FontWeight.normal)),
-          onPressed: () {
-            // 목록 요청
-            getEventList(page: pageNum);
-          }
-      ),
-    );
   }
 
   /// 이벤트 팝업 열기
@@ -294,9 +241,16 @@ class _MVOMSEventState extends State<MVOMSEvent> with InputWidget {
   /// - [evntId]: 이벤트아이디(상세조회시사용)
   void showEventPop(BuildContext context, String title, bool readOnly, [String? evntId]) {
     // 다이얼로그호출
+    print(readOnly);
     showDialog(
         context: context,
         barrierDismissible: true,
-        builder: ((context) => MVOMSEventDialog(evntId: evntId, readOnly: readOnly, title: title)));
+        builder: ((context) => MVOMSEventDialog(evntId: evntId, readOnly: readOnly, title: title))
+    ).then((saved) {
+      if (saved ?? false) {
+        // 저장된 경우 리스트업
+        getEventList(page: _curPageNo);
+      }
+    });
   }
 }

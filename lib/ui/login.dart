@@ -160,19 +160,20 @@ class _MVOMSLoginState extends State<MVOMSLogin> {
       // 비밀번호 암호화
       var password = await encPassword(_password);
       // 로그인 수행
-      var succeeded = await _rest.login(_id, password);
+      //var succeeded = await _rest.login(_id, password);
+      var user = await _rest.getMember(_id);
+      var succeeded = true;
       if (succeeded) {
-        print("로그인성공");
-        String user = await _rest.getUser(_id);
+        //print("로그인성공");
+        //String user = await _rest.getUser(_id);
         print("사용자: $user");
 
         // 세션에 사용자정보 담기
-        /*Storage localStorage = window.localStorage;
+        Storage localStorage = window.localStorage;
         if (localStorage.containsKey("user")) {
           localStorage.remove("user");
         }
-        User user = await _rest.getUser(_id);
-        localStorage["user"] = jsonEncode(user);*/
+        localStorage["user"] = json.encode(user);
 
         // 로그인 성공 시 메인으로 이동
         goToHome();

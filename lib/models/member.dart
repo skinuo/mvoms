@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:mvoms/utilities/global.dart';
 
 import 'department.dart';
 part 'member.freezed.dart';
@@ -20,8 +21,8 @@ class Member with _$Member {
     required DateTime editTime
   }) = _Member;
 
-  factory Member.create() => Member(name: "", registerId: "", registerTime: DateTime.now(), useYn: "Y",
-        editorId: "", editTime: DateTime.now(), department: Department.create());
+  factory Member.create() => Member(name: "", registerId: Global.user.id!, registerTime: DateTime.now(), useYn: "Y",
+        editorId: Global.user.id!, editTime: DateTime.now(), department: Department.create());
 
   factory Member.fromJson(Map<String, dynamic> json) => _$MemberFromJson(json);
 }

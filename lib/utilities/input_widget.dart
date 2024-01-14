@@ -29,7 +29,6 @@ mixin InputWidget {
         style: TextStyle(fontSize: fontSize),
         decoration: decoration,
         isExpanded: true,
-        disabledHint: disabled ? Text(value) : null,
         onChanged: !disabled ? (item) {
           onChanged?.call(item);
         } : null,
@@ -47,7 +46,7 @@ mixin InputWidget {
   InputDecoration makeInputDecoration({
       String? labelText,
       bool required = false,
-      double padding = 12
+      double padding = 13
     }) {
     return InputDecoration(
         labelStyle: labelText != null ? TextStyle(fontSize: 12, color: required ? Colors.red : Colors.grey) : null,
@@ -58,7 +57,7 @@ mixin InputWidget {
               width: 1),
         ),
         focusedBorder: const OutlineInputBorder(borderSide: BorderSide(
-            color: Colors.grey,
+            color: Colors.indigo,
             width: 1),
         ),
         isDense: true,
@@ -79,7 +78,8 @@ mixin InputWidget {
     double fontSize = ConstantValues.kBodyFontSize,
     TextEditingController? controller,
     Function? onChanged,
-    Function? onTab
+    Function? onTab,
+    FocusNode? focusNode,
   }) {
     decoration ??= const InputDecoration();
     return TextField(
@@ -98,6 +98,7 @@ mixin InputWidget {
           : [],
       onChanged:(value) => onChanged?.call(value),
       onTap:() => onTab?.call(),
+      focusNode: focusNode != null ? focusNode : null,
     );
   }
 
@@ -176,22 +177,24 @@ mixin InputWidget {
         },
     );
   }
-/*
-  void makePagination1(Pagination pg) {
-    print(pg.toString());
 
-    // 초기화 후 추가
-    //_pageButtons.clear();
+  /// 페이지 버튼 목록 생성
+  /// 
+  /// - [pg]: 페이징객체
+  /// - [pageSize]: 페이지사이즈
+  /// - [pageFunc]: 버튼클릭시 이벤트
+  List<Widget> makePageButtons(Pagination pg, int pageSize, Function pageFunc) {
+    List<Widget> pageButtons = [];
 
     // 버튼 생성
-    int firstPage = (pg.number ~/ pg.p pageSize) * _pageSize;
+    int firstPage = (pg.number ~/ pageSize) * pageSize;
     int lastPage = firstPage;
     // 이전으로
-    if (pg.number >= _pageSize) {
-      _pageButtons.add(makePageButton1("<<", firstPage-_pageSize, false));
-      _pageButtons.add(makePageButton1("<", pg.number-1, false));
+    if (pg.number >= pageSize) {
+      pageButtons.add(makePageButton("<<", firstPage-pageSize, false, pageFunc));
+      pageButtons.add(makePageButton("<", pg.number-1, false, pageFunc));
     }
-    for (int i = 0; i < _pageSize; i++) {
+    for (int i = 0; i < pageSize; i++) {
       int pageNum = firstPage + i;
       if (pageNum >= pg.totalPages) {
         // 최대 페이지 도달, 다음페이지 없음
@@ -200,33 +203,34 @@ mixin InputWidget {
       }
       // 현재 페이지 여부
       bool curr = pageNum == pg.number;
-      _pageButtons.add(makePageButton1((pageNum+1).toString(), pageNum, curr));
+      pageButtons.add(makePageButton((pageNum+1).toString(), pageNum, curr, pageFunc));
       // 마지막 페이지
       lastPage = pageNum;
     }
     // 다음으로
-    if (lastPage > -1 && lastPage+1 <= pg.totalPages) {
-      _pageButtons.add(makePageButton1(">", pg.number+1, false));
-      _pageButtons.add(makePageButton1(">>", lastPage+1, false));
+    if (lastPage > -1 && lastPage+1 < pg.totalPages) {
+      pageButtons.add(makePageButton(">", pg.number+1, false, pageFunc));
+      pageButtons.add(makePageButton(">>", lastPage+1, false, pageFunc));
     }
+    return pageButtons;
   }
 
-  /// 페이지 버튼 생성
-  ///
-  /// - [pageTxt]: 페이지텍스트
-  /// - [pageNum]: 페이지번호
+  /// 페이징 버튼 생성
+  /// 
+  /// - [pageTxt]: 버튼텍스트
+  /// - [pageNum]: 버튼번호
   /// - [highlighting]: 강조여부
-  Widget makePageButton1(String pageTxt, int pageNum, bool highlighting) {
+  /// - [onPressed]: 버튼클릭이벤트
+  Widget makePageButton(String pageTxt, int pageNum, bool highlighting, Function onPressed) {
     return Flexible(
       child: TextButton(
           child: Text(pageTxt, style: TextStyle(
               decoration: highlighting ? TextDecoration.underline : null,
               fontWeight: highlighting ? FontWeight.bold: FontWeight.normal)),
           onPressed: () {
-            // 목록 요청
-            getEventList(page: pageNum);
+            onPressed(pageNum);
           }
       ),
     );
-  }*/
+  }
 }
