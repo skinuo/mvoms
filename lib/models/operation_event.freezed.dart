@@ -28,7 +28,9 @@ mixin _$OperationEvent {
   set stateCd(String value) => throw _privateConstructorUsedError;
   String get evntDesc => throw _privateConstructorUsedError;
   set evntDesc(String value) => throw _privateConstructorUsedError;
+  @UTCDateTimeConverter()
   DateTime get evntTime => throw _privateConstructorUsedError;
+  @UTCDateTimeConverter()
   set evntTime(DateTime value) => throw _privateConstructorUsedError;
   Member? get charger => throw _privateConstructorUsedError;
   set charger(Member? value) => throw _privateConstructorUsedError;
@@ -70,7 +72,7 @@ abstract class $OperationEventCopyWith<$Res> {
       String title,
       String stateCd,
       String evntDesc,
-      DateTime evntTime,
+      @UTCDateTimeConverter() DateTime evntTime,
       Member? charger,
       String? closeTime,
       TargetSystem? targetSystem,
@@ -232,7 +234,7 @@ abstract class _$$OperationEventImplCopyWith<$Res>
       String title,
       String stateCd,
       String evntDesc,
-      DateTime evntTime,
+      @UTCDateTimeConverter() DateTime evntTime,
       Member? charger,
       String? closeTime,
       TargetSystem? targetSystem,
@@ -358,7 +360,7 @@ class _$OperationEventImpl implements _OperationEvent {
       required this.title,
       required this.stateCd,
       required this.evntDesc,
-      required this.evntTime,
+      @UTCDateTimeConverter() required this.evntTime,
       this.charger,
       this.closeTime,
       this.targetSystem,
@@ -383,6 +385,7 @@ class _$OperationEventImpl implements _OperationEvent {
   @override
   String evntDesc;
   @override
+  @UTCDateTimeConverter()
   DateTime evntTime;
   @override
   Member? charger;
@@ -433,7 +436,7 @@ abstract class _OperationEvent implements OperationEvent {
       required String title,
       required String stateCd,
       required String evntDesc,
-      required DateTime evntTime,
+      @UTCDateTimeConverter() required DateTime evntTime,
       Member? charger,
       String? closeTime,
       TargetSystem? targetSystem,
@@ -462,7 +465,9 @@ abstract class _OperationEvent implements OperationEvent {
   String get evntDesc;
   set evntDesc(String value);
   @override
+  @UTCDateTimeConverter()
   DateTime get evntTime;
+  @UTCDateTimeConverter()
   set evntTime(DateTime value);
   @override
   Member? get charger;

@@ -21,15 +21,25 @@ CommonCode _$CommonCodeFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$CommonCode {
   String get id => throw _privateConstructorUsedError;
+  set id(String value) => throw _privateConstructorUsedError;
   String get code => throw _privateConstructorUsedError;
+  set code(String value) => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
+  set name(String value) => throw _privateConstructorUsedError;
   String? get desc => throw _privateConstructorUsedError;
+  set desc(String? value) => throw _privateConstructorUsedError;
   int get orderSeq => throw _privateConstructorUsedError;
+  set orderSeq(int value) => throw _privateConstructorUsedError;
   String get registerId => throw _privateConstructorUsedError;
+  set registerId(String value) => throw _privateConstructorUsedError;
   DateTime get registerTime => throw _privateConstructorUsedError;
+  set registerTime(DateTime value) => throw _privateConstructorUsedError;
   String get useYn => throw _privateConstructorUsedError;
+  set useYn(String value) => throw _privateConstructorUsedError;
   String get editorId => throw _privateConstructorUsedError;
+  set editorId(String value) => throw _privateConstructorUsedError;
   DateTime get editTime => throw _privateConstructorUsedError;
+  set editTime(DateTime value) => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -232,57 +242,30 @@ class _$CommonCodeImpl implements _CommonCode {
       _$$CommonCodeImplFromJson(json);
 
   @override
-  final String id;
+  String id;
   @override
-  final String code;
+  String code;
   @override
-  final String name;
+  String name;
   @override
-  final String? desc;
+  String? desc;
   @override
-  final int orderSeq;
+  int orderSeq;
   @override
-  final String registerId;
+  String registerId;
   @override
-  final DateTime registerTime;
+  DateTime registerTime;
   @override
-  final String useYn;
+  String useYn;
   @override
-  final String editorId;
+  String editorId;
   @override
-  final DateTime editTime;
+  DateTime editTime;
 
   @override
   String toString() {
     return 'CommonCode(id: $id, code: $code, name: $name, desc: $desc, orderSeq: $orderSeq, registerId: $registerId, registerTime: $registerTime, useYn: $useYn, editorId: $editorId, editTime: $editTime)';
   }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$CommonCodeImpl &&
-            (identical(other.id, id) || other.id == id) &&
-            (identical(other.code, code) || other.code == code) &&
-            (identical(other.name, name) || other.name == name) &&
-            (identical(other.desc, desc) || other.desc == desc) &&
-            (identical(other.orderSeq, orderSeq) ||
-                other.orderSeq == orderSeq) &&
-            (identical(other.registerId, registerId) ||
-                other.registerId == registerId) &&
-            (identical(other.registerTime, registerTime) ||
-                other.registerTime == registerTime) &&
-            (identical(other.useYn, useYn) || other.useYn == useYn) &&
-            (identical(other.editorId, editorId) ||
-                other.editorId == editorId) &&
-            (identical(other.editTime, editTime) ||
-                other.editTime == editTime));
-  }
-
-  @JsonKey(ignore: true)
-  @override
-  int get hashCode => Object.hash(runtimeType, id, code, name, desc, orderSeq,
-      registerId, registerTime, useYn, editorId, editTime);
 
   @JsonKey(ignore: true)
   @override
@@ -300,40 +283,50 @@ class _$CommonCodeImpl implements _CommonCode {
 
 abstract class _CommonCode implements CommonCode {
   factory _CommonCode(
-      {required final String id,
-      required final String code,
-      required final String name,
-      final String? desc,
-      required final int orderSeq,
-      required final String registerId,
-      required final DateTime registerTime,
-      required final String useYn,
-      required final String editorId,
-      required final DateTime editTime}) = _$CommonCodeImpl;
+      {required String id,
+      required String code,
+      required String name,
+      String? desc,
+      required int orderSeq,
+      required String registerId,
+      required DateTime registerTime,
+      required String useYn,
+      required String editorId,
+      required DateTime editTime}) = _$CommonCodeImpl;
 
   factory _CommonCode.fromJson(Map<String, dynamic> json) =
       _$CommonCodeImpl.fromJson;
 
   @override
   String get id;
+  set id(String value);
   @override
   String get code;
+  set code(String value);
   @override
   String get name;
+  set name(String value);
   @override
   String? get desc;
+  set desc(String? value);
   @override
   int get orderSeq;
+  set orderSeq(int value);
   @override
   String get registerId;
+  set registerId(String value);
   @override
   DateTime get registerTime;
+  set registerTime(DateTime value);
   @override
   String get useYn;
+  set useYn(String value);
   @override
   String get editorId;
+  set editorId(String value);
   @override
   DateTime get editTime;
+  set editTime(DateTime value);
   @override
   @JsonKey(ignore: true)
   _$$CommonCodeImplCopyWith<_$CommonCodeImpl> get copyWith =>

@@ -9,6 +9,7 @@ import 'package:mvoms/utilities/auth_updater.dart';
 import 'package:mvoms/utilities/global.dart';
 import 'package:mvoms/utilities/constants.dart';
 import 'package:mvoms/utilities/rest_repository.dart';
+
 import 'utilities/input_widget.dart';
 import 'ui/login.dart';
 import 'dart:html';
@@ -123,11 +124,12 @@ class _MVOMSMainState extends State<MVOMSMain> with InputWidget {
                 style: const TextStyle(fontSize: ConstantValues.kBodyFontSize),
                 child: const TabBarView(children: [
                   // 탭1
-                  Text("home"),
+                  //Text("home"),
                   // 탭2
                   MVOMSEvent(),
                   // 탭3
                   Text("b"),
+                  Text("home"),
                 ]),
               ),
             ),
@@ -179,20 +181,20 @@ class _MVOMSMainState extends State<MVOMSMain> with InputWidget {
   }
 
   void init() async {
-    if (!_localStorage.containsKey("user")) {
+    /*if (!_localStorage.containsKey("user")) {
       // 로그인페이지로 이동
       Navigator.pushAndRemoveUntil(context,
           MaterialPageRoute(builder: (context)=> const MVOMSLogin()), (route) => false);
-    } else {
+    } else {*/
       // 공통 코드 세팅
       await initComCode();
 
-      // 스토리지에서 사용자 정보 가져오기
+      /*// 스토리지에서 사용자 정보 가져오기
       var userJson = _localStorage["user"];
       var m = json.decode(userJson!);
 
       Global.user = Member.fromJson(m);
-      print(Global.user.toString());
+      print(Global.user.toString());*/
       // 사용자 정보 출력
       printUserInfo(Global.user);
 
@@ -201,5 +203,5 @@ class _MVOMSMainState extends State<MVOMSMain> with InputWidget {
         loaded = true;
       });
     }
-  }
+/*}*/
 }

@@ -91,7 +91,8 @@ class _MVOMSEventState extends State<MVOMSEvent> with InputWidget {
                           Text("이벤트 추가",
                               style: TextStyle(fontWeight: FontWeight.bold))
                         ],
-                      ))),
+                      ))
+              )
             ],
           ),
           // 간격
@@ -243,7 +244,20 @@ class _MVOMSEventState extends State<MVOMSEvent> with InputWidget {
   /// - [evntId]: 이벤트아이디(상세조회시사용)
   void showEventPop(BuildContext context, String title, bool readOnly, [String? evntId]) {
     // 다이얼로그호출
-    print(readOnly);
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: ((context) => MVOMSEventDialog(evntId: evntId, readOnly: readOnly, title: title))
+    ).then((saved) {
+      if (saved ?? false) {
+        // 저장된 경우 리스트업
+        getEventList(page: _curPageNo);
+      }
+    });
+  }
+
+  void showEventPop2(BuildContext context, String title, bool readOnly, [String? evntId]) {
+    // 다이얼로그호출
     showDialog(
         context: context,
         barrierDismissible: true,

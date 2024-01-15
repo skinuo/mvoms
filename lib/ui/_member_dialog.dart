@@ -69,9 +69,13 @@ class MVOMSMemberDialogState extends State<MVOMSMemberDialog> with InputWidget {
         child: Column(
           children: [
             Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(5),
-              child: const Text("조직원 검색")
+                width: double.infinity,
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: ConstantValues.kColorBlue
+                ),
+                child: const Text("조직원 조회")
             ),
             // 필터
             Padding(
@@ -81,14 +85,13 @@ class MVOMSMemberDialogState extends State<MVOMSMemberDialog> with InputWidget {
                 Expanded(
                   child: DropdownSearch<Organization>(
                     dropdownDecoratorProps: (
-                      DropDownDecoratorProps(
-                       /* dropdownSearchDecoration: InputDecoration(
+                      const DropDownDecoratorProps(
+                        dropdownSearchDecoration: InputDecoration(
                           enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
                           border: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
                           isDense: true,
                           contentPadding: EdgeInsets.all(10),
-                        ))*/
-                        dropdownSearchDecoration: makeDecoration())
+                        ))
                     ),
                     dropdownBuilder: (context, selectedItem) {
                       return Stack(children: [
@@ -113,7 +116,7 @@ class MVOMSMemberDialogState extends State<MVOMSMemberDialog> with InputWidget {
                     popupProps: PopupProps.menu(
                       isFilterOnline: true,
                       showSearchBox: true,
-                      //searchFieldProps: (TextFieldProps(decoration: makeInputDecoration())),
+                      searchFieldProps: (TextFieldProps(decoration: makeInputDecoration())),
                       itemBuilder: (BuildContext context, Organization org, bool isSelected) {
                         return Center(
                           child: Padding(padding: EdgeInsets.all(5), child: Text(org.name)),
@@ -249,22 +252,6 @@ class MVOMSMemberDialogState extends State<MVOMSMemberDialog> with InputWidget {
           ],
         ),
       ],
-    );
-  }
-
-  /// 다이얼로그 입력 공통 데코레이션
-  InputDecoration makeDecoration() {
-    return const InputDecoration(
-        filled: true,
-        fillColor: ConstantValues.kColorGray,
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(
-              color: ConstantValues.kColorGray,
-              width: 1),
-        ),
-        isDense: true,
-        contentPadding: EdgeInsets.all(13),
-        counterText: ""
     );
   }
 

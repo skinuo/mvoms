@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
+import 'package:intl/intl.dart';
 import 'package:mvoms/models/operation_event.dart';
 import 'package:mvoms/models/operation_event_search_condition.dart';
 import 'package:mvoms/utilities/auth_updater.dart';
@@ -98,6 +99,24 @@ class RestRepogitory {
         uri += "&chargerNameLike=${cond?.keyword}";
       }
     }
+    // 발생일시
+    if (cond?.evntTimeStart != null) {
+      uri += "&evntTimeStart=${DateFormat("yyyy-MM-dd HH:mm:ss").format(cond!.evntTimeStart!)}";
+    }
+    if (cond?.evntTimeEnd != null) {
+      uri += "&evntTimeEnd=${DateFormat("yyyy-MM-dd HH:mm:ss").format(cond!.evntTimeEnd!)}";
+    }
+    // 종결일시
+    if (cond?.closeTimeStart != null) {
+      uri += "&evntTimeStart=${DateFormat("yyyy-MM-dd HH:mm:ss").format(cond!.closeTimeStart!)}";
+    }
+    if (cond?.closeTimeEnd != null) {
+      uri += "&evntTimeEnd=${DateFormat("yyyy-MM-dd HH:mm:ss").format(cond!.closeTimeEnd!)}";
+    }
+    // 상태코드
+    if (cond?.stateCd != null && cond?.stateCd != "") {
+      uri += "&stateCd=${cond?.stateCd}";
+    }
     print("검색 : $uri");
     return req(uri: uri);
   }
@@ -106,6 +125,13 @@ class RestRepogitory {
   ///
   /// - [event]: 이벤트
   Future<dynamic> addEvent(OperationEvent event) {
+   /* //print(event.toString());
+    print(event.evntTime);
+    print(event.evntTime.isUtc);
+    event.evntTime = event.evntTime.toUtc();
+    //print(event.evntTime.timeZoneName);
+    print(event.evntTime.isUtc);
+    print(event.evntTime);*/
     return req(methodType: HttpMethodType.post, uri:'/op-event', data:event);
   }
 
@@ -155,7 +181,7 @@ class RestRepogitory {
     // 응답결과
     late Future<Response<dynamic>> res;
     // 토큰을 물고 요청
-    Options options = Options(headers: {"mvoms.auth.token": _ahtoToken});
+    Options options = Options(headers: {ConstantValues.kAuthToken: _ahtoToken});
 
     // 요청 메소드별 처리
     switch (methodType) {
@@ -166,7 +192,6 @@ class RestRepogitory {
         res = _dio.post(uri, options: options, data: data);
         break;
       case HttpMethodType.put:
-        print("pnt: ${uri}");
         res = _dio.put(uri, options: options, data: data);
     }
 

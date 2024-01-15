@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:mvoms/models/target_system.dart';
+import 'package:mvoms/utilities/UTCDateTimeConverter.dart';
 import 'package:mvoms/utilities/global.dart';
 
 import 'member.dart';
@@ -14,7 +15,7 @@ class OperationEvent with _$OperationEvent {
     required String title,
     required String stateCd,
     required String evntDesc,
-    required DateTime evntTime,
+    @UTCDateTimeConverter() required DateTime evntTime,
     Member? charger,
     String? closeTime,
     TargetSystem? targetSystem,

@@ -12,7 +12,8 @@ _$OperationEventImpl _$$OperationEventImplFromJson(Map<String, dynamic> json) =>
       title: json['title'] as String,
       stateCd: json['stateCd'] as String,
       evntDesc: json['evntDesc'] as String,
-      evntTime: DateTime.parse(json['evntTime'] as String),
+      evntTime:
+          const UTCDateTimeConverter().fromJson(json['evntTime'] as String),
       charger: json['charger'] == null
           ? null
           : Member.fromJson(json['charger'] as Map<String, dynamic>),
@@ -37,7 +38,7 @@ Map<String, dynamic> _$$OperationEventImplToJson(
       'title': instance.title,
       'stateCd': instance.stateCd,
       'evntDesc': instance.evntDesc,
-      'evntTime': instance.evntTime.toIso8601String(),
+      'evntTime': const UTCDateTimeConverter().toJson(instance.evntTime),
       'charger': instance.charger,
       'closeTime': instance.closeTime,
       'targetSystem': instance.targetSystem,

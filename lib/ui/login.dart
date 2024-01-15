@@ -2,8 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:mvoms/main.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:mvoms/models/user.dart';
 import 'package:mvoms/utilities/constants.dart';
 import 'package:mvoms/utilities/rest_repository.dart';
 import 'package:encrypt/encrypt.dart' as enc;
@@ -18,9 +16,10 @@ class MVOMSLogin extends StatefulWidget {
   @override
   State<MVOMSLogin> createState() => _MVOMSLoginState();
 }
-
+/**
+ *
+ */
 class _MVOMSLoginState extends State<MVOMSLogin> {
-
   // 세션 스토리지
   Storage _localStorage = window.localStorage;
 
@@ -168,11 +167,10 @@ class _MVOMSLoginState extends State<MVOMSLogin> {
         print("사용자: $user");
 
         // 세션에 사용자정보 담기
-        Storage localStorage = window.localStorage;
-        if (localStorage.containsKey("user")) {
-          localStorage.remove("user");
+        if (_localStorage.containsKey("user")) {
+          _localStorage.remove("user");
         }
-        localStorage["user"] = json.encode(user);
+        _localStorage["user"] = json.encode(user);
 
         // 로그인 성공 시 메인으로 이동
         goToHome();

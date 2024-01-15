@@ -21,14 +21,18 @@ class MVOMSSearch extends StatefulWidget {
 class _MVOMSSearchState extends State<MVOMSSearch> with InputWidget {
   // 검색조건
   final OperationEventSearchCondition _cond = OperationEventSearchCondition();
-
   // 상태 코드
-  final List<CommonCode> _stateCodes = Global.getComCode(ConstantValues.kCodeState);
+  List<CommonCode> _stateCodes = Global.getComCode(ConstantValues.kCodeState);
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    // 상태 코드 기본
+    var newCode = CommonCode.create();
+    newCode.name = "선택";
+    _stateCodes = [newCode,..._stateCodes];
   }
 
   @override
@@ -83,7 +87,7 @@ class _MVOMSSearchState extends State<MVOMSSearch> with InputWidget {
                                   child: CheckboxListTile(
                                     controlAffinity: ListTileControlAffinity.leading,
                                     contentPadding: EdgeInsets.zero,
-                                    title: Text("제목", style: TextStyle(fontSize: ConstantValues.kBodyFontSize)),
+                                    title: const Text("제목", style: TextStyle(fontSize: ConstantValues.kBodyFontSize)),
                                     value: _cond.checkedTitle,
                                     onChanged: (value){
                                       setState(()=>_cond.checkedTitle = value!);
@@ -97,7 +101,7 @@ class _MVOMSSearchState extends State<MVOMSSearch> with InputWidget {
                                   child: CheckboxListTile(
                                     controlAffinity: ListTileControlAffinity.leading,
                                     contentPadding: EdgeInsets.zero,
-                                    title: Text("내용", style: TextStyle(fontSize: ConstantValues.kBodyFontSize)),
+                                    title: const Text("내용", style: TextStyle(fontSize: ConstantValues.kBodyFontSize)),
                                     value: _cond.checkedDesc,
                                     onChanged: (value){
                                       setState(()=>_cond.checkedDesc = value!);
@@ -111,7 +115,7 @@ class _MVOMSSearchState extends State<MVOMSSearch> with InputWidget {
                                   child: CheckboxListTile(
                                     controlAffinity: ListTileControlAffinity.leading,
                                     contentPadding: EdgeInsets.zero,
-                                    title: Text("처리자", style: TextStyle(fontSize: ConstantValues.kBodyFontSize)),
+                                    title: const Text("처리자", style: TextStyle(fontSize: ConstantValues.kBodyFontSize)),
                                     value: _cond.checkedCharger,
                                     onChanged: (value){
                                       setState(()=>_cond.checkedCharger = value!);
@@ -125,7 +129,7 @@ class _MVOMSSearchState extends State<MVOMSSearch> with InputWidget {
                                   child: CheckboxListTile(
                                     controlAffinity: ListTileControlAffinity.leading,
                                     contentPadding: EdgeInsets.zero,
-                                    title: Text("의뢰자", style: TextStyle(fontSize: ConstantValues.kBodyFontSize)),
+                                    title: const Text("의뢰자", style: TextStyle(fontSize: ConstantValues.kBodyFontSize)),
                                     value: _cond.checkedRequester,
                                     onChanged: (value){
                                       setState(()=>_cond.checkedRequester = value!);
@@ -139,7 +143,7 @@ class _MVOMSSearchState extends State<MVOMSSearch> with InputWidget {
                                   child: CheckboxListTile(
                                     controlAffinity: ListTileControlAffinity.leading,
                                     contentPadding: EdgeInsets.zero,
-                                    title: Text("의뢰부서", style: TextStyle(fontSize: ConstantValues.kBodyFontSize)),
+                                    title: const Text("의뢰부서", style: TextStyle(fontSize: ConstantValues.kBodyFontSize)),
                                     value: _cond.checkedRequesterDepartment,
                                     onChanged: (value){
                                       setState(()=>_cond.checkedRequesterDepartment = value!);
@@ -249,7 +253,8 @@ class _MVOMSSearchState extends State<MVOMSSearch> with InputWidget {
                             decoration: makeInputDecoration(padding: 9),
                             style: const TextStyle(fontSize: ConstantValues.kBodyFontSize),
                             isExpanded: true,
-                            onChanged: (CommonCode? value) {
+                            hint: Text("선택")
+                            ,onChanged: (CommonCode? value) {
                               _cond.stateCd = value?.code;
                             },
                             items: _stateCodes.map((item) {
