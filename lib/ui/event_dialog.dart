@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mvoms/models/operation_event.dart';
 import 'package:mvoms/models/target_system.dart';
+import 'package:mvoms/utilities/input_widget.dart';
 import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 import '../models/member.dart';
 import '../utilities/global.dart';
@@ -25,7 +26,7 @@ class MVOMSEventDialog extends StatefulWidget {
   State<MVOMSEventDialog> createState() => _MVOMSEventDialogState();
 }
 
-class _MVOMSEventDialogState extends State<MVOMSEventDialog> {
+class _MVOMSEventDialogState extends State<MVOMSEventDialog> with InputWidget {
   final _rest = RestRepogitory();
   // 시스템 콤보박스 아이템
   final List<TargetSystem> _targetSystems = [];
@@ -33,6 +34,8 @@ class _MVOMSEventDialogState extends State<MVOMSEventDialog> {
   late final _reqMethods = Global.getComCode(ConstantValues.kCodeReqMethod);
   // 요청 유형 아이템
   late final _reqTypes = Global.getComCode(ConstantValues.kCodeReqType);
+  // 처리 상태 아이템
+  late final _reqStates = Global.getComCode(ConstantValues.kCodeState);
   // 이벤트 객체
   OperationEvent _event = OperationEvent.create();
   // 이벤트 다이얼로그 버튼
@@ -129,34 +132,54 @@ class _MVOMSEventDialogState extends State<MVOMSEventDialog> {
                               onTap: widget.readOnly ? null : ()=>showMemberPop(setRequester),
                               validator: (value) {
                                 if (_event.requester.name.replaceAll(" ", "") == "") {
-                                  return ConstantValues.kMessages["Required"];
+                                  return ConstantValues.kMessageRequired;
                                 }
                                 return null;
                               },
-                              decoration: makeDecoration(),
+                              decoration: makeDecoration(icon: const Icon(Icons.account_circle, color: Colors.grey)),
                             ),
                           ],
                         ),
                         // 요청일시
-                        Column(
+                        Row(
                           children: [
-                            makeWidgetTitle("요청일시", true),
-                            const SizedBox(height: 3),
-                            TextFormField(
-                              style: const TextStyle(fontSize: ConstantValues.kDialogFontSize),
-                              readOnly: true,
-                              controller: TextEditingController(text: DateFormat('yyyy-MM-dd HH:mm:ss').format(_event.evntTime)),
-                              onTap: !widget.readOnly ? () async {
-                                // 시간 피처
-                                DateTime? now = await showOmniDateTimePicker(
-                                  context: context,
-                                  // 최초 시간
-                                  initialDate: DateTime.now(),
-                                );
-                                setState(() => _event.evntTime = now!);
-                              } : null,
-                              decoration: makeDecoration(),
+                            Expanded(
+                              child: Column(
+                                children: [
+                                  makeWidgetTitle("요청일시", true),
+                                  const SizedBox(height: 3),
+                                  TextFormField(
+                                    style: const TextStyle(fontSize: ConstantValues.kDialogFontSize),
+                                    readOnly: true,
+                                    controller: TextEditingController(text: DateFormat('yyyy-MM-dd HH:mm:ss').format(_event.evntTime)),
+                                    onTap: !widget.readOnly ? () async {
+                                      // 시간 피처
+                                      DateTime? now = await showOmniDateTimePicker(
+                                        context: context,
+                                        // 최초 시간
+                                        initialDate: DateTime.now(),
+                                      );
+                                      setState(() => _event.evntTime = now!);
+                                    } : null,
+                                    decoration: makeDecoration(),
+                                  ),
+                                ],
+                              ),
                             ),
+                            const SizedBox(width: 10),
+                            // 처리상태
+                            Expanded(
+                              child: Column(
+                                children: [
+                                  makeWidgetTitle("처리상태", true),
+                                  const SizedBox(height: 3),
+                                  makeDropdown(_reqStates, widget.readOnly, (value) {
+                                    _event.stateCd = value!;
+                                  }, _reqStates[0])
+                                  ,
+                                ],
+                              ),
+                            )
                           ],
                         ),
                         Row(
@@ -174,11 +197,11 @@ class _MVOMSEventDialogState extends State<MVOMSEventDialog> {
                                     onTap: widget.readOnly ? null : ()=>showMemberPop(setCharger),
                                     validator: (value) {
                                       if (_event.charger == null) {
-                                        return ConstantValues.kMessages["Required"];
+                                        return ConstantValues.kMessageRequired;
                                       }
                                       return null;
                                     },
-                                    decoration: makeDecoration(),
+                                    decoration: makeDecoration(icon: const Icon(Icons.account_circle, color: Colors.grey)),
                                   ),
                                 ],
                               ),
@@ -191,7 +214,7 @@ class _MVOMSEventDialogState extends State<MVOMSEventDialog> {
                                   makeWidgetTitle("시스템", true),
                                   const SizedBox(height: 3),
                                   makeDropdown(_targetSystems, widget.readOnly, (value) {
-                                    _event.reqTpCd = value!.code;
+                                    _event.targetSystem = value!;
                                   }, _targetSystems.isNotEmpty ? _targetSystems[0] : "")
                                 ],
                               ),
@@ -233,6 +256,7 @@ class _MVOMSEventDialogState extends State<MVOMSEventDialog> {
                             makeWidgetTitle("제목", true),
                             const SizedBox(height: 3),
                             TextFormField(
+                              readOnly: widget.readOnly,
                               style: const TextStyle(fontSize: ConstantValues.kDialogFontSize),
                               controller: TextEditingController(text: _event.title),
                               maxLength: 100,
@@ -241,7 +265,7 @@ class _MVOMSEventDialogState extends State<MVOMSEventDialog> {
                               },
                               validator: (value) {
                                 if (_event.title.isEmpty) {
-                                  return ConstantValues.kMessages["Required"];
+                                  return ConstantValues.kMessageRequired;
                                 }
                                 return null;
                               },
@@ -253,6 +277,7 @@ class _MVOMSEventDialogState extends State<MVOMSEventDialog> {
                             makeWidgetTitle("내용", true),
                             const SizedBox(height: 3),
                             TextFormField(
+                              readOnly: widget.readOnly,
                               style: const TextStyle(fontSize: ConstantValues.kDialogFontSize),
                               controller: TextEditingController(text: _event.evntDesc),
                               maxLines: 5, maxLength: 500,
@@ -261,7 +286,7 @@ class _MVOMSEventDialogState extends State<MVOMSEventDialog> {
                               },
                               validator: (value) {
                                 if (_event.evntDesc.isEmpty) {
-                                  return ConstantValues.kMessages["Required"];
+                                  return ConstantValues.kMessageRequired;
                                 }
                                 return null;
                               },
@@ -307,18 +332,6 @@ class _MVOMSEventDialogState extends State<MVOMSEventDialog> {
     );
   }
 
-  Widget makeWidgetTitle(String title, bool required) {
-    return Align(
-        alignment: Alignment.centerLeft,
-        child: Row(
-          children: [
-            Text(required ? "*" : "", style: const TextStyle(color: Colors.red)),
-            Text(title, style: const TextStyle(color: Colors.grey, fontWeight: FontWeight.bold, fontSize: 12)),
-          ],
-        )
-    );
-  }
-
   /// 드랍다운 위젯 생성
   DropdownButtonFormField2 makeDropdown(List items, bool readonly, Function onChanged, Object value) {
     return DropdownButtonFormField2(
@@ -335,22 +348,6 @@ class _MVOMSEventDialogState extends State<MVOMSEventDialog> {
         );
       }).toList(),
       value: value
-    );
-  }
-
-  /// 다이얼로그 입력 공통 데코레이션
-  InputDecoration makeDecoration() {
-    return const InputDecoration(
-      filled: true,
-      fillColor: ConstantValues.kColorGray,
-      enabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(
-          color: ConstantValues.kColorGray,
-          width: 1),
-      ),
-      isDense: true,
-      contentPadding: EdgeInsets.all(13),
-      counterText: ""
     );
   }
 

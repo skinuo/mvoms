@@ -63,166 +63,191 @@ class MVOMSMemberDialogState extends State<MVOMSMemberDialog> with InputWidget {
       surfaceTintColor: Colors.transparent,
       title: const Text("조직원 조회"),
       content: Container(
-        width: 550,
-        height: 450,
+        width: 500,
+        height: 490,
         color: Colors.white,
         child: Column(
           children: [
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(5),
+              decoration: const BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(
+                        color: Colors.grey,
+                        width: 1
+                    )
+                )
+              ),
               child: const Text("조직원 검색")
             ),
             // 필터
-            Padding(
-              padding: const EdgeInsets.only(bottom: 10, top: 10),
-              child: Row(children: [
-                // 기관
-                Expanded(
-                  child: DropdownSearch<Organization>(
-                    dropdownDecoratorProps: (
-                      DropDownDecoratorProps(
-                       /* dropdownSearchDecoration: InputDecoration(
-                          enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
-                          border: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
-                          isDense: true,
-                          contentPadding: EdgeInsets.all(10),
-                        ))*/
-                        dropdownSearchDecoration: makeDecoration())
-                    ),
-                    dropdownBuilder: (context, selectedItem) {
-                      return Stack(children: [
-                        Center(child: Text(_org.name == "" ? "기관" : _org.name, textAlign: TextAlign.center)),
-                        Positioned(right: 0, child: InkWell(child: Text(_org.name == "" ? "" : "X"),
-                          onTap:(){
-                            setState(() {
-                              _dep = Department.create();
-                              _org = Organization.create();
-                            });
-                          }))
-                        ],
-                      );
-                    },
-                    items: _orgList,
-                    filterFn: (instance, filter) {
-                      return instance.name.contains(filter);
-                    },
-                    onChanged: (org) {
-                      onChangedByOrg(org);
-                    },
-                    popupProps: PopupProps.menu(
-                      isFilterOnline: true,
-                      showSearchBox: true,
-                      //searchFieldProps: (TextFieldProps(decoration: makeInputDecoration())),
-                      itemBuilder: (BuildContext context, Organization org, bool isSelected) {
-                        return Center(
-                          child: Padding(padding: EdgeInsets.all(5), child: Text(org.name)),
-                        );
-                      },
-                    ),
-                  )),
-                const SizedBox(width: 5),
-                // 부서
-                Expanded(
-                    child: DropdownSearch<Department>(
-                      dropdownDecoratorProps: (
-                        const DropDownDecoratorProps(
-                          dropdownSearchDecoration: InputDecoration(
-                            enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
-                            border: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
-                            isDense: true,
-                            contentPadding: EdgeInsets.all(10),
-                          ))
-                      ),
-                      dropdownBuilder: (context, selectedItem) {
-                        return Stack(children: [
-                          Center(child: Text(_dep.name == "" ? "부서" : _dep.name, textAlign: TextAlign.center)),
-                          Positioned(right: 0, child: InkWell(child: Text(_dep.name == "" ? "" : "X", textAlign: TextAlign.right),
-                            onTap:(){
-                              setState(()=>_dep = Department.create());
-                            }))
-                        ]);
-                      },
-                      items: _departmentList,
-                      filterFn: (instance, filter) {
-                        return instance.name.contains(filter);
-                      },
-                      onChanged: (dep) {
-                        onChangedByDep(dep);
-                      },
-                      popupProps: PopupProps.menu(
-                        isFilterOnline: true,
-                        showSearchBox: true,
-                        searchFieldProps:
-                        (TextFieldProps(decoration: makeInputDecoration())),
-                        itemBuilder: (BuildContext context, Department department, bool isSelected) {
-                          return Center(
-                            child: Padding( padding: EdgeInsets.all(5), child: Text(department.name)),
-                          );
-                        },
-                      ),
-                    ))
-                ,
-                const SizedBox(width: 5),
-                // 검색어
-                Expanded(
-                  child:
-                  TextField(
-                    style: TextStyle(fontSize: ConstantValues.kDialogFontSize),
-                    decoration: makeInputDecoration(labelText: "키워드"),
-                    textInputAction: TextInputAction.go,
-                    maxLength: 10,
-                    onSubmitted: (value) async {
-                      submitByKeyword(value);
-                    },
-                  )
-                )
-              ]),
-            ),
-            const SizedBox(height: 10),
-            // 결과 출력
-            Expanded(
-              child:SizedBox(
-                child:
-                _memberList.length > 0 ?
-                  ListView.builder(
-                    itemCount: _memberList.length,
-                    itemBuilder: (BuildContext context, int idx) {
-                      return Container(
-                          padding: const EdgeInsets.only(top: 3, bottom: 3),
-                          decoration: const BoxDecoration(
-                              border: Border(bottom:BorderSide(color: ConstantValues.kColorGray))),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              // 기관
-                              Expanded(child: Center(child: Text(_memberList[idx].department.organization.name))),
-                              // 부서
-                              Expanded(child: Center(child: Text(_memberList[idx].department.name))),
-                              // 멤버
-                              Expanded(child: Center(
-                                child: InkWell(child: Text(_memberList[idx].name), onTap: (){
-                                  onSelectedMember(_memberList[idx]);
-                                }),
-                              )),
-                            ],
-                          ));
-                    },
-                  ) : const Text("조회된 데이터가 없습니다."),
-              )
-            ),
-            const SizedBox(height: 10),
-            // 페이징
-            Container(
-              height: 40,
+            Flexible(
               child: Container(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: _pageButtons,
+                padding: const EdgeInsets.all(10),
+                child: Column(
+                  children: [
+                    // 필터
+                    SizedBox(
+                      child: Row(children: [
+                        // 기관
+                        Expanded(child:
+                        Column(
+                          children: [
+                            makeWidgetTitle("기관", false),
+                            const SizedBox(height: 3),
+                            DropdownSearch<Organization>(
+                              dropdownDecoratorProps: (
+                                  DropDownDecoratorProps(dropdownSearchDecoration: makeDecoration())
+                              ),
+                              dropdownBuilder: (context, selectedItem) {
+                                return Stack(children: [
+                                  Center(child: Text(_org.name == "" ? "선택" : _org.name, textAlign: TextAlign.center,
+                                    style: const TextStyle(fontSize: ConstantValues.kDialogFontSize))),
+                                  Positioned(right: 0, child: InkWell(child: Text(_org.name == "" ? "" : "X"),
+                                    onTap:(){
+                                      setState(() {
+                                        _dep = Department.create();
+                                        _org = Organization.create();
+                                      });
+                                    }))
+                                ]);
+                              },
+                              items: _orgList,
+                              filterFn: (instance, filter) {
+                                return instance.name.contains(filter);
+                              },
+                              onChanged: (org) {
+                                onChangedByOrg(org);
+                              },
+                              popupProps: PopupProps.menu(
+                                isFilterOnline: true,
+                                showSearchBox: true,
+                                searchFieldProps: (TextFieldProps(
+                                  decoration: makeDecoration(),
+                                  style: const TextStyle(fontSize: ConstantValues.kDialogFontSize))),
+                                itemBuilder: (BuildContext context, Organization org, bool isSelected) {
+                                  return Center(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(5),
+                                      child: Text(org.name, style: const TextStyle(fontSize: ConstantValues.kDialogFontSize))),
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
+                        )),
+                        const SizedBox(width: 10),
+                        // 부서
+                        Expanded(
+                            child: Column(
+                              children: [
+                                makeWidgetTitle("부서", false),
+                                const SizedBox(height: 3),
+                                DropdownSearch<Department>(
+                                  dropdownDecoratorProps: (
+                                      DropDownDecoratorProps(dropdownSearchDecoration: makeDecoration())
+                                  ),
+                                  dropdownBuilder: (context, selectedItem) {
+                                    return Stack(children: [
+                                      Center(child: Text(_dep.name == "" ? "선택" : _dep.name, textAlign: TextAlign.center,
+                                        style: const TextStyle(fontSize: ConstantValues.kDialogFontSize))),
+                                      Positioned(right: 0, child: InkWell(child: Text(_dep.name == "" ? "" : "X", textAlign: TextAlign.right),
+                                        onTap:(){
+                                          setState(()=>_dep = Department.create());
+                                        }))
+                                    ]);
+                                  },
+                                  items: _departmentList,
+                                  filterFn: (instance, filter) {
+                                    return instance.name.contains(filter);
+                                  },
+                                  onChanged: (dep) {
+                                    onChangedByDep(dep);
+                                  },
+                                  popupProps: PopupProps.menu(
+                                    isFilterOnline: true,
+                                    showSearchBox: true,
+                                    searchFieldProps: (TextFieldProps(
+                                        decoration: makeDecoration(),
+                                        style: const TextStyle(fontSize: ConstantValues.kDialogFontSize))),
+                                    itemBuilder: (BuildContext context, Department department, bool isSelected) {
+                                      return Center(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(5),
+                                          child: Text(department.name,
+                                            style: const TextStyle(fontSize: ConstantValues.kDialogFontSize))),
+                                      );
+                                    },
+                                  ),
+                                )
+                              ],
+                            )
+                        )
+                      ]),
+                    ),
+                    const SizedBox(height: 10),
+                    // 키워드입력
+                    SizedBox(
+                      child: TextField(
+                        style: const TextStyle(fontSize: ConstantValues.kDialogFontSize),
+                        decoration: makeDecoration(
+                            icon: Icon(Icons.search, color: Colors.blue.shade900),
+                            hintText: "키워드입력"
+                        ),
+                        textInputAction: TextInputAction.go,
+                        maxLength: 10,
+                        onSubmitted: (value) async {
+                          submitByKeyword(value);
+                        },
+                      )
+                    ),
+                    const SizedBox(height: 15),
+                    // 결과 출력
+                    Expanded(
+                      child: Container(
+                        alignment: Alignment.center,
+                        child: _memberList.isNotEmpty ?
+                        ListView.builder(
+                          itemCount: _memberList.length,
+                          itemBuilder: (BuildContext context, int idx) {
+                            return Container(
+                              padding: const EdgeInsets.only(top: 3, bottom: 3),
+                              decoration: const BoxDecoration(border: Border(bottom:BorderSide(color: ConstantValues.kColorGray))),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  // 기관
+                                  Expanded(child: Center(child: Text(_memberList[idx].department.organization.name, style: const TextStyle(fontSize: ConstantValues.kDialogFontSize)))),
+                                  // 부서
+                                  Expanded(child: Center(child: Text(_memberList[idx].department.name, style: const TextStyle(fontSize: ConstantValues.kDialogFontSize)))),
+                                  // 멤버
+                                  Expanded(child: Center(
+                                    child: InkWell(child: Text(_memberList[idx].name, style: const TextStyle(fontSize: ConstantValues.kDialogFontSize)), onTap: (){
+                                      onSelectedMember(_memberList[idx]);
+                                    }),
+                                  )),
+                                ],
+                              ))
+                            ;
+                          },
+                        ) : const Text(ConstantValues.kMessageNoData, style: TextStyle(fontSize: ConstantValues.kDialogFontSize)),
+                      )
+                    ),
+                    const SizedBox(height: 10),
+                    // 페이징
+                    SizedBox(
+                      height: 40,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: _pageButtons,
+                      ),
+                    )
+                  ],
                 ),
               ),
             )
-          ],
+            ],
         ),
       ),
       actions: [
@@ -249,22 +274,6 @@ class MVOMSMemberDialogState extends State<MVOMSMemberDialog> with InputWidget {
           ],
         ),
       ],
-    );
-  }
-
-  /// 다이얼로그 입력 공통 데코레이션
-  InputDecoration makeDecoration() {
-    return const InputDecoration(
-        filled: true,
-        fillColor: ConstantValues.kColorGray,
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(
-              color: ConstantValues.kColorGray,
-              width: 1),
-        ),
-        isDense: true,
-        contentPadding: EdgeInsets.all(13),
-        counterText: ""
     );
   }
 

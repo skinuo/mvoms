@@ -125,13 +125,6 @@ class RestRepogitory {
   ///
   /// - [event]: 이벤트
   Future<dynamic> addEvent(OperationEvent event) {
-   /* //print(event.toString());
-    print(event.evntTime);
-    print(event.evntTime.isUtc);
-    event.evntTime = event.evntTime.toUtc();
-    //print(event.evntTime.timeZoneName);
-    print(event.evntTime.isUtc);
-    print(event.evntTime);*/
     return req(methodType: HttpMethodType.post, uri:'/op-event', data:event);
   }
 

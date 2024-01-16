@@ -17,15 +17,18 @@ _$OperationEventImpl _$$OperationEventImplFromJson(Map<String, dynamic> json) =>
       charger: json['charger'] == null
           ? null
           : Member.fromJson(json['charger'] as Map<String, dynamic>),
-      closeTime: json['closeTime'] as String?,
+      closeTime: _$JsonConverterFromJson<String, DateTime>(
+          json['closeTime'], const UTCDateTimeConverter().fromJson),
       targetSystem: json['targetSystem'] == null
           ? null
           : TargetSystem.fromJson(json['targetSystem'] as Map<String, dynamic>),
       registerId: json['registerId'] as String,
-      registerTime: DateTime.parse(json['registerTime'] as String),
+      registerTime:
+          const UTCDateTimeConverter().fromJson(json['registerTime'] as String),
       useYn: json['useYn'] as String,
       editorId: json['editorId'] as String,
-      editTime: DateTime.parse(json['editTime'] as String),
+      editTime:
+          const UTCDateTimeConverter().fromJson(json['editTime'] as String),
       requester: Member.fromJson(json['requester'] as Map<String, dynamic>),
       reqMthdCd: json['reqMthdCd'] as String,
       reqTpCd: json['reqTpCd'] as String,
@@ -40,14 +43,28 @@ Map<String, dynamic> _$$OperationEventImplToJson(
       'evntDesc': instance.evntDesc,
       'evntTime': const UTCDateTimeConverter().toJson(instance.evntTime),
       'charger': instance.charger,
-      'closeTime': instance.closeTime,
+      'closeTime': _$JsonConverterToJson<String, DateTime>(
+          instance.closeTime, const UTCDateTimeConverter().toJson),
       'targetSystem': instance.targetSystem,
       'registerId': instance.registerId,
-      'registerTime': instance.registerTime.toIso8601String(),
+      'registerTime':
+          const UTCDateTimeConverter().toJson(instance.registerTime),
       'useYn': instance.useYn,
       'editorId': instance.editorId,
-      'editTime': instance.editTime.toIso8601String(),
+      'editTime': const UTCDateTimeConverter().toJson(instance.editTime),
       'requester': instance.requester,
       'reqMthdCd': instance.reqMthdCd,
       'reqTpCd': instance.reqTpCd,
     };
+
+Value? _$JsonConverterFromJson<Json, Value>(
+  Object? json,
+  Value? Function(Json json) fromJson,
+) =>
+    json == null ? null : fromJson(json as Json);
+
+Json? _$JsonConverterToJson<Json, Value>(
+  Value? value,
+  Json? Function(Value value) toJson,
+) =>
+    value == null ? null : toJson(value);

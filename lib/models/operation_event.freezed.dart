@@ -34,19 +34,25 @@ mixin _$OperationEvent {
   set evntTime(DateTime value) => throw _privateConstructorUsedError;
   Member? get charger => throw _privateConstructorUsedError;
   set charger(Member? value) => throw _privateConstructorUsedError;
-  String? get closeTime => throw _privateConstructorUsedError;
-  set closeTime(String? value) => throw _privateConstructorUsedError;
+  @UTCDateTimeConverter()
+  DateTime? get closeTime => throw _privateConstructorUsedError;
+  @UTCDateTimeConverter()
+  set closeTime(DateTime? value) => throw _privateConstructorUsedError;
   TargetSystem? get targetSystem => throw _privateConstructorUsedError;
   set targetSystem(TargetSystem? value) => throw _privateConstructorUsedError;
   String get registerId => throw _privateConstructorUsedError;
   set registerId(String value) => throw _privateConstructorUsedError;
+  @UTCDateTimeConverter()
   DateTime get registerTime => throw _privateConstructorUsedError;
+  @UTCDateTimeConverter()
   set registerTime(DateTime value) => throw _privateConstructorUsedError;
   String get useYn => throw _privateConstructorUsedError;
   set useYn(String value) => throw _privateConstructorUsedError;
   String get editorId => throw _privateConstructorUsedError;
   set editorId(String value) => throw _privateConstructorUsedError;
+  @UTCDateTimeConverter()
   DateTime get editTime => throw _privateConstructorUsedError;
+  @UTCDateTimeConverter()
   set editTime(DateTime value) => throw _privateConstructorUsedError;
   Member get requester => throw _privateConstructorUsedError;
   set requester(Member value) => throw _privateConstructorUsedError;
@@ -74,13 +80,13 @@ abstract class $OperationEventCopyWith<$Res> {
       String evntDesc,
       @UTCDateTimeConverter() DateTime evntTime,
       Member? charger,
-      String? closeTime,
+      @UTCDateTimeConverter() DateTime? closeTime,
       TargetSystem? targetSystem,
       String registerId,
-      DateTime registerTime,
+      @UTCDateTimeConverter() DateTime registerTime,
       String useYn,
       String editorId,
-      DateTime editTime,
+      @UTCDateTimeConverter() DateTime editTime,
       Member requester,
       String reqMthdCd,
       String reqTpCd});
@@ -148,7 +154,7 @@ class _$OperationEventCopyWithImpl<$Res, $Val extends OperationEvent>
       closeTime: freezed == closeTime
           ? _value.closeTime
           : closeTime // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as DateTime?,
       targetSystem: freezed == targetSystem
           ? _value.targetSystem
           : targetSystem // ignore: cast_nullable_to_non_nullable
@@ -236,13 +242,13 @@ abstract class _$$OperationEventImplCopyWith<$Res>
       String evntDesc,
       @UTCDateTimeConverter() DateTime evntTime,
       Member? charger,
-      String? closeTime,
+      @UTCDateTimeConverter() DateTime? closeTime,
       TargetSystem? targetSystem,
       String registerId,
-      DateTime registerTime,
+      @UTCDateTimeConverter() DateTime registerTime,
       String useYn,
       String editorId,
-      DateTime editTime,
+      @UTCDateTimeConverter() DateTime editTime,
       Member requester,
       String reqMthdCd,
       String reqTpCd});
@@ -311,7 +317,7 @@ class __$$OperationEventImplCopyWithImpl<$Res>
       closeTime: freezed == closeTime
           ? _value.closeTime
           : closeTime // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as DateTime?,
       targetSystem: freezed == targetSystem
           ? _value.targetSystem
           : targetSystem // ignore: cast_nullable_to_non_nullable
@@ -362,13 +368,13 @@ class _$OperationEventImpl implements _OperationEvent {
       required this.evntDesc,
       @UTCDateTimeConverter() required this.evntTime,
       this.charger,
-      this.closeTime,
+      @UTCDateTimeConverter() this.closeTime,
       this.targetSystem,
       required this.registerId,
-      required this.registerTime,
+      @UTCDateTimeConverter() required this.registerTime,
       required this.useYn,
       required this.editorId,
-      required this.editTime,
+      @UTCDateTimeConverter() required this.editTime,
       required this.requester,
       required this.reqMthdCd,
       required this.reqTpCd});
@@ -390,18 +396,21 @@ class _$OperationEventImpl implements _OperationEvent {
   @override
   Member? charger;
   @override
-  String? closeTime;
+  @UTCDateTimeConverter()
+  DateTime? closeTime;
   @override
   TargetSystem? targetSystem;
   @override
   String registerId;
   @override
+  @UTCDateTimeConverter()
   DateTime registerTime;
   @override
   String useYn;
   @override
   String editorId;
   @override
+  @UTCDateTimeConverter()
   DateTime editTime;
   @override
   Member requester;
@@ -438,13 +447,13 @@ abstract class _OperationEvent implements OperationEvent {
       required String evntDesc,
       @UTCDateTimeConverter() required DateTime evntTime,
       Member? charger,
-      String? closeTime,
+      @UTCDateTimeConverter() DateTime? closeTime,
       TargetSystem? targetSystem,
       required String registerId,
-      required DateTime registerTime,
+      @UTCDateTimeConverter() required DateTime registerTime,
       required String useYn,
       required String editorId,
-      required DateTime editTime,
+      @UTCDateTimeConverter() required DateTime editTime,
       required Member requester,
       required String reqMthdCd,
       required String reqTpCd}) = _$OperationEventImpl;
@@ -473,8 +482,10 @@ abstract class _OperationEvent implements OperationEvent {
   Member? get charger;
   set charger(Member? value);
   @override
-  String? get closeTime;
-  set closeTime(String? value);
+  @UTCDateTimeConverter()
+  DateTime? get closeTime;
+  @UTCDateTimeConverter()
+  set closeTime(DateTime? value);
   @override
   TargetSystem? get targetSystem;
   set targetSystem(TargetSystem? value);
@@ -482,7 +493,9 @@ abstract class _OperationEvent implements OperationEvent {
   String get registerId;
   set registerId(String value);
   @override
+  @UTCDateTimeConverter()
   DateTime get registerTime;
+  @UTCDateTimeConverter()
   set registerTime(DateTime value);
   @override
   String get useYn;
@@ -491,7 +504,9 @@ abstract class _OperationEvent implements OperationEvent {
   String get editorId;
   set editorId(String value);
   @override
+  @UTCDateTimeConverter()
   DateTime get editTime;
+  @UTCDateTimeConverter()
   set editTime(DateTime value);
   @override
   Member get requester;

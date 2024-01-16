@@ -233,4 +233,35 @@ mixin InputWidget {
       ),
     );
   }
+
+  /// 타이틀 위젯 생성
+  Widget makeWidgetTitle(String title, bool required) {
+    return Align(
+        alignment: Alignment.centerLeft,
+        child: Row(
+          children: [
+            Text(required ? "*" : "", style: const TextStyle(color: Colors.red)),
+            Text(title, style: const TextStyle(color: Colors.grey, fontWeight: FontWeight.bold, fontSize: 12)),
+          ],
+        )
+    );
+  }
+
+  /// 다이얼로그 입력 공통 데코레이션
+  InputDecoration makeDecoration({Icon? icon, String? hintText}) {
+    return InputDecoration(
+        filled: true,
+        fillColor: ConstantValues.kColorGray,
+        enabledBorder: const OutlineInputBorder(
+          borderSide: BorderSide(
+              color: ConstantValues.kColorGray,
+              width: 1),
+        ),
+        isDense: true,
+        contentPadding: const EdgeInsets.all(13),
+        counterText: "",
+        hintText: hintText,
+        prefixIcon: icon
+    );
+  }
 }

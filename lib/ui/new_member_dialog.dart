@@ -48,7 +48,6 @@ class _MVOMSNewMemberDialogState extends State<MVOMSNewMemberDialog> with InputW
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       // 기관직접입력
       var newOrg = Organization.create();
-      newOrg.name = _newItemVal;
       newOrg.id = _newItemId;
       _orgList.add(newOrg);
 
@@ -68,235 +67,251 @@ class _MVOMSNewMemberDialogState extends State<MVOMSNewMemberDialog> with InputW
       title: const Text("조직원 신규"),
       content: Container(
         width: 400,
-        height: 360,
+        height: 400,
         color: Colors.white,
         child: Form(
           key: _formKey,
           child: SingleChildScrollView(
-            scrollDirection: Axis.vertical,
             child: Column(
               children: [
                 Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        color: ConstantValues.kColorBlue),
-                    child: const Text("기관 및 부서", style: TextStyle(fontWeight: FontWeight.bold))),
-                const SizedBox(height: 10),
-                // 기관 필터
-                Row(children: [
-                    // 기관
-                    Expanded(
-                        child: DropdownSearch<Organization>(
-                          dropdownDecoratorProps: (
-                            const DropDownDecoratorProps(
-                            dropdownSearchDecoration: InputDecoration(
-                            enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
-                            border: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
-                            isDense: true,
-                            contentPadding: EdgeInsets.all(0),
-                          ))),
-                          validator:(Organization? item) {
-                            if (_org.name == "") {
-                              return ConstantValues.kMessages["Required"];
-                            } else {
-                              return null;
-                            }
-                          },
-                          dropdownBuilder: (context, selectedItem) {
-                            return Stack(children: [
-                              Center(child: Text(_org.name == "" ? "기관" : _org.name)),
-                              Positioned(right: 0, child: InkWell(child: Text(_org.name == "" ? "" : "X"),
-                                onTap:(){
-                                  setState(() {
-                                    // 초기화
-                                    _dep = Department.create();
-                                    _org = Organization.create();
-                                    _readonlyOrg = true;
-                                    _readonlyDep = true;
-                                  });
-                                }))
-                            ]);
-                          },
-                          items: _orgList,
-                          filterFn: (instance, filter) {
-                            return instance.name.contains(filter);
-                          },
-                          onChanged: (a) {
-                            onChangedByOrg(a);
-                          },
-                          popupProps: PopupProps.menu(
-                            isFilterOnline: true,
-                            showSearchBox: true,
-                            searchFieldProps: (
-                              TextFieldProps(decoration: makeInputDecoration(),
-                              style: const TextStyle(fontSize: ConstantValues.kDialogFontSize))
-                            ),
-                            itemBuilder: (BuildContext context, Organization org, bool isSelected) {
-                              return Center(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(5),
-                                  child: Text(org.name, style: TextStyle(
-                                      color: org.name == _newItemVal ? Colors.blue : Colors.black))),
-                              );
-                            },
-                          ),
-                        )
-                    ),
-                    const SizedBox(width: 10),
-                    // 기관직접입력
-                    Expanded(child: TextFormField(
-                      readOnly: _readonlyOrg,
-                      controller: TextEditingController(text: _org.name),
-                      style: const TextStyle(fontSize: ConstantValues.kDialogFontSize),
-                      validator: (value) {
-                        if (_org.name == _newItemVal) {
-                          return "신규기관명을 입력해 주세요.";
-                        } else {
-                          return null;
-                        }
-                      },
-                      decoration:
-                        InputDecoration(
-                        contentPadding: const EdgeInsets.all(13),
-                        isDense: true,
-                        filled: true,
-                        fillColor: _readonlyOrg ? ConstantValues.kColorGray : Colors.white,
-                        focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.blue.shade800, width: 2)),
-                        enabledBorder: const OutlineInputBorder(borderSide: BorderSide(color: Colors.grey))),
-                    )),
-                  ]),
-                const SizedBox(height: 10),
-                // 부서 필터
-                Row(children: [
-                  // 부서
-                  Expanded(
-                      child: DropdownSearch<Department>(
-                        dropdownDecoratorProps: (
-                          const DropDownDecoratorProps(
-                            dropdownSearchDecoration: InputDecoration(
-                              enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
-                              border: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
-                              isDense: true,
-                              contentPadding: EdgeInsets.all(3),
-                            ))
-                        ),
-                        validator:(Department? item) {
-                          if (_dep.name == "") {
-                            return ConstantValues.kMessages["Required"];
-                          } else {
-                            return null;
-                          }
-                        },
-                        dropdownBuilder: (context, selectedItem) {
-                          return Stack(children: [
-                            Center(child: Text(_dep.name == "" ? "부서" : _dep.name)),
-                            Positioned(right: 0, child: InkWell(child: Text(_dep.name == "" ? "" : "X"),
-                              onTap:(){
-                                setState(() {
-                                  _dep = Department.create();
-                                });
-                              }))
-                          ]);
-                        },
-                        items: _departmentList,
-                        filterFn: (instance, filter) {
-                          return instance.name.contains(filter);
-                        },
-                        onChanged: (department) {
-                          // 부서콤보박스변경
-                          onChangedByDep(department);
-                        },
-                        popupProps: PopupProps.menu(
-                          isFilterOnline: true,
-                          showSearchBox: true,
-                          searchFieldProps: (TextFieldProps(decoration: makeInputDecoration())),
-                          itemBuilder: (BuildContext context, Department department, bool isSelected) {
-                            return Center(
-                              child: Padding(
-                                padding: const EdgeInsets.all(5),
-                                child: Text(department.name, style:
-                                  TextStyle(color: department.name == _newItemVal ? Colors.blue : Colors.black),)),
-                            );
-                          },
-                        ),
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(5),
+                  decoration: const BoxDecoration(
+                      border: Border(
+                          bottom: BorderSide(
+                              color: Colors.grey,
+                              width: 1
+                          )
                       )
                   ),
-                  const SizedBox(width: 10),
-                  // 부서직접입력
-                  Expanded(child: TextFormField(
-                    readOnly: _readonlyDep,
-                    controller: TextEditingController(text: _dep.name),
-                    style: const TextStyle(fontSize: ConstantValues.kDialogFontSize),
-                    validator: (value) {
-                      if (_dep.name == _newItemVal) {
-                        return "신규부서명을 입력해 주세요.";
-                      } else {
-                        return null;
-                      }
-                    },
-                    decoration:
-                    InputDecoration(
-                        contentPadding: const EdgeInsets.all(13),
-                        isDense: true,
-                        filled: true,
-                        fillColor: _readonlyDep ? ConstantValues.kColorGray : Colors.white,
-                        border: const OutlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
-                        enabledBorder: const OutlineInputBorder(borderSide: BorderSide(color: Colors.grey))),
-                  )),
-                ]),
-                const SizedBox(height: 10),
+                  child: const Text("신규 입력")
+                ),
+                // 기관 필터
                 Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        color: ConstantValues.kColorBlue),
-                    child: const Text("요청자", style: TextStyle(fontWeight: FontWeight.bold))
-                ),
-                const SizedBox(height: 10),
-                SizedBox(child:
-                  TextFormField(
-                    validator: (value) {
-                      if (value!.replaceAll(" ", "") == "") {
-                        return ConstantValues.kMessages["Required"];
-                      } else {
-                        return null;
-                      }
-                    },
-                    style: const TextStyle(fontSize: ConstantValues.kDialogFontSize),
-                    decoration: makeInputDecoration(labelText: "이름", required: true),
-                    controller: TextEditingController(text: _member.name),
-                    onChanged: (value) {
-                      _member.name = value;
-                    },
+                  padding: const EdgeInsets.all(10),
+                  child: Column(
+                    children: [
+                      Row(children: [
+                          // 기관
+                          Expanded(
+                            child: Column(
+                              children: [
+                                makeWidgetTitle("기관", true),
+                                const SizedBox(height: 3),
+                                DropdownSearch<Organization>(
+                                  dropdownDecoratorProps: (
+                                      DropDownDecoratorProps(dropdownSearchDecoration: makeDecoration())
+                                  ),
+                                  validator:(Organization? item) => _org.name == "" ? ConstantValues.kMessageRequired : null,
+                                  dropdownBuilder: (context, selectedItem) {
+                                    return Center(child: Text(_org.name == "" ? "선택" : _org.name,
+                                      style: const TextStyle(fontSize: ConstantValues.kDialogFontSize)));
+                                  },
+                                  items: _orgList,
+                                  filterFn: (instance, filter) {
+                                    return instance.name.contains(filter);
+                                  },
+                                  onChanged: (a) {
+                                    onChangedByOrg(a);
+                                  },
+                                  popupProps: PopupProps.menu(
+                                    isFilterOnline: true,
+                                    showSearchBox: true,
+                                    searchFieldProps: (
+                                      TextFieldProps(decoration: makeDecoration(),
+                                      style: const TextStyle(fontSize: ConstantValues.kDialogFontSize))
+                                    ),
+                                    itemBuilder: (BuildContext context, Organization org, bool isSelected) {
+                                      return Center(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(5),
+                                          // 신규 여부에 따른 위젯 생성
+                                          // 신규 입력 위젯은 힌트 텍스트를 출력하기 위해 텍스트 필드로 생성. 기본 텍스트는 신규입력명을 받음
+                                          child: org.id == _newItemId
+                                            ? TextFormField(
+                                              controller: TextEditingController(text: org.name),
+                                              textAlign: TextAlign.center,
+                                              style: const TextStyle(fontSize: ConstantValues.kDialogFontSize),
+                                              decoration: InputDecoration(
+                                                  hintText: _newItemVal,
+                                                  hintStyle: const TextStyle(color: Colors.blue),
+                                                  border: InputBorder.none,
+                                                  isDense: true,
+                                                  contentPadding: EdgeInsets.zero
+                                              ))
+                                            : Text(org.name, style: const TextStyle(fontSize: ConstantValues.kDialogFontSize))
+                                        )
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ],
+                            )
+                          ),
+                          // 기관직접입력
+                          _readonlyOrg ? const SizedBox.shrink()
+                          : Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 10),
+                                child: Column(
+                                  children: [
+                                    makeWidgetTitle("신규기관", true),
+                                    const SizedBox(height: 3),
+                                    TextFormField(
+                                      controller: TextEditingController(text: _org.name),
+                                      style: const TextStyle(fontSize: ConstantValues.kDialogFontSize),
+                                      onChanged: (v) {
+                                        _org.name = v;
+                                      },
+                                      validator: (value) => _org.name.replaceAll(" ", "").isEmpty ? ConstantValues.kMessageRequired : null,
+                                      decoration: makeDecoration()
+                                    ),
+                                  ],
+                                ),
+                              )
+                          ),
+                        ]
+                      ),
+                      // 부서
+                      Row(children: [
+                        // 부서
+                        Expanded(
+                            child: Column(
+                              children: [
+                                makeWidgetTitle("부서", true),
+                                const SizedBox(height: 3),
+                                DropdownSearch<Department>(
+                                  dropdownDecoratorProps: (
+                                      DropDownDecoratorProps(dropdownSearchDecoration: makeDecoration())
+                                  ),
+                                  validator:(Department? item) => _dep.name == "" ? ConstantValues.kMessageRequired : null,
+                                  dropdownBuilder: (context, selectedItem) {
+                                    return Center(child: Text(_dep.name == "" ? "선택" : _dep.name,
+                                      style: const TextStyle(fontSize: ConstantValues.kDialogFontSize)));
+                                  },
+                                  items: _departmentList,
+                                  filterFn: (instance, filter) {
+                                    return instance.name.contains(filter);
+                                  },
+                                  onChanged: (department) {
+                                    // 부서콤보박스변경
+                                    onChangedByDep(department);
+                                  },
+                                  popupProps: PopupProps.menu(
+                                    isFilterOnline: true,
+                                    showSearchBox: true,
+                                    searchFieldProps: (TextFieldProps(
+                                      decoration: makeDecoration(),
+                                      style: const TextStyle(fontSize: ConstantValues.kDialogFontSize))),
+                                    itemBuilder: (BuildContext context, Department department, bool isSelected) {
+                                      return Center(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(5),
+                                          // 신규 여부에 따른 위젯 생성
+                                          // 신규 입력 위젯은 힌트 텍스트를 출력하기 위해 텍스트 필드로 생성. 기본 텍스트는 신규입력명을 받음
+                                          child: department.id == _newItemId
+                                            ? TextFormField(
+                                              controller: TextEditingController(text: department.name),
+                                              textAlign: TextAlign.center,
+                                              style: const TextStyle(fontSize: ConstantValues.kDialogFontSize),
+                                              decoration: InputDecoration(
+                                                  hintText: _newItemVal,
+                                                  hintStyle: const TextStyle(color: Colors.blue),
+                                                  border: InputBorder.none,
+                                                  isDense: true,
+                                                  contentPadding: EdgeInsets.zero
+                                              ))
+                                            : Text(department.name, style: const TextStyle(fontSize: ConstantValues.kDialogFontSize))
+                                        )
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ],
+                            )
+                        ),
+                        // 부서직접입력
+                        _readonlyDep ? const SizedBox.shrink()
+                        : Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 10),
+                            child: Column(
+                              children: [
+                                makeWidgetTitle("신규부서", true),
+                                const SizedBox(height: 3),
+                                TextFormField(
+                                  controller: TextEditingController(text: _dep.name),
+                                  onChanged: (v) {
+                                    _dep.name = v;
+                                  },
+                                  style: const TextStyle(fontSize: ConstantValues.kDialogFontSize),
+                                  validator: (value) => _dep.name.replaceAll(" ", "").isEmpty ? ConstantValues.kMessageRequired : null,
+                                  decoration: makeDecoration(),
+                                ),
+                              ],
+                            ),
+                          )
+                        )]
+                      ),
+                      // 이름
+                      SizedBox(child:
+                        Column(
+                          children: [
+                            makeWidgetTitle("이름", true),
+                            const SizedBox(height: 3),
+                            TextFormField(
+                              validator: (value) => value!.replaceAll(" ", "") == "" ? ConstantValues.kMessageRequired : null,
+                              maxLength: 10,
+                              style: const TextStyle(fontSize: ConstantValues.kDialogFontSize),
+                              decoration: makeDecoration(),
+                              controller: TextEditingController(text: _member.name),
+                              onChanged: (value) {
+                                _member.name = value;
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                      // 메일
+                      SizedBox(child:
+                        Column(
+                          children: [
+                            makeWidgetTitle("mail", false),
+                            const SizedBox(height: 3),
+                            TextField(
+                              style: const TextStyle(fontSize: ConstantValues.kDialogFontSize),
+                              decoration: makeDecoration(),
+                              controller: TextEditingController(text: _member.email),
+                              maxLength: 50,
+                              onChanged: (value) {
+                                _member.email = value;
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                      // 전화번호
+                      SizedBox(child:
+                        Column(
+                          children: [
+                            makeWidgetTitle("전화번호", false),
+                            const SizedBox(height: 3),
+                            TextField(
+                              style: const TextStyle(fontSize: ConstantValues.kDialogFontSize),
+                              decoration: makeDecoration(),
+                              controller: TextEditingController(text: _member.phone),
+                              maxLength: 13,
+                              onChanged: (value) {
+                                _member.phone = value;
+                              },
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
                   ),
                 ),
-                const SizedBox(height: 10),
-                SizedBox(child:
-                  TextField(
-                    style: const TextStyle(fontSize: ConstantValues.kDialogFontSize),
-                    decoration: makeInputDecoration(labelText: "mail"),
-                    controller: TextEditingController(text: _member.email),
-                    maxLength: 50,
-                    onChanged: (value) {
-                      _member.email = value;
-                    },
-                  ),
-                ),
-                const SizedBox(height: 10),
-                SizedBox(child:
-                  TextField(
-                    style: const TextStyle(fontSize: ConstantValues.kDialogFontSize),
-                    decoration: makeInputDecoration(labelText: "전화번호"),
-                    controller: TextEditingController(text: _member.phone),
-                    maxLength: 13,
-                    onChanged: (value) {
-                      _member.phone = value;
-                    },
-                  ),
-                )
               ],
             ),
           ),
@@ -308,13 +323,16 @@ class _MVOMSNewMemberDialogState extends State<MVOMSNewMemberDialog> with InputW
           child: const Text('취소')),
         ElevatedButton(
           onPressed: (){
-            // 기관, 부서, 멤버 합치기
             if (_formKey.currentState!.validate()) {
+              // 새 아이디를 받기위해 신규아이디 초기화
+              if (_org.id == _newItemId) _org.id = null;
+              if (_dep.id == _newItemId) _dep.id = null;
+              // 기관, 부서, 멤버 합치기
               _dep.organization = _org;
               _member.department = _dep;
               Navigator.pop(context, _member);
             } else {
-              print('error');
+              print('validation fail');
             }
           },
           child: const Text('저장')),
@@ -331,7 +349,6 @@ class _MVOMSNewMemberDialogState extends State<MVOMSNewMemberDialog> with InputW
 
     // 부서직접입력 여부
     if (department.id == _newItemId) {
-      department.name = _newItemVal;
       _readonlyDep = false;
     } else {
       _readonlyDep = true;
@@ -346,17 +363,16 @@ class _MVOMSNewMemberDialogState extends State<MVOMSNewMemberDialog> with InputW
     // 기관 입력
     _org = org;
     // 부서 초기화
+    _dep = Department.create();
     _departmentList.clear();
     // 부서 직접입력
     var newDep = Department.create();
-    newDep.name = "신규";
     newDep.id = _newItemId;
     _departmentList.add(newDep);
 
     // 기관직접입력 여부
     if (org.id == _newItemId) {
       // 직접입력
-      _org.name = "신규";
       _readonlyOrg = false;
     } else {
       _readonlyOrg = true;
