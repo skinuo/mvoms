@@ -6,6 +6,9 @@ import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 import '../models/pagination.dart';
 import 'constants.dart';
 
+/// 메시지 타입
+enum MessageLevel {error, info}
+
 /// 공통 입력 위젯 생성 mixin
 mixin InputWidget {
   /// 드랍다운 셀 생성
@@ -264,4 +267,63 @@ mixin InputWidget {
         prefixIcon: icon
     );
   }
+
+  /// 메시지 박스 출력
+  ///
+  /// - [context]: 컨텍스트
+  /// - [messageLevel]: 레벨
+  /// - [message]: 메시지
+  /// - [buttons]: 버튼목록
+  Future showMessageBox(
+      BuildContext context,
+      MessageLevel messageLevel,
+      String message,
+      Map<String,Function?> buttons) {
+    List<Widget> actions = [];
+    buttons.forEach((buttonVal, func) {
+      actions.add(Center(
+        child: ElevatedButton(
+          child: Text(buttonVal),
+          onPressed: () {
+            Navigator.pop(context);
+            func?.call();
+          },
+        ),
+      ));
+    });
+
+    // 타이틀
+    String title;
+    // 아이콘
+    Icon icon;
+    switch(messageLevel) {
+      case MessageLevel.info:
+        title = ConstantValues.kMessageInfo;
+        icon = const Icon(Icons.check, color:Colors.green);
+      case MessageLevel.error:
+        title = ConstantValues.kMessageError;
+        icon = const Icon(Icons.error, color:Colors.red);
+    }
+
+    return showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: ((txt) {
+          return AlertDialog(
+            //title: Text(title),
+            content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(height: 10),
+                  icon, Text(message),
+                ],
+            ),
+            actions: actions,
+          );
+        })
+    ).then((value) {
+      return value;
+    });
+  }
 }
+

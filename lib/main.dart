@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:mvoms/models/common_code.dart';
@@ -80,40 +78,40 @@ class _MVOMSMainState extends State<MVOMSMain> with InputWidget {
           length: 3,
           child: Scaffold(
             appBar: AppBar(
-                toolbarHeight: 30,
+                toolbarHeight: 40,
                 backgroundColor: ConstantValues.kColorGray,
                 centerTitle: true,
-                // 탭바 구성
-                bottom: const TabBar(tabs: [
-                  Tab(text: "home"),
-                  Tab(text: "이벤트"),
-                  Tab(icon: Icon(Icons.star))
-                ]),
                 title: Row(
                   children: [
-                    const Flexible(fit: FlexFit.tight, child: Center(child: Text(""))),
-                    const Flexible(
-                        fit: FlexFit.tight, child: Center(child: Text("MVOMS"))),
+                    Container(
+                      padding: const EdgeInsets.only(left: 30, right: 30),
+                      child: const Center(child: Text("MVOMS"))),
+                    const Expanded(
+                      child: TabBar(tabs: [
+                        Tab(text: "home"),
+                        Tab(text: "이벤트"),
+                        Tab(icon: Icon(Icons.star))
+                      ]),
+                    ),
                     // 사용자 정보 출력
-                    Flexible(
-                      fit: FlexFit.tight,
+                    SizedBox(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          Text(_userInfoValue, style: const TextStyle(fontSize: 12)),
+                          Padding(padding: const EdgeInsets.only(left:30),
+                            child: Text(_userInfoValue, style: const TextStyle(fontSize: 12))),
                           const SizedBox(width: 10),
                           SizedBox(
-                            child: TextButton(
-                              onPressed: () {
-                                print("stop");
-                                logout();
-
-                              },
-                              child: const Text("로그아웃", style: TextStyle(fontSize: 12)))
+                              child: TextButton(
+                                  onPressed: () {
+                                    print("stop");
+                                    logout();
+                                  },
+                                  child: const Text("로그아웃", style: TextStyle(fontSize: 12)))
                           )
                         ],
                       ),
-                    )
+                    ),
                   ],
                 )),
             body: Container(
@@ -143,7 +141,7 @@ class _MVOMSMainState extends State<MVOMSMain> with InputWidget {
 
   void printUserInfo(Member member) async {
       setState(() {
-        _userInfoValue = "${member.name} (${member.id}, ${member.department.name})";
+        _userInfoValue = "${member.name} (${member.id})";
       });
   }
 

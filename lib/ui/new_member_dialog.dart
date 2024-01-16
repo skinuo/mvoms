@@ -335,7 +335,7 @@ class _MVOMSNewMemberDialogState extends State<MVOMSNewMemberDialog> with InputW
               print('validation fail');
             }
           },
-          child: const Text('저장')),
+          child: const Text('완료')),
       ],
     );
   }

@@ -391,19 +391,36 @@ class _MVOMSEventDialogState extends State<MVOMSEventDialog> with InputWidget {
         // 이벤트 수정
         _rest.updateEvent(_event)
         .then((value) {
-          Navigator.pop(context, true);
+          // 메시지 박스 출력
+          showMessageBox(context, MessageLevel.info, ConstantValues.kMessageSaved, {
+            ConstantValues.kMessageOk: ()=> Navigator.pop(context, true)
+          });
         }).catchError((err) {
+          showMessageBox(context, MessageLevel.error, "${ConstantValues.kMessageErrored}[$err]", {
+            ConstantValues.kMessageOk: null
+          });
           print(err);
         });
       } else {
         // 이벤트 저장
         _rest.addEvent(_event)
         .then((value) {
-          Navigator.pop(context, true);
+          // 메시지 박스 출력
+          showMessageBox(context, MessageLevel.info, ConstantValues.kMessageSaved, {
+            ConstantValues.kMessageOk: ()=> Navigator.pop(context, true)
+          });
         }).catchError((err) {
+          // 메시지 박스 출력
+          showMessageBox(context, MessageLevel.error, "${ConstantValues.kMessageErrored}[$err]", {
+            ConstantValues.kMessageOk: null
+          });
           print(err);
         });
       }
     }
+  }
+
+  void test(){
+    print('a');
   }
 }

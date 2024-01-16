@@ -9,13 +9,11 @@ abstract class ConstantValues {
   static const Color kColorBlue = Color.fromRGBO(135, 186, 215, 0.25);
   static const Color kColorBlue01 = Color.fromRGBO(135, 186, 215, 0.1);
   static const Color kColorBlue05 = Color.fromRGBO(135, 186, 215, 0.5);
-
   static const double kBodyFontSize = 12;
   static const double kDialogFontSize = 13;
 
-  // 토큰
+  // 토큰 키
   static const String kAuthToken = "mvoms.auth.token";
-
   // 비밀번호 암호화 키
   static const String kEncKey = "mvsoftech07076393629j;kasjf;lksjf;ajf3foisdflkj";
 
@@ -30,6 +28,11 @@ abstract class ConstantValues {
   // 메시지
   static const String kMessageRequired = "필수입력 입니다.";
   static const String kMessageNoData = "데이터가 없습니다.";
+  static const String kMessageSaved = "저장되었습니다.";
+  static const String kMessageErrored = "오류가 발생했습니다.";
+  static const String kMessageOk = "확인";
+  static const String kMessageInfo = "정보";
+  static const String kMessageError = "오류";
 
   // http 상태
   static const Map<int, String> kHttpStatus = {

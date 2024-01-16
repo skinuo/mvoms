@@ -56,6 +56,7 @@ class _MVOMSEventState extends State<MVOMSEvent> with InputWidget {
           borderRadius: BorderRadius.all(Radius.circular(5))),
       child: Column(
         children: [
+          // 헤더
           Row(
             children: [
               Expanded(
@@ -100,15 +101,15 @@ class _MVOMSEventState extends State<MVOMSEvent> with InputWidget {
           // 검색바
           MVOMSSearch(searchFunc: getEventList),
           // 간격
-          const SizedBox(height: 10),
+          const SizedBox(height: 20),
           // 이벤트 테이블 헤더 (헤더 고정을 위해 분리)
           Row(
             children: [
               Expanded(
                 child: Table(
                   border: const TableBorder(
-                      bottom: BorderSide(
-                          color: ConstantValues.kColorGray, width: 2)),
+                    bottom: BorderSide(
+                      color: ConstantValues.kColorGray, width: 2)),
                   columnWidths: getEventHeaderColWidths(),
                   children: [
                     TableRow(children: [
