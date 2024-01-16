@@ -3,6 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:mvoms/models/common_code.dart';
 import 'package:mvoms/models/member.dart';
 import 'package:mvoms/ui/event.dart';
+import 'package:mvoms/ui/organization.dart';
 import 'package:mvoms/utilities/auth_updater.dart';
 import 'package:mvoms/utilities/global.dart';
 import 'package:mvoms/utilities/constants.dart';
@@ -127,7 +128,7 @@ class _MVOMSMainState extends State<MVOMSMain> with InputWidget {
                   MVOMSEvent(),
                   // 탭3
                   Text("b"),
-                  Text("home"),
+                  MVOMSOrganization(),
                 ]),
               ),
             ),
