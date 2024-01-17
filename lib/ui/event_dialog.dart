@@ -95,7 +95,7 @@ class _MVOMSEventDialogState extends State<MVOMSEventDialog> with InputWidget {
       title: Text(widget.title),
       content:
       Container(
-          width: 500,
+          width: 600,
           color: Colors.white,
           child: Form(
             key: _formKey,
@@ -128,7 +128,7 @@ class _MVOMSEventDialogState extends State<MVOMSEventDialog> with InputWidget {
                             TextFormField(
                               style: const TextStyle(fontSize: ConstantValues.kDialogFontSize),
                               readOnly: true,
-                              controller: TextEditingController(text: _event.requester.name !=  "" ? "${_event.requester.name} (${_event.requester.department.name}, ${_event.requester.department.organization.name})" : ""),
+                              controller: TextEditingController(text: _event.requester.name.isNotEmpty ? "${_event.requester.name} (${_event.requester.department.name}, ${_event.requester.department.organization.name})" : ""),
                               onTap: widget.readOnly ? null : ()=>showMemberPop(setRequester),
                               validator: (value) {
                                 if (_event.requester.name.replaceAll(" ", "") == "") {
@@ -167,19 +167,33 @@ class _MVOMSEventDialogState extends State<MVOMSEventDialog> with InputWidget {
                               ),
                             ),
                             const SizedBox(width: 10),
-                            // 처리상태
+                            // 요청유형
                             Expanded(
                               child: Column(
                                 children: [
-                                  makeWidgetTitle("처리상태", true),
+                                  makeWidgetTitle("요청유형", true),
                                   const SizedBox(height: 3),
-                                  makeDropdown(_reqStates, widget.readOnly, (value) {
-                                    _event.stateCd = value!;
-                                  }, _reqStates[0])
-                                  ,
+                                  makeDropdown(_reqTypes, widget.readOnly, (value) {
+                                    _event.reqTpCd = value!.code;
+                                  }, _reqTypes[0])
                                 ],
                               ),
-                            )
+                            ),
+                            const SizedBox(width: 10),
+                            // 요청경로
+                            Expanded(
+                              child: Column(
+                                children: [
+                                  makeWidgetTitle("요청경로", true),
+                                  const SizedBox(height: 3),
+                                  makeDropdown(_reqMethods, widget.readOnly, (value) {
+                                    _event.reqMthdCd = value!.code;
+                                  }, _reqMethods[0])
+                                ],
+                              ),
+                            ),
+                            // 처리상태
+
                           ],
                         ),
                         Row(
@@ -207,6 +221,19 @@ class _MVOMSEventDialogState extends State<MVOMSEventDialog> with InputWidget {
                               ),
                             ),
                             const SizedBox(width: 10),
+                            Expanded(
+                              child: Column(
+                                children: [
+                                  makeWidgetTitle("처리상태", true),
+                                  const SizedBox(height: 3),
+                                  makeDropdown(_reqStates, widget.readOnly, (value) {
+                                    _event.stateCd = value!;
+                                  }, _reqStates[0])
+                                  ,
+                                ],
+                              ),
+                            ),
+                            const SizedBox(width: 10),
                             // 시스템
                             Expanded(
                               child: Column(
@@ -221,35 +248,6 @@ class _MVOMSEventDialogState extends State<MVOMSEventDialog> with InputWidget {
                             )
                           ],
                         ),
-                        Row(
-                          children: [
-                            // 요청유형
-                            Expanded(
-                              child: Column(
-                                children: [
-                                  makeWidgetTitle("요청유형", true),
-                                  const SizedBox(height: 3),
-                                  makeDropdown(_reqTypes, widget.readOnly, (value) {
-                                    _event.reqTpCd = value!.code;
-                                  }, _reqTypes[0])
-                                ],
-                              ),
-                            ),
-                            const SizedBox(width: 10),
-                            // 요청경로
-                            Expanded(
-                              child: Column(
-                                children: [
-                                  makeWidgetTitle("요청경로", true),
-                                  const SizedBox(height: 3),
-                                  makeDropdown(_reqMethods, widget.readOnly, (value) {
-                                    _event.reqMthdCd = value!.code;
-                                  }, _reqMethods[0])
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
                         // 제목
                         Column(
                           children: [
@@ -259,12 +257,12 @@ class _MVOMSEventDialogState extends State<MVOMSEventDialog> with InputWidget {
                               readOnly: widget.readOnly,
                               style: const TextStyle(fontSize: ConstantValues.kDialogFontSize),
                               controller: TextEditingController(text: _event.title),
-                              maxLength: 100,
+                              maxLength: 500,
                               onChanged: (value) {
                                 _event.title = value;
                               },
                               validator: (value) {
-                                if (_event.title.isEmpty) {
+                                if (_event.title.replaceAll(" ", "").isEmpty) {
                                   return ConstantValues.kMessageRequired;
                                 }
                                 return null;
@@ -285,7 +283,7 @@ class _MVOMSEventDialogState extends State<MVOMSEventDialog> with InputWidget {
                                 _event.evntDesc = value;
                               },
                               validator: (value) {
-                                if (_event.evntDesc.isEmpty) {
+                                if (_event.evntDesc.replaceAll(" ", "").isEmpty) {
                                   return ConstantValues.kMessageRequired;
                                 }
                                 return null;

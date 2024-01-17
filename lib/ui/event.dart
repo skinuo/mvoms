@@ -89,8 +89,7 @@ class _MVOMSEventState extends State<MVOMSEvent> with InputWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(Icons.add),
-                          Text("이벤트 추가",
-                              style: TextStyle(fontWeight: FontWeight.bold))
+                          Text("이벤트 추가")
                         ],
                       ))
               )
