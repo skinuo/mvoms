@@ -132,8 +132,8 @@ class _MVOMSOrganizationState extends State<MVOMSOrganization> with InputWidget 
                                                       children: [
                                                         TableRow(
                                                           children: [
-                                                            makeOrganizationHeaderCell("id"),
-                                                            makeOrganizationHeaderCell("이름"),
+                                                            makeOrganizationHeaderCell("아이디"),
+                                                            makeOrganizationHeaderCell("조직명"),
                                                             makeOrganizationHeaderCell("이메일"),
                                                             makeOrganizationHeaderCell("번호"),
                                                           ]
