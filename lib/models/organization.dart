@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:mvoms/utilities/UTCDateTimeConverter.dart';
 import 'package:mvoms/utilities/global.dart';
 part 'organization.freezed.dart';
 part 'organization.g.dart';
@@ -12,10 +13,10 @@ class Organization with _$Organization {
     String? email,
     String? phone,
     required String registerId,
-    required DateTime registerTime,
+    @UTCDateTimeConverter() required DateTime registerTime,
     required String useYn,
     required String editorId,
-    required DateTime editTime,
+    @UTCDateTimeConverter() required DateTime editTime,
   }) = _Organization;
 
   factory Organization.create() => Organization(name: "", registerId: Global.user.id!,

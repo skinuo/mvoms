@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mvoms/models/department.dart';
 import 'package:mvoms/models/organization.dart';
-import 'package:mvoms/utilities/input_widget.dart';
+import 'package:mvoms/utilities/common_widget.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 
 import '../models/member.dart';
@@ -17,7 +17,7 @@ class MVOMSNewMemberDialog extends StatefulWidget {
   State<MVOMSNewMemberDialog> createState() => _MVOMSNewMemberDialogState();
 }
 
-class _MVOMSNewMemberDialogState extends State<MVOMSNewMemberDialog> with InputWidget {
+class _MVOMSNewMemberDialogState extends State<MVOMSNewMemberDialog> {
   final _rest = RestRepogitory();
   // 기관
   final List<Organization> _orgList = [];
@@ -97,11 +97,11 @@ class _MVOMSNewMemberDialogState extends State<MVOMSNewMemberDialog> with InputW
                           Expanded(
                             child: Column(
                               children: [
-                                makeWidgetTitle("기관", true),
+                                CommonWidget.makeWidgetTitle("기관", true),
                                 const SizedBox(height: 3),
                                 DropdownSearch<Organization>(
                                   dropdownDecoratorProps: (
-                                      DropDownDecoratorProps(dropdownSearchDecoration: makeDecoration())
+                                      DropDownDecoratorProps(dropdownSearchDecoration: CommonWidget.makeDecoration())
                                   ),
                                   validator:(Organization? item) => _org.name == "" ? ConstantValues.kMessageRequired : null,
                                   dropdownBuilder: (context, selectedItem) {
@@ -119,7 +119,7 @@ class _MVOMSNewMemberDialogState extends State<MVOMSNewMemberDialog> with InputW
                                     isFilterOnline: true,
                                     showSearchBox: true,
                                     searchFieldProps: (
-                                      TextFieldProps(decoration: makeDecoration(),
+                                      TextFieldProps(decoration: CommonWidget.makeDecoration(),
                                       style: const TextStyle(fontSize: ConstantValues.kDialogFontSize))
                                     ),
                                     itemBuilder: (BuildContext context, Organization org, bool isSelected) {
@@ -156,7 +156,7 @@ class _MVOMSNewMemberDialogState extends State<MVOMSNewMemberDialog> with InputW
                                 padding: const EdgeInsets.only(left: 10),
                                 child: Column(
                                   children: [
-                                    makeWidgetTitle("신규기관", true),
+                                    CommonWidget.makeWidgetTitle("신규기관", true),
                                     const SizedBox(height: 3),
                                     TextFormField(
                                       controller: TextEditingController(text: _org.name),
@@ -165,7 +165,7 @@ class _MVOMSNewMemberDialogState extends State<MVOMSNewMemberDialog> with InputW
                                         _org.name = v;
                                       },
                                       validator: (value) => _org.name.replaceAll(" ", "").isEmpty ? ConstantValues.kMessageRequired : null,
-                                      decoration: makeDecoration()
+                                      decoration: CommonWidget.makeDecoration()
                                     ),
                                   ],
                                 ),
@@ -179,11 +179,11 @@ class _MVOMSNewMemberDialogState extends State<MVOMSNewMemberDialog> with InputW
                         Expanded(
                             child: Column(
                               children: [
-                                makeWidgetTitle("부서", true),
+                                CommonWidget.makeWidgetTitle("부서", true),
                                 const SizedBox(height: 3),
                                 DropdownSearch<Department>(
                                   dropdownDecoratorProps: (
-                                      DropDownDecoratorProps(dropdownSearchDecoration: makeDecoration())
+                                      DropDownDecoratorProps(dropdownSearchDecoration: CommonWidget.makeDecoration())
                                   ),
                                   validator:(Department? item) => _dep.name == "" ? ConstantValues.kMessageRequired : null,
                                   dropdownBuilder: (context, selectedItem) {
@@ -202,7 +202,7 @@ class _MVOMSNewMemberDialogState extends State<MVOMSNewMemberDialog> with InputW
                                     isFilterOnline: true,
                                     showSearchBox: true,
                                     searchFieldProps: (TextFieldProps(
-                                      decoration: makeDecoration(),
+                                      decoration: CommonWidget.makeDecoration(),
                                       style: const TextStyle(fontSize: ConstantValues.kDialogFontSize))),
                                     itemBuilder: (BuildContext context, Department department, bool isSelected) {
                                       return Center(
@@ -238,7 +238,7 @@ class _MVOMSNewMemberDialogState extends State<MVOMSNewMemberDialog> with InputW
                             padding: const EdgeInsets.only(left: 10),
                             child: Column(
                               children: [
-                                makeWidgetTitle("신규부서", true),
+                                CommonWidget.makeWidgetTitle("신규부서", true),
                                 const SizedBox(height: 3),
                                 TextFormField(
                                   controller: TextEditingController(text: _dep.name),
@@ -247,7 +247,7 @@ class _MVOMSNewMemberDialogState extends State<MVOMSNewMemberDialog> with InputW
                                   },
                                   style: const TextStyle(fontSize: ConstantValues.kDialogFontSize),
                                   validator: (value) => _dep.name.replaceAll(" ", "").isEmpty ? ConstantValues.kMessageRequired : null,
-                                  decoration: makeDecoration(),
+                                  decoration: CommonWidget.makeDecoration(),
                                 ),
                               ],
                             ),
@@ -258,13 +258,13 @@ class _MVOMSNewMemberDialogState extends State<MVOMSNewMemberDialog> with InputW
                       SizedBox(child:
                         Column(
                           children: [
-                            makeWidgetTitle("이름", true),
+                            CommonWidget.makeWidgetTitle("이름", true),
                             const SizedBox(height: 3),
                             TextFormField(
                               validator: (value) => value!.replaceAll(" ", "") == "" ? ConstantValues.kMessageRequired : null,
                               maxLength: 10,
                               style: const TextStyle(fontSize: ConstantValues.kDialogFontSize),
-                              decoration: makeDecoration(),
+                              decoration: CommonWidget.makeDecoration(),
                               controller: TextEditingController(text: _member.name),
                               onChanged: (value) {
                                 _member.name = value;
@@ -277,11 +277,11 @@ class _MVOMSNewMemberDialogState extends State<MVOMSNewMemberDialog> with InputW
                       SizedBox(child:
                         Column(
                           children: [
-                            makeWidgetTitle("mail", false),
+                            CommonWidget.makeWidgetTitle("mail", false),
                             const SizedBox(height: 3),
                             TextField(
                               style: const TextStyle(fontSize: ConstantValues.kDialogFontSize),
-                              decoration: makeDecoration(),
+                              decoration: CommonWidget.makeDecoration(),
                               controller: TextEditingController(text: _member.email),
                               maxLength: 50,
                               onChanged: (value) {
@@ -295,11 +295,11 @@ class _MVOMSNewMemberDialogState extends State<MVOMSNewMemberDialog> with InputW
                       SizedBox(child:
                         Column(
                           children: [
-                            makeWidgetTitle("전화번호", false),
+                            CommonWidget.makeWidgetTitle("전화번호", false),
                             const SizedBox(height: 3),
                             TextField(
                               style: const TextStyle(fontSize: ConstantValues.kDialogFontSize),
-                              decoration: makeDecoration(),
+                              decoration: CommonWidget.makeDecoration(),
                               controller: TextEditingController(text: _member.phone),
                               maxLength: 13,
                               onChanged: (value) {

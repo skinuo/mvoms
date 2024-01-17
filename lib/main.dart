@@ -8,7 +8,7 @@ import 'package:mvoms/utilities/global.dart';
 import 'package:mvoms/utilities/constants.dart';
 import 'package:mvoms/utilities/rest_repository.dart';
 
-import 'utilities/input_widget.dart';
+import 'utilities/common_widget.dart';
 import 'ui/login.dart';
 import 'dart:html';
 
@@ -40,7 +40,7 @@ class MVOMSMain extends StatefulWidget {
   State<MVOMSMain> createState() => _MVOMSMainState();
 }
 
-class _MVOMSMainState extends State<MVOMSMain> with InputWidget {
+class _MVOMSMainState extends State<MVOMSMain> {
   // 요청 관리
   final _rest = RestRepogitory();
   // 세션 스토리지

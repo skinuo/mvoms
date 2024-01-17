@@ -26,13 +26,17 @@ mixin _$TargetSystem {
   set name(String value) => throw _privateConstructorUsedError;
   String get registerId => throw _privateConstructorUsedError;
   set registerId(String value) => throw _privateConstructorUsedError;
+  @UTCDateTimeConverter()
   DateTime get registerTime => throw _privateConstructorUsedError;
+  @UTCDateTimeConverter()
   set registerTime(DateTime value) => throw _privateConstructorUsedError;
   String get useYn => throw _privateConstructorUsedError;
   set useYn(String value) => throw _privateConstructorUsedError;
   String get editorId => throw _privateConstructorUsedError;
   set editorId(String value) => throw _privateConstructorUsedError;
+  @UTCDateTimeConverter()
   DateTime get editTime => throw _privateConstructorUsedError;
+  @UTCDateTimeConverter()
   set editTime(DateTime value) => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -51,10 +55,10 @@ abstract class $TargetSystemCopyWith<$Res> {
       {String id,
       String name,
       String registerId,
-      DateTime registerTime,
+      @UTCDateTimeConverter() DateTime registerTime,
       String useYn,
       String editorId,
-      DateTime editTime});
+      @UTCDateTimeConverter() DateTime editTime});
 }
 
 /// @nodoc
@@ -123,10 +127,10 @@ abstract class _$$TargetSystemImplCopyWith<$Res>
       {String id,
       String name,
       String registerId,
-      DateTime registerTime,
+      @UTCDateTimeConverter() DateTime registerTime,
       String useYn,
       String editorId,
-      DateTime editTime});
+      @UTCDateTimeConverter() DateTime editTime});
 }
 
 /// @nodoc
@@ -188,10 +192,10 @@ class _$TargetSystemImpl implements _TargetSystem {
       {required this.id,
       required this.name,
       required this.registerId,
-      required this.registerTime,
+      @UTCDateTimeConverter() required this.registerTime,
       required this.useYn,
       required this.editorId,
-      required this.editTime});
+      @UTCDateTimeConverter() required this.editTime});
 
   factory _$TargetSystemImpl.fromJson(Map<String, dynamic> json) =>
       _$$TargetSystemImplFromJson(json);
@@ -203,12 +207,14 @@ class _$TargetSystemImpl implements _TargetSystem {
   @override
   String registerId;
   @override
+  @UTCDateTimeConverter()
   DateTime registerTime;
   @override
   String useYn;
   @override
   String editorId;
   @override
+  @UTCDateTimeConverter()
   DateTime editTime;
 
   @override
@@ -235,10 +241,10 @@ abstract class _TargetSystem implements TargetSystem {
       {required String id,
       required String name,
       required String registerId,
-      required DateTime registerTime,
+      @UTCDateTimeConverter() required DateTime registerTime,
       required String useYn,
       required String editorId,
-      required DateTime editTime}) = _$TargetSystemImpl;
+      @UTCDateTimeConverter() required DateTime editTime}) = _$TargetSystemImpl;
 
   factory _TargetSystem.fromJson(Map<String, dynamic> json) =
       _$TargetSystemImpl.fromJson;
@@ -253,7 +259,9 @@ abstract class _TargetSystem implements TargetSystem {
   String get registerId;
   set registerId(String value);
   @override
+  @UTCDateTimeConverter()
   DateTime get registerTime;
+  @UTCDateTimeConverter()
   set registerTime(DateTime value);
   @override
   String get useYn;
@@ -262,7 +270,9 @@ abstract class _TargetSystem implements TargetSystem {
   String get editorId;
   set editorId(String value);
   @override
+  @UTCDateTimeConverter()
   DateTime get editTime;
+  @UTCDateTimeConverter()
   set editTime(DateTime value);
   @override
   @JsonKey(ignore: true)

@@ -29,11 +29,13 @@ abstract class ConstantValues {
   static const String kMessageRequired = "필수입력 입니다.";
   static const String kMessageNoData = "데이터가 없습니다.";
   static const String kMessageSaved = "저장되었습니다.";
+  static const String kMessageCompleted = "완료되었습니다.";
+  static const String kMessageRemoved = "삭제되었습니다.";
   static const String kMessageErrored = "오류가 발생했습니다.";
+  static const String kMessageAskRemove = "삭제하시겠습니까?";
   static const String kMessageOk = "확인";
   static const String kMessageInfo = "정보";
   static const String kMessageError = "오류";
-
   // http 상태
   static const Map<int, String> kHttpStatus = {
       461: "대상 객체가 존재하지 않음",

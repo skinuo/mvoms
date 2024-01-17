@@ -5,7 +5,7 @@ import 'package:mvoms/models/common_code.dart';
 import 'package:mvoms/models/operation_event_search_condition.dart';
 import 'package:mvoms/utilities/global.dart';
 
-import '../utilities/input_widget.dart';
+import '../utilities/common_widget.dart';
 import '../utilities/constants.dart';
 
 /// 검색 위젯 구현
@@ -18,7 +18,7 @@ class MVOMSSearch extends StatefulWidget {
   State<MVOMSSearch> createState() => _MVOMSSearchState();
 }
 
-class _MVOMSSearchState extends State<MVOMSSearch> with InputWidget {
+class _MVOMSSearchState extends State<MVOMSSearch> {
   // 검색조건
   final OperationEventSearchCondition _cond = OperationEventSearchCondition();
   // 상태 코드
@@ -66,10 +66,10 @@ class _MVOMSSearchState extends State<MVOMSSearch> with InputWidget {
                           child: const Text("검색어", style: TextStyle(fontWeight: FontWeight.bold))
                         ),
                         Expanded(
-                          child: makeTextCell(
+                          child: CommonWidget.makeTextCell(
                             controller: TextEditingController(text: _cond.keyword),
                             maxLength: 50,
-                            decoration: makeInputDecoration(),
+                            decoration: CommonWidget.makeInputDecoration(),
                             onChanged: (v) {
                               _cond.keyword = v;
                             }
@@ -171,7 +171,7 @@ class _MVOMSSearchState extends State<MVOMSSearch> with InputWidget {
                             children: [
                               // 발생시작
                               Expanded(
-                                child: makeDateCell(
+                                child: CommonWidget.makeDateCell(
                                   context: context,
                                   controller: TextEditingController(text: _cond.evntTimeStart != null ? DateFormat('yyyy-MM-dd').format(_cond.evntTimeStart!) : ""),
                                   onSelected: (value) {
@@ -179,7 +179,7 @@ class _MVOMSSearchState extends State<MVOMSSearch> with InputWidget {
                                   },
                                   lastDate: _cond.evntTimeEnd,
                                   readOnly: true,
-                                  decoration: makeInputDecoration(),
+                                  decoration: CommonWidget.makeInputDecoration(),
                                 )
                               ),
                               Container(
@@ -189,7 +189,7 @@ class _MVOMSSearchState extends State<MVOMSSearch> with InputWidget {
                               ),
                               // 발생종료
                               Expanded(
-                                child: makeDateCell(
+                                child: CommonWidget.makeDateCell(
                                   context: context,
                                   controller: TextEditingController(text: _cond.evntTimeEnd != null ? DateFormat('yyyy-MM-dd').format(_cond.evntTimeEnd!) : ""),
                                   onSelected: (value) {
@@ -197,7 +197,7 @@ class _MVOMSSearchState extends State<MVOMSSearch> with InputWidget {
                                   },
                                   firstDate: _cond.evntTimeStart,
                                   readOnly: true,
-                                  decoration: makeInputDecoration(),
+                                  decoration: CommonWidget.makeInputDecoration(),
                                 )
                               ),
                             ],
@@ -211,7 +211,7 @@ class _MVOMSSearchState extends State<MVOMSSearch> with InputWidget {
                         Expanded(
                           child: Row(children: [
                             Expanded(
-                              child: makeDateCell(
+                              child: CommonWidget.makeDateCell(
                                 context: context,
                                 controller: TextEditingController(text: _cond.closeTimeStart != null ? DateFormat('yyyy-MM-dd').format(_cond.closeTimeStart!) : ""),
                                 onSelected: (value) {
@@ -220,7 +220,7 @@ class _MVOMSSearchState extends State<MVOMSSearch> with InputWidget {
                                   });
                                 },
                                 readOnly: true,
-                                decoration: makeInputDecoration(),
+                                decoration: CommonWidget.makeInputDecoration(),
                               )
                             ),
                             Container(
@@ -229,7 +229,7 @@ class _MVOMSSearchState extends State<MVOMSSearch> with InputWidget {
                               child: const Text("~")
                             ),
                             Expanded(
-                              child: makeDateCell(
+                              child: CommonWidget.makeDateCell(
                                 context: context,
                                 controller: TextEditingController(text: _cond.closeTimeEnd != null ? DateFormat('yyyy-MM-dd').format(_cond.closeTimeEnd!) : ""),
                                 onSelected: (value) {
@@ -238,7 +238,7 @@ class _MVOMSSearchState extends State<MVOMSSearch> with InputWidget {
                                   });
                                 },
                                 readOnly: true,
-                                decoration: makeInputDecoration(),
+                                decoration: CommonWidget.makeInputDecoration(),
                               )
                             )
                           ])
@@ -250,7 +250,7 @@ class _MVOMSSearchState extends State<MVOMSSearch> with InputWidget {
                         ),
                         Expanded(
                           child: DropdownButtonFormField2<CommonCode>(
-                            decoration: makeInputDecoration(padding: 9),
+                            decoration: CommonWidget.makeInputDecoration(padding: 9),
                             style: const TextStyle(fontSize: ConstantValues.kBodyFontSize),
                             isExpanded: true,
                             hint: Text("선택")

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mvoms/models/operation_event.dart';
 import 'package:mvoms/models/target_system.dart';
-import 'package:mvoms/utilities/input_widget.dart';
+import 'package:mvoms/utilities/common_widget.dart';
 import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 import '../models/member.dart';
 import '../utilities/global.dart';
@@ -26,7 +26,7 @@ class MVOMSEventDialog extends StatefulWidget {
   State<MVOMSEventDialog> createState() => _MVOMSEventDialogState();
 }
 
-class _MVOMSEventDialogState extends State<MVOMSEventDialog> with InputWidget {
+class _MVOMSEventDialogState extends State<MVOMSEventDialog> {
   final _rest = RestRepogitory();
   // 시스템 콤보박스 아이템
   final List<TargetSystem> _targetSystems = [];
@@ -72,9 +72,9 @@ class _MVOMSEventDialogState extends State<MVOMSEventDialog> with InputWidget {
 
     // 다이얼로그 버튼 생성
     _actions.add(
-      ElevatedButton(
-          onPressed: () => Navigator.pop(context, false),
-          child: const Text('취소'))
+        ElevatedButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('취소'))
     );
     // 수정 가능시 저장버튼 추가
     if (!widget.readOnly) {
@@ -83,6 +83,32 @@ class _MVOMSEventDialogState extends State<MVOMSEventDialog> with InputWidget {
             saveEvent();
           },
           child: const Text('저장')));
+      // 삭제
+      if (widget.evntId != null) {
+        _actions.add(ElevatedButton(
+          onPressed: () async {
+            CommonWidget.showMessageBox(context,
+                MessageLevel.question,
+                ConstantValues.kMessageAskRemove,
+                { "확인": (){
+                  // 삭제처리
+                  _rest.deleteEvent(widget.evntId!).then((v){
+                    CommonWidget.showMessageBox(context, MessageLevel.info, ConstantValues.kMessageRemoved,
+                        {"확인": ()=>Navigator.pop(context, true)});
+                  }, onError: (err) {
+                    // 오류
+                    CommonWidget.showMessageBox(context, MessageLevel.error, "${ConstantValues.kMessageErrored}[$err]", {
+                      ConstantValues.kMessageOk: null
+                    });
+                    print(err);
+                  });
+                },
+                  "취소": null
+                }
+            );
+          },
+          child: const Text('삭제')));
+      }
     }
   }
 
@@ -123,7 +149,7 @@ class _MVOMSEventDialogState extends State<MVOMSEventDialog> with InputWidget {
                         // 요청자
                         Column(
                           children: [
-                            makeWidgetTitle("요청자", true),
+                            CommonWidget.makeWidgetTitle("요청자", true),
                             const SizedBox(height: 3),
                             TextFormField(
                               style: const TextStyle(fontSize: ConstantValues.kDialogFontSize),
@@ -136,7 +162,7 @@ class _MVOMSEventDialogState extends State<MVOMSEventDialog> with InputWidget {
                                 }
                                 return null;
                               },
-                              decoration: makeDecoration(icon: const Icon(Icons.account_circle, color: Colors.grey)),
+                              decoration: CommonWidget.makeDecoration(icon: const Icon(Icons.account_circle, color: Colors.grey)),
                             ),
                           ],
                         ),
@@ -146,7 +172,7 @@ class _MVOMSEventDialogState extends State<MVOMSEventDialog> with InputWidget {
                             Expanded(
                               child: Column(
                                 children: [
-                                  makeWidgetTitle("요청일시", true),
+                                  CommonWidget.makeWidgetTitle("요청일시", true),
                                   const SizedBox(height: 3),
                                   TextFormField(
                                     style: const TextStyle(fontSize: ConstantValues.kDialogFontSize),
@@ -161,7 +187,7 @@ class _MVOMSEventDialogState extends State<MVOMSEventDialog> with InputWidget {
                                       );
                                       setState(() => _event.evntTime = now!);
                                     } : null,
-                                    decoration: makeDecoration(),
+                                    decoration: CommonWidget.makeDecoration(),
                                   ),
                                 ],
                               ),
@@ -171,7 +197,7 @@ class _MVOMSEventDialogState extends State<MVOMSEventDialog> with InputWidget {
                             Expanded(
                               child: Column(
                                 children: [
-                                  makeWidgetTitle("요청유형", true),
+                                  CommonWidget.makeWidgetTitle("요청유형", true),
                                   const SizedBox(height: 3),
                                   makeDropdown(_reqTypes, widget.readOnly, (value) {
                                     _event.reqTpCd = value!.code;
@@ -184,7 +210,7 @@ class _MVOMSEventDialogState extends State<MVOMSEventDialog> with InputWidget {
                             Expanded(
                               child: Column(
                                 children: [
-                                  makeWidgetTitle("요청경로", true),
+                                  CommonWidget.makeWidgetTitle("요청경로", true),
                                   const SizedBox(height: 3),
                                   makeDropdown(_reqMethods, widget.readOnly, (value) {
                                     _event.reqMthdCd = value!.code;
@@ -202,7 +228,7 @@ class _MVOMSEventDialogState extends State<MVOMSEventDialog> with InputWidget {
                             Expanded(
                               child: Column(
                                 children: [
-                                  makeWidgetTitle("처리자", true),
+                                  CommonWidget.makeWidgetTitle("처리자", true),
                                   const SizedBox(height: 3),
                                   TextFormField(
                                     style: const TextStyle(fontSize: ConstantValues.kDialogFontSize),
@@ -215,7 +241,7 @@ class _MVOMSEventDialogState extends State<MVOMSEventDialog> with InputWidget {
                                       }
                                       return null;
                                     },
-                                    decoration: makeDecoration(icon: const Icon(Icons.account_circle, color: Colors.grey)),
+                                    decoration: CommonWidget.makeDecoration(icon: const Icon(Icons.account_circle, color: Colors.grey)),
                                   ),
                                 ],
                               ),
@@ -224,10 +250,10 @@ class _MVOMSEventDialogState extends State<MVOMSEventDialog> with InputWidget {
                             Expanded(
                               child: Column(
                                 children: [
-                                  makeWidgetTitle("처리상태", true),
+                                  CommonWidget.makeWidgetTitle("처리상태", true),
                                   const SizedBox(height: 3),
                                   makeDropdown(_reqStates, widget.readOnly, (value) {
-                                    _event.stateCd = value!;
+                                    _event.stateCd = value.code;
                                   }, _reqStates[0])
                                   ,
                                 ],
@@ -238,10 +264,10 @@ class _MVOMSEventDialogState extends State<MVOMSEventDialog> with InputWidget {
                             Expanded(
                               child: Column(
                                 children: [
-                                  makeWidgetTitle("시스템", true),
+                                  CommonWidget.makeWidgetTitle("시스템", true),
                                   const SizedBox(height: 3),
                                   makeDropdown(_targetSystems, widget.readOnly, (value) {
-                                    _event.targetSystem = value!;
+                                    _event.targetSystem = value;
                                   }, _targetSystems.isNotEmpty ? _targetSystems[0] : "")
                                 ],
                               ),
@@ -251,7 +277,7 @@ class _MVOMSEventDialogState extends State<MVOMSEventDialog> with InputWidget {
                         // 제목
                         Column(
                           children: [
-                            makeWidgetTitle("제목", true),
+                            CommonWidget.makeWidgetTitle("제목", true),
                             const SizedBox(height: 3),
                             TextFormField(
                               readOnly: widget.readOnly,
@@ -267,12 +293,12 @@ class _MVOMSEventDialogState extends State<MVOMSEventDialog> with InputWidget {
                                 }
                                 return null;
                               },
-                              decoration: makeDecoration(),
+                              decoration: CommonWidget.makeDecoration(),
                             ),
                           ],
                         ),Column(
                           children: [
-                            makeWidgetTitle("내용", true),
+                            CommonWidget.makeWidgetTitle("내용", true),
                             const SizedBox(height: 3),
                             TextFormField(
                               readOnly: widget.readOnly,
@@ -288,33 +314,33 @@ class _MVOMSEventDialogState extends State<MVOMSEventDialog> with InputWidget {
                                 }
                                 return null;
                               },
-                              decoration: makeDecoration(),
+                              decoration: CommonWidget.makeDecoration(),
                             ),
                           ],
                         ),
                         // 첨부파일
                         Column(
                           children: [
-                            makeWidgetTitle("첨부파일", false),
+                            CommonWidget.makeWidgetTitle("첨부파일", false),
                             const SizedBox(height: 3),
                             TextFormField(
                               style: const TextStyle(fontSize: ConstantValues.kDialogFontSize),
                               controller: TextEditingController(text: _event.evntDesc),
                               maxLength: 100,
-                              decoration: makeDecoration(),
+                              decoration: CommonWidget.makeDecoration(),
                             ),
                           ],
                         ),
                         // 태그
                         Column(
                           children: [
-                            makeWidgetTitle("태그", false),
+                            CommonWidget.makeWidgetTitle("태그", false),
                             const SizedBox(height: 3),
                             TextFormField(
                               style: const TextStyle(fontSize: ConstantValues.kDialogFontSize),
                               controller: TextEditingController(text: _event.evntDesc),
                               maxLength: 100,
-                              decoration: makeDecoration(),
+                              decoration: CommonWidget.makeDecoration(),
                             ),
                           ],
                         )
@@ -334,7 +360,7 @@ class _MVOMSEventDialogState extends State<MVOMSEventDialog> with InputWidget {
   DropdownButtonFormField2 makeDropdown(List items, bool readonly, Function onChanged, Object value) {
     return DropdownButtonFormField2(
       style: const TextStyle(fontSize: ConstantValues.kDialogFontSize),
-      decoration: makeDecoration(),
+      decoration: CommonWidget.makeDecoration(),
       isExpanded: true,
       onChanged: !readonly ? (value) {
         onChanged.call(value);
@@ -386,15 +412,21 @@ class _MVOMSEventDialogState extends State<MVOMSEventDialog> with InputWidget {
     // 입력값 검증
     if (_formKey.currentState!.validate()) {
       if (widget.evntId != null) {
+        // 완료, 반려/취소 된 상태이면 이벤트 종료
+        if (_event.stateCd == "CMP"
+          || _event.stateCd == "REJ") {
+          // 종결시간 입력
+          _event.closeTime = DateTime.now();
+        }
         // 이벤트 수정
         _rest.updateEvent(_event)
         .then((value) {
           // 메시지 박스 출력
-          showMessageBox(context, MessageLevel.info, ConstantValues.kMessageSaved, {
+          CommonWidget.showMessageBox(context, MessageLevel.info, ConstantValues.kMessageSaved, {
             ConstantValues.kMessageOk: ()=> Navigator.pop(context, true)
           });
         }).catchError((err) {
-          showMessageBox(context, MessageLevel.error, "${ConstantValues.kMessageErrored}[$err]", {
+          CommonWidget.showMessageBox(context, MessageLevel.error, "${ConstantValues.kMessageErrored}[$err]", {
             ConstantValues.kMessageOk: null
           });
           print(err);
@@ -404,12 +436,12 @@ class _MVOMSEventDialogState extends State<MVOMSEventDialog> with InputWidget {
         _rest.addEvent(_event)
         .then((value) {
           // 메시지 박스 출력
-          showMessageBox(context, MessageLevel.info, ConstantValues.kMessageSaved, {
+          CommonWidget.showMessageBox(context, MessageLevel.info, ConstantValues.kMessageSaved, {
             ConstantValues.kMessageOk: ()=> Navigator.pop(context, true)
           });
         }).catchError((err) {
           // 메시지 박스 출력
-          showMessageBox(context, MessageLevel.error, "${ConstantValues.kMessageErrored}[$err]", {
+          CommonWidget.showMessageBox(context, MessageLevel.error, "${ConstantValues.kMessageErrored}[$err]", {
             ConstantValues.kMessageOk: null
           });
           print(err);

@@ -13,10 +13,12 @@ _$OrganizationImpl _$$OrganizationImplFromJson(Map<String, dynamic> json) =>
       email: json['email'] as String?,
       phone: json['phone'] as String?,
       registerId: json['registerId'] as String,
-      registerTime: DateTime.parse(json['registerTime'] as String),
+      registerTime:
+          const UTCDateTimeConverter().fromJson(json['registerTime'] as String),
       useYn: json['useYn'] as String,
       editorId: json['editorId'] as String,
-      editTime: DateTime.parse(json['editTime'] as String),
+      editTime:
+          const UTCDateTimeConverter().fromJson(json['editTime'] as String),
     );
 
 Map<String, dynamic> _$$OrganizationImplToJson(_$OrganizationImpl instance) =>
@@ -26,8 +28,9 @@ Map<String, dynamic> _$$OrganizationImplToJson(_$OrganizationImpl instance) =>
       'email': instance.email,
       'phone': instance.phone,
       'registerId': instance.registerId,
-      'registerTime': instance.registerTime.toIso8601String(),
+      'registerTime':
+          const UTCDateTimeConverter().toJson(instance.registerTime),
       'useYn': instance.useYn,
       'editorId': instance.editorId,
-      'editTime': instance.editTime.toIso8601String(),
+      'editTime': const UTCDateTimeConverter().toJson(instance.editTime),
     };

@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:mvoms/utilities/UTCDateTimeConverter.dart';
 import 'package:mvoms/utilities/global.dart';
 part 'target_system.freezed.dart';
 part 'target_system.g.dart';
@@ -11,10 +12,10 @@ class TargetSystem with _$TargetSystem {
     required String name,
 
     required String registerId,
-    required DateTime registerTime,
+    @UTCDateTimeConverter() required DateTime registerTime,
     required String useYn,
     required String editorId,
-    required DateTime editTime
+    @UTCDateTimeConverter() required DateTime editTime
   }) = _TargetSystem;
 
   factory TargetSystem.create() => TargetSystem(id: "", name: "", registerId: Global.user.id!,

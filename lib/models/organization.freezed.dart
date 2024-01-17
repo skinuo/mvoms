@@ -30,13 +30,17 @@ mixin _$Organization {
   set phone(String? value) => throw _privateConstructorUsedError;
   String get registerId => throw _privateConstructorUsedError;
   set registerId(String value) => throw _privateConstructorUsedError;
+  @UTCDateTimeConverter()
   DateTime get registerTime => throw _privateConstructorUsedError;
+  @UTCDateTimeConverter()
   set registerTime(DateTime value) => throw _privateConstructorUsedError;
   String get useYn => throw _privateConstructorUsedError;
   set useYn(String value) => throw _privateConstructorUsedError;
   String get editorId => throw _privateConstructorUsedError;
   set editorId(String value) => throw _privateConstructorUsedError;
+  @UTCDateTimeConverter()
   DateTime get editTime => throw _privateConstructorUsedError;
+  @UTCDateTimeConverter()
   set editTime(DateTime value) => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -57,10 +61,10 @@ abstract class $OrganizationCopyWith<$Res> {
       String? email,
       String? phone,
       String registerId,
-      DateTime registerTime,
+      @UTCDateTimeConverter() DateTime registerTime,
       String useYn,
       String editorId,
-      DateTime editTime});
+      @UTCDateTimeConverter() DateTime editTime});
 }
 
 /// @nodoc
@@ -141,10 +145,10 @@ abstract class _$$OrganizationImplCopyWith<$Res>
       String? email,
       String? phone,
       String registerId,
-      DateTime registerTime,
+      @UTCDateTimeConverter() DateTime registerTime,
       String useYn,
       String editorId,
-      DateTime editTime});
+      @UTCDateTimeConverter() DateTime editTime});
 }
 
 /// @nodoc
@@ -218,10 +222,10 @@ class _$OrganizationImpl implements _Organization {
       this.email,
       this.phone,
       required this.registerId,
-      required this.registerTime,
+      @UTCDateTimeConverter() required this.registerTime,
       required this.useYn,
       required this.editorId,
-      required this.editTime});
+      @UTCDateTimeConverter() required this.editTime});
 
   factory _$OrganizationImpl.fromJson(Map<String, dynamic> json) =>
       _$$OrganizationImplFromJson(json);
@@ -237,12 +241,14 @@ class _$OrganizationImpl implements _Organization {
   @override
   String registerId;
   @override
+  @UTCDateTimeConverter()
   DateTime registerTime;
   @override
   String useYn;
   @override
   String editorId;
   @override
+  @UTCDateTimeConverter()
   DateTime editTime;
 
   @override
@@ -271,10 +277,10 @@ abstract class _Organization implements Organization {
       String? email,
       String? phone,
       required String registerId,
-      required DateTime registerTime,
+      @UTCDateTimeConverter() required DateTime registerTime,
       required String useYn,
       required String editorId,
-      required DateTime editTime}) = _$OrganizationImpl;
+      @UTCDateTimeConverter() required DateTime editTime}) = _$OrganizationImpl;
 
   factory _Organization.fromJson(Map<String, dynamic> json) =
       _$OrganizationImpl.fromJson;
@@ -295,7 +301,9 @@ abstract class _Organization implements Organization {
   String get registerId;
   set registerId(String value);
   @override
+  @UTCDateTimeConverter()
   DateTime get registerTime;
+  @UTCDateTimeConverter()
   set registerTime(DateTime value);
   @override
   String get useYn;
@@ -304,7 +312,9 @@ abstract class _Organization implements Organization {
   String get editorId;
   set editorId(String value);
   @override
+  @UTCDateTimeConverter()
   DateTime get editTime;
+  @UTCDateTimeConverter()
   set editTime(DateTime value);
   @override
   @JsonKey(ignore: true)

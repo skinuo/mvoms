@@ -7,10 +7,13 @@ import '../models/pagination.dart';
 import 'constants.dart';
 
 /// 메시지 타입
-enum MessageLevel {error, info}
+enum MessageLevel {error, info, question}
 
 /// 공통 입력 위젯 생성 mixin
-mixin InputWidget {
+class CommonWidget {
+  // 인스턴스화 하지 않음
+  CommonWidget._();
+  
   /// 드랍다운 셀 생성
   ///
   /// - [item]: 아이템 목록
@@ -19,7 +22,7 @@ mixin InputWidget {
   /// - [decoration]: 셀박스 데코레이션
   /// - [fontSize]: 폰트사이즈
   /// - [disabledText]: 비활성텍스트
-  Widget makeCellWithDropdown({
+  static Widget makeCellWithDropdown({
       required List item,
       required String value,
       Function? onChanged,
@@ -46,7 +49,7 @@ mixin InputWidget {
   }
 
   /// input 데코레이션 생성
-  InputDecoration makeInputDecoration({
+  static InputDecoration makeInputDecoration({
       String? labelText,
       bool required = false,
       double padding = 13
@@ -70,7 +73,7 @@ mixin InputWidget {
   }
 
   /// 텍스트 셀 생성
-  TextField makeTextCell({
+  static TextField makeTextCell({
     String? labelText,
     bool required = false,
     bool onlyNumber = false,
@@ -106,7 +109,7 @@ mixin InputWidget {
   }
 
   /// 날짜 셀 생성
-  TextField makeDateCell({
+  static TextField makeDateCell({
     required TextEditingController controller,
     required BuildContext context,
     required Function onSelected,
@@ -152,7 +155,7 @@ mixin InputWidget {
   /// - [decoration]: 데코레이션
   /// - [fontSize]: 폰트사이즈
   /// - [disabled]: 시간선택불가여부,true시날짜팝업열지않음
-  TextField makeDatetimeCell({
+  static TextField makeDatetimeCell({
     required TextEditingController controller,
     required BuildContext context,
     Function? onSelected,
@@ -186,7 +189,7 @@ mixin InputWidget {
   /// - [pg]: 페이징객체
   /// - [pageSize]: 페이지사이즈
   /// - [pageFunc]: 버튼클릭시 이벤트
-  List<Widget> makePageButtons(Pagination pg, int pageSize, Function pageFunc) {
+  static List<Widget> makePageButtons(Pagination pg, int pageSize, Function pageFunc) {
     List<Widget> pageButtons = [];
 
     // 버튼 생성
@@ -224,7 +227,7 @@ mixin InputWidget {
   /// - [pageNum]: 버튼번호
   /// - [highlighting]: 강조여부
   /// - [onPressed]: 버튼클릭이벤트
-  Widget makePageButton(String pageTxt, int pageNum, bool highlighting, Function onPressed) {
+  static Widget makePageButton(String pageTxt, int pageNum, bool highlighting, Function onPressed) {
     return Flexible(
       child: TextButton(
           child: Text(pageTxt, style: TextStyle(
@@ -238,7 +241,7 @@ mixin InputWidget {
   }
 
   /// 타이틀 위젯 생성
-  Widget makeWidgetTitle(String title, bool required) {
+  static Widget makeWidgetTitle(String title, bool required) {
     return Align(
         alignment: Alignment.centerLeft,
         child: Row(
@@ -251,7 +254,7 @@ mixin InputWidget {
   }
 
   /// 다이얼로그 입력 공통 데코레이션
-  InputDecoration makeDecoration({Icon? icon, String? hintText}) {
+  static InputDecoration makeDecoration({Icon? icon, String? hintText}) {
     return InputDecoration(
         filled: true,
         fillColor: ConstantValues.kColorGray,
@@ -274,21 +277,19 @@ mixin InputWidget {
   /// - [messageLevel]: 레벨
   /// - [message]: 메시지
   /// - [buttons]: 버튼목록
-  Future showMessageBox(
+  static Future showMessageBox(
       BuildContext context,
       MessageLevel messageLevel,
       String message,
       Map<String,Function?> buttons) {
     List<Widget> actions = [];
     buttons.forEach((buttonVal, func) {
-      actions.add(Center(
-        child: ElevatedButton(
-          child: Text(buttonVal),
-          onPressed: () {
-            Navigator.pop(context);
-            func?.call();
-          },
-        ),
+      actions.add(ElevatedButton(
+        child: Text(buttonVal),
+        onPressed: () {
+          Navigator.pop(context);
+          func?.call();
+        }
       ));
     });
 
@@ -302,23 +303,27 @@ mixin InputWidget {
         icon = const Icon(Icons.check, color:Colors.green);
       case MessageLevel.error:
         title = ConstantValues.kMessageError;
-        icon = const Icon(Icons.error, color:Colors.red);
+        icon = const Icon(Icons.error_outline, color:Colors.red);
+      case MessageLevel.question:
+        icon = const Icon(Icons.question_mark, color:Colors.red);
     }
 
     return showDialog(
         context: context,
-        barrierDismissible: true,
         builder: ((txt) {
           return AlertDialog(
-            //title: Text(title),
+            alignment: Alignment.center,
             content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const SizedBox(height: 10),
-                  icon, Text(message),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10, bottom: 10),
+                    child: icon,
+                  ),
+                  Text(message, textAlign: TextAlign.center),
                 ],
             ),
-            actions: actions,
+            actions: actions
           );
         })
     ).then((value) {

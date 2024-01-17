@@ -8,7 +8,7 @@ import 'package:mvoms/utilities/auth_updater.dart';
 import 'package:mvoms/utilities/constants.dart';
 
 // http 요청 유형
-enum HttpMethodType {get, post, put}
+enum HttpMethodType {get, post, put, delete}
 
 /// REST 요청 관리
 class RestRepogitory {
@@ -62,7 +62,7 @@ class RestRepogitory {
   ///
   /// - [evntId]: 이벤트아이디
   Future<dynamic> getEventById(String evntId) {
-    return req(uri:'/op-evnet/$evntId');
+    return req(uri:'/op-event/$evntId');
   }
 
   /// 이벤트 목록 조회
@@ -135,6 +135,13 @@ class RestRepogitory {
     return req(methodType: HttpMethodType.put, uri:'/op-event/${event.evntId}', data:event);
   }
 
+  /// 이벤트 삭제
+  ///
+  /// - [event]: 이벤트
+  Future<dynamic> deleteEvent(String evntId) {
+    return req(methodType: HttpMethodType.delete, uri:'/op-event/$evntId');
+  }
+
   /// 기관 모든 목록 조회
   Future<dynamic> getAllOrganizations() {
     return req(uri:'/org/org/list/all');
@@ -186,6 +193,11 @@ class RestRepogitory {
         break;
       case HttpMethodType.put:
         res = _dio.put(uri, options: options, data: data);
+        break;
+      case HttpMethodType.delete:
+        print('uri: $uri');
+        res = _dio.delete(uri, options: options, data: data);
+        break;
     }
 
     return res.then((response) {

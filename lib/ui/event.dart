@@ -6,7 +6,7 @@ import 'package:mvoms/models/pagination.dart';
 import 'package:mvoms/ui/search.dart';
 
 import '../utilities/global.dart';
-import '../utilities/input_widget.dart';
+import '../utilities/common_widget.dart';
 import '../utilities/constants.dart';
 import '../utilities/rest_repository.dart';
 import 'event_dialog.dart';
@@ -19,7 +19,7 @@ class MVOMSEvent extends StatefulWidget {
   State<MVOMSEvent> createState() => _MVOMSEventState();
 }
 
-class _MVOMSEventState extends State<MVOMSEvent> with InputWidget {
+class _MVOMSEventState extends State<MVOMSEvent> {
 
   int _newEventCount = 0;
   int _notCompleteEventCount = 0;
@@ -230,7 +230,7 @@ class _MVOMSEventState extends State<MVOMSEvent> with InputWidget {
       }
       // 페이징 생성
       Pagination pg = Pagination.fromJson(resMap);
-      _pageButtons = makePageButtons(pg, _pageSize, (pageNum){getEventList(page:pageNum);});
+      _pageButtons = CommonWidget.makePageButtons(pg, _pageSize, (pageNum){getEventList(page:pageNum);});
       // 건수
       _eventCountValue = "전체 ${pg.totalElements}건";
     });

@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:mvoms/utilities/UTCDateTimeConverter.dart';
 import 'package:mvoms/utilities/global.dart';
 
 import 'department.dart';
@@ -15,10 +16,10 @@ class Member with _$Member {
     String? phone,
     required Department department,
     required String registerId,
-    required DateTime registerTime,
+    @UTCDateTimeConverter() required DateTime registerTime,
     required String useYn,
     required String editorId,
-    required DateTime editTime
+    @UTCDateTimeConverter() required DateTime editTime
   }) = _Member;
 
   factory Member.create() => Member(name: "", registerId: Global.user.id!, registerTime: DateTime.now(), useYn: "Y",

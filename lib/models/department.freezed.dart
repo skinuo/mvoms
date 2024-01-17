@@ -32,13 +32,17 @@ mixin _$Department {
   set member(Member? value) => throw _privateConstructorUsedError;
   String get registerId => throw _privateConstructorUsedError;
   set registerId(String value) => throw _privateConstructorUsedError;
+  @UTCDateTimeConverter()
   DateTime get registerTime => throw _privateConstructorUsedError;
+  @UTCDateTimeConverter()
   set registerTime(DateTime value) => throw _privateConstructorUsedError;
   String get useYn => throw _privateConstructorUsedError;
   set useYn(String value) => throw _privateConstructorUsedError;
   String get editorId => throw _privateConstructorUsedError;
   set editorId(String value) => throw _privateConstructorUsedError;
+  @UTCDateTimeConverter()
   DateTime get editTime => throw _privateConstructorUsedError;
+  @UTCDateTimeConverter()
   set editTime(DateTime value) => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -60,10 +64,10 @@ abstract class $DepartmentCopyWith<$Res> {
       Department? superDepartment,
       Member? member,
       String registerId,
-      DateTime registerTime,
+      @UTCDateTimeConverter() DateTime registerTime,
       String useYn,
       String editorId,
-      DateTime editTime});
+      @UTCDateTimeConverter() DateTime editTime});
 
   $OrganizationCopyWith<$Res> get organization;
   $DepartmentCopyWith<$Res>? get superDepartment;
@@ -186,10 +190,10 @@ abstract class _$$DepartmentImplCopyWith<$Res>
       Department? superDepartment,
       Member? member,
       String registerId,
-      DateTime registerTime,
+      @UTCDateTimeConverter() DateTime registerTime,
       String useYn,
       String editorId,
-      DateTime editTime});
+      @UTCDateTimeConverter() DateTime editTime});
 
   @override
   $OrganizationCopyWith<$Res> get organization;
@@ -276,10 +280,10 @@ class _$DepartmentImpl implements _Department {
       this.superDepartment,
       this.member,
       required this.registerId,
-      required this.registerTime,
+      @UTCDateTimeConverter() required this.registerTime,
       required this.useYn,
       required this.editorId,
-      required this.editTime});
+      @UTCDateTimeConverter() required this.editTime});
 
   factory _$DepartmentImpl.fromJson(Map<String, dynamic> json) =>
       _$$DepartmentImplFromJson(json);
@@ -297,12 +301,14 @@ class _$DepartmentImpl implements _Department {
   @override
   String registerId;
   @override
+  @UTCDateTimeConverter()
   DateTime registerTime;
   @override
   String useYn;
   @override
   String editorId;
   @override
+  @UTCDateTimeConverter()
   DateTime editTime;
 
   @override
@@ -332,10 +338,10 @@ abstract class _Department implements Department {
       Department? superDepartment,
       Member? member,
       required String registerId,
-      required DateTime registerTime,
+      @UTCDateTimeConverter() required DateTime registerTime,
       required String useYn,
       required String editorId,
-      required DateTime editTime}) = _$DepartmentImpl;
+      @UTCDateTimeConverter() required DateTime editTime}) = _$DepartmentImpl;
 
   factory _Department.fromJson(Map<String, dynamic> json) =
       _$DepartmentImpl.fromJson;
@@ -359,7 +365,9 @@ abstract class _Department implements Department {
   String get registerId;
   set registerId(String value);
   @override
+  @UTCDateTimeConverter()
   DateTime get registerTime;
+  @UTCDateTimeConverter()
   set registerTime(DateTime value);
   @override
   String get useYn;
@@ -368,7 +376,9 @@ abstract class _Department implements Department {
   String get editorId;
   set editorId(String value);
   @override
+  @UTCDateTimeConverter()
   DateTime get editTime;
+  @UTCDateTimeConverter()
   set editTime(DateTime value);
   @override
   @JsonKey(ignore: true)

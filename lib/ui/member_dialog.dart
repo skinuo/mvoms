@@ -4,7 +4,7 @@ import 'package:mvoms/models/department.dart';
 import 'package:mvoms/models/member.dart';
 import 'package:mvoms/models/organization.dart';
 import 'package:mvoms/models/pagination.dart';
-import 'package:mvoms/utilities/input_widget.dart';
+import 'package:mvoms/utilities/common_widget.dart';
 
 import '../utilities/constants.dart';
 import '../utilities/rest_repository.dart';
@@ -18,7 +18,7 @@ class MVOMSMemberDialog extends StatefulWidget {
   State<MVOMSMemberDialog> createState() => MVOMSMemberDialogState();
 }
 
-class MVOMSMemberDialogState extends State<MVOMSMemberDialog> with InputWidget {
+class MVOMSMemberDialogState extends State<MVOMSMemberDialog> {
   final _rest = RestRepogitory();
   // 기관 목록
   final List<Organization> _orgList = [];
@@ -94,11 +94,11 @@ class MVOMSMemberDialogState extends State<MVOMSMemberDialog> with InputWidget {
                         Expanded(child:
                         Column(
                           children: [
-                            makeWidgetTitle("기관", false),
+                            CommonWidget.makeWidgetTitle("기관", false),
                             const SizedBox(height: 3),
                             DropdownSearch<Organization>(
                               dropdownDecoratorProps: (
-                                  DropDownDecoratorProps(dropdownSearchDecoration: makeDecoration())
+                                  DropDownDecoratorProps(dropdownSearchDecoration: CommonWidget.makeDecoration())
                               ),
                               dropdownBuilder: (context, selectedItem) {
                                 return Stack(children: [
@@ -124,7 +124,7 @@ class MVOMSMemberDialogState extends State<MVOMSMemberDialog> with InputWidget {
                                 isFilterOnline: true,
                                 showSearchBox: true,
                                 searchFieldProps: (TextFieldProps(
-                                  decoration: makeDecoration(),
+                                  decoration: CommonWidget.makeDecoration(),
                                   style: const TextStyle(fontSize: ConstantValues.kDialogFontSize))),
                                 itemBuilder: (BuildContext context, Organization org, bool isSelected) {
                                   return Center(
@@ -142,11 +142,11 @@ class MVOMSMemberDialogState extends State<MVOMSMemberDialog> with InputWidget {
                         Expanded(
                             child: Column(
                               children: [
-                                makeWidgetTitle("부서", false),
+                                CommonWidget.makeWidgetTitle("부서", false),
                                 const SizedBox(height: 3),
                                 DropdownSearch<Department>(
                                   dropdownDecoratorProps: (
-                                      DropDownDecoratorProps(dropdownSearchDecoration: makeDecoration())
+                                      DropDownDecoratorProps(dropdownSearchDecoration: CommonWidget.makeDecoration())
                                   ),
                                   dropdownBuilder: (context, selectedItem) {
                                     return Stack(children: [
@@ -169,7 +169,7 @@ class MVOMSMemberDialogState extends State<MVOMSMemberDialog> with InputWidget {
                                     isFilterOnline: true,
                                     showSearchBox: true,
                                     searchFieldProps: (TextFieldProps(
-                                        decoration: makeDecoration(),
+                                        decoration: CommonWidget.makeDecoration(),
                                         style: const TextStyle(fontSize: ConstantValues.kDialogFontSize))),
                                     itemBuilder: (BuildContext context, Department department, bool isSelected) {
                                       return Center(
@@ -191,7 +191,7 @@ class MVOMSMemberDialogState extends State<MVOMSMemberDialog> with InputWidget {
                     SizedBox(
                       child: TextField(
                         style: const TextStyle(fontSize: ConstantValues.kDialogFontSize),
-                        decoration: makeDecoration(
+                        decoration: CommonWidget.makeDecoration(
                             icon: Icon(Icons.search, color: Colors.blue.shade900),
                             hintText: "키워드입력"
                         ),
@@ -349,7 +349,7 @@ class MVOMSMemberDialogState extends State<MVOMSMemberDialog> with InputWidget {
       }
       // 페이징
       var pg = Pagination.fromJson(resJson);
-      _pageButtons = makePageButtons(pg, _pageSize, (pageNum){
+      _pageButtons = CommonWidget.makePageButtons(pg, _pageSize, (pageNum){
         getMembers(page: pageNum);
       });
     } else {
