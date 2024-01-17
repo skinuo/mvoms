@@ -140,6 +140,12 @@ class RestRepogitory {
     return req(uri:'/org/org/list/all');
   }
 
+  /// 기관 검색 요청 수행
+  ///
+  /// - [keyword]: 키워드
+  Future<dynamic> searchOrganization({required int page, required int size, String? keyword}) {
+    return req(uri:'/org/org/search?page=$page&size=$size&keyword=${keyword??''}');
+  }
   /// 조직원 검색 요청 수행
   ///
   /// - [orgId]: 기관아이디

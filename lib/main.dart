@@ -124,10 +124,10 @@ class _MVOMSMainState extends State<MVOMSMain> with InputWidget {
                 child: const TabBarView(children: [
                   // 탭1
                   //Text("home"),
-                  // 탭2
                   MVOMSEvent(),
-                  // 탭3
+                  // 탭2
                   Text("b"),
+                  // 탭3
                   MVOMSOrganization(),
                 ]),
               ),
