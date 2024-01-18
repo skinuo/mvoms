@@ -10,16 +10,16 @@ import 'package:mvoms/models/organization.dart';
 class MVOMSOrganization extends StatefulWidget {
   const MVOMSOrganization({super.key});
 
-
   @override
   State<MVOMSOrganization> createState() => _MVOMSOrganizationState();
 }
 
 class _MVOMSOrganizationState extends State<MVOMSOrganization> with InputWidget {
 
-  // int _newOrganizationCount = 0;
-  // int _notCompleteOrganizationCount = 0;
+  // 기관 총 개수
   String _organizationCountValue = "";
+
+  // REST 요청 관리
   final _rest = RestRepogitory();
 
   // 이벤트 목록
@@ -39,7 +39,7 @@ class _MVOMSOrganizationState extends State<MVOMSOrganization> with InputWidget 
   void initState() {
     super.initState();
 
-    // 조직 목록 가져오기
+    // 기관 목록 가져오기
     getOrganizationList();
   }
 
@@ -54,7 +54,6 @@ class _MVOMSOrganizationState extends State<MVOMSOrganization> with InputWidget 
         ),
         child: Column(
           children: [
-            // 헤더
             Row(
               children: [
                 Expanded(
@@ -113,12 +112,16 @@ class _MVOMSOrganizationState extends State<MVOMSOrganization> with InputWidget 
                                                 ],
                                               ),
 
+                                              // 간격
                                               const SizedBox(height: 10),
 
+                                              // 기관 검색 창
                                               OrganizationSearch(searchFunc: getOrganizationList),
 
+                                              // 간격
                                               const SizedBox(height: 10),
 
+                                              // 기관 목록 헤더
                                               Row(
                                                 children: [
                                                   Expanded(
@@ -133,7 +136,7 @@ class _MVOMSOrganizationState extends State<MVOMSOrganization> with InputWidget 
                                                         TableRow(
                                                           children: [
                                                             makeOrganizationHeaderCell("아이디"),
-                                                            makeOrganizationHeaderCell("조직명"),
+                                                            makeOrganizationHeaderCell("기관명"),
                                                             makeOrganizationHeaderCell("이메일"),
                                                             makeOrganizationHeaderCell("번호"),
                                                           ]
@@ -144,7 +147,7 @@ class _MVOMSOrganizationState extends State<MVOMSOrganization> with InputWidget 
                                                 ],
                                               ),
 
-                                             // 기관 리스트 뷰
+                                             // 기관 목록
                                              Expanded(
                                                child:  ListView.builder(
                                                  itemCount: _rows.length,
@@ -167,14 +170,14 @@ class _MVOMSOrganizationState extends State<MVOMSOrganization> with InputWidget 
                                                              child: Text("${_rows[idx].name}"),
                                                            ),
                                                          ),Expanded(
-                                                           flex: 1,
+                                                           flex: 2,
                                                            child: Center(
-                                                             child: Text(_rows[idx].email ?? ''),
+                                                             child: Text(_rows[idx].email ?? '-'),
                                                            ),
                                                          ),Expanded(
                                                            flex: 1,
                                                            child: Center(
-                                                             child: Text(_rows[idx].phone ?? ''),
+                                                             child: Text(_rows[idx].phone ?? '-'),
                                                            ),
                                                          ),
                                                        ],
@@ -184,6 +187,7 @@ class _MVOMSOrganizationState extends State<MVOMSOrganization> with InputWidget 
                                                ),
                                              ),
 
+                                              // 페이지
                                               SizedBox(
                                                 height: 50,
                                                 child: Row(
@@ -199,6 +203,8 @@ class _MVOMSOrganizationState extends State<MVOMSOrganization> with InputWidget 
                                   ],
                                 ),
                               ),
+
+                              // 부서
                               Expanded(
                                 child: Row(
                                   children: [
@@ -218,6 +224,8 @@ class _MVOMSOrganizationState extends State<MVOMSOrganization> with InputWidget 
                           ),
                         ),
                       ),
+
+                      // 조직원
                       Expanded(
                         flex: 4,
                         child: Container(
@@ -237,15 +245,23 @@ class _MVOMSOrganizationState extends State<MVOMSOrganization> with InputWidget 
 
   }
 
+  /// 목록 헤더 간격 조정
   Map<int, TableColumnWidth> getOrganizationHeaderColWidths() {
     return const <int, TableColumnWidth>{
+      // 아이디
       0: FlexColumnWidth(1),
+      // 기관명
       1: FlexColumnWidth(1),
-      2: FlexColumnWidth(1),
+      // 이메일
+      2: FlexColumnWidth(2),
+      // 번호
       3: FlexColumnWidth(1),
     };
   }
 
+  /// 목록 헤더 생성
+  ///
+  /// - [label]: 셀 내용
   TableCell makeOrganizationHeaderCell(String label) {
     return TableCell(
         verticalAlignment: TableCellVerticalAlignment.middle,
@@ -257,7 +273,10 @@ class _MVOMSOrganizationState extends State<MVOMSOrganization> with InputWidget 
         ));
   }
 
-  /// 조직 목록 조회
+  /// 기관 목록 조회
+  ///
+  /// - [page]: 조회된 페이지 번호, 0 부터 시작
+  /// - [keyword]: 검색 조건 키워드
   void getOrganizationList({int page = 0, String? keyword}) async{
     // 현재 페이지 저장
     _curPageNo = page;
