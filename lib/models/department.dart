@@ -22,7 +22,7 @@ class Department with _$Department {
     required DateTime editTime
   }) = _Department;
 
-  factory Department.create() => Department(name: "", registerId: Global.user.id!, registerTime: DateTime.now(),
+  factory Department.create() => Department(name: "a", registerId: Global.user.id!, registerTime: DateTime.now(),
       useYn: "Y", editorId: Global.user.id!, editTime: DateTime.now(), organization: Organization.create());
 
   factory Department.fromJson(Map<String, dynamic> json) => _$DepartmentFromJson(json);

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mvoms/models/department.dart';
 import 'package:mvoms/models/pagination.dart';
 import 'package:mvoms/ui/organization_search.dart';
 import 'package:mvoms/utilities/constants.dart';
@@ -25,13 +26,19 @@ class _MVOMSOrganizationState extends State<MVOMSOrganization> with InputWidget 
   // REST 요청 관리
   final _rest = RestRepogitory();
 
-  // 이벤트 목록
-  late List<Organization> _rows = [];
+  // 기관 목록
+  late List<Organization> _orgRows = [];
 
-  // 페이지 버튼
-  late List<Widget> _pageButtons = [];
+  // 부서 목록
+  late List<Department> _deptRows = [];
 
-  // 현재 조직 페이지 번호
+  // 기관 페이지 버튼
+  late List<Widget> _orgPageButtons = [];
+  
+  // 부서 페이지 버튼
+  late List<Widget> _deptPageButtons = [];
+
+  // 현재 기관 페이지 번호
   int _organizationCurPageNo = 0;
 
   // 현재 부서 페이지 번호
@@ -41,7 +48,7 @@ class _MVOMSOrganizationState extends State<MVOMSOrganization> with InputWidget 
   int _memberCurPageNo = 0;
 
   // 레코드 수
-  final int _recordSize = 1;
+  final int _recordSize = 10;
   // 페이지 수
   final int _pageSize = 10;
 
@@ -51,6 +58,9 @@ class _MVOMSOrganizationState extends State<MVOMSOrganization> with InputWidget 
 
     // 기관 목록 가져오기
     getOrganizationList();
+
+    // 부서 목록 가져오기
+    getDepartmentList();
   }
 
   @override
@@ -159,7 +169,7 @@ class _MVOMSOrganizationState extends State<MVOMSOrganization> with InputWidget 
                                              // 기관 목록
                                              Expanded(
                                                child:  ListView.builder(
-                                                 itemCount: _rows.length,
+                                                 itemCount: _orgRows.length,
                                                  itemBuilder: (BuildContext context, int idx) {
                                                    return Container(
                                                      padding: const EdgeInsets.only(top: 3, bottom: 3),
@@ -170,23 +180,23 @@ class _MVOMSOrganizationState extends State<MVOMSOrganization> with InputWidget 
                                                          Expanded(
                                                            flex: 1,
                                                            child: Center(
-                                                             child: Text("${_rows[idx].id}"),
+                                                             child: Text("${_orgRows[idx].id}"),
                                                            ),
                                                          ),
                                                          Expanded(
                                                            flex: 1,
                                                            child: Center(
-                                                             child: Text(_rows[idx].name),
+                                                             child: Text(_orgRows[idx].name),
                                                            ),
                                                          ),Expanded(
                                                            flex: 2,
                                                            child: Center(
-                                                             child: Text(_rows[idx].email ?? '-'),
+                                                             child: Text(_orgRows[idx].email ?? '-'),
                                                            ),
                                                          ),Expanded(
                                                            flex: 1,
                                                            child: Center(
-                                                             child: Text(_rows[idx].phone ?? '-'),
+                                                             child: Text(_orgRows[idx].phone ?? '-'),
                                                            ),
                                                          ),
                                                        ],
@@ -201,8 +211,7 @@ class _MVOMSOrganizationState extends State<MVOMSOrganization> with InputWidget 
                                                 height: 50,
                                                 child: Row(
                                                   mainAxisAlignment: MainAxisAlignment.center,
-                                                  children: _pageButtons,
-
+                                                  children: _orgPageButtons,
                                                 ),
                                               )
                                             ],
@@ -287,9 +296,60 @@ class _MVOMSOrganizationState extends State<MVOMSOrganization> with InputWidget 
                                                     ),
                                                   )
                                                 ],
-                                              )
+                                              ),
 
                                               // 부서 목록
+                                              Expanded(
+                                                child: ListView.builder(
+                                                  itemCount: _deptRows.length,
+                                                  itemBuilder: (BuildContext context, int idx) {
+                                                    return Container(
+                                                      padding: const EdgeInsets.only(top: 3, bottom: 3),
+                                                      decoration: const BoxDecoration(
+                                                          border: Border(bottom:BorderSide(color: ConstantValues.kColorGray))),
+                                                      child: Row(
+                                                        children: [
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: Center(
+                                                              child: Text("${_deptRows[idx].id}"),
+                                                            ),
+                                                          ),
+
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: Center(
+                                                              child: Text(_deptRows[idx].name),
+                                                            ),
+                                                          ),
+
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: Center(
+                                                              child: Text(_deptRows[idx].superDepartment?.name ?? ''),
+                                                            ),
+                                                          ),
+
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: Center(
+                                                              child: Text(_deptRows[idx].member?.name ?? ''),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    );
+                                                  },
+                                                ),
+                                              ),
+
+                                              SizedBox(
+                                                height: 50,
+                                                child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  children: _deptPageButtons,
+                                                ),
+                                              )
                                             ],
                                           ),
                                         ),
@@ -392,15 +452,15 @@ class _MVOMSOrganizationState extends State<MVOMSOrganization> with InputWidget 
 
     setState(() {
       // 목록 업데이트
-      _rows.clear();
+      _orgRows.clear();
 
       for(var content in resMap['content']) {
         Organization organization = Organization.fromJson(content);
-        _rows.add(organization);
+        _orgRows.add(organization);
       }
       // 페이징 생성
       Pagination pg = Pagination.fromJson(resMap);
-      _pageButtons = makePageButtons(pg, _pageSize, (pageNum){getOrganizationList(page:pageNum);});
+      _orgPageButtons = makePageButtons(pg, _pageSize, (pageNum){getOrganizationList(page:pageNum);});
       // 건수
       _organizationCountValue = pg.totalElements;
     });
@@ -410,5 +470,24 @@ class _MVOMSOrganizationState extends State<MVOMSOrganization> with InputWidget 
   ///
   void getDepartmentList({int page = 0}) async {
     // 현재 페이지 저장
+    _departmentCurPageNo = page;
+
+    // 부서 기본 생성
+    var resMap = await _rest.searchDepartment(page: page, size: _recordSize);
+
+    setState(() {
+      // 목록 업데이트
+      _deptRows.clear();
+
+      for(var content in resMap['content']) {
+        Department department = Department.fromJson(content);
+        _deptRows.add(department);
+      }
+
+      // 페이징 생성
+      Pagination pg = Pagination.fromJson(resMap);
+      _deptPageButtons = makePageButtons(pg, _pageSize, (pageNum){getDepartmentList(page:pageNum);});
+      // 건수
+    });
   }
 }

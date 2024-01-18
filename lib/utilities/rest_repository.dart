@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:intl/intl.dart';
+import 'package:mvoms/models/department.dart';
 import 'package:mvoms/models/operation_event.dart';
 import 'package:mvoms/models/operation_event_search_condition.dart';
 import 'package:mvoms/utilities/auth_updater.dart';
@@ -146,6 +147,13 @@ class RestRepogitory {
   Future<dynamic> searchOrganization({required int page, required int size, String? keyword}) {
     return req(uri:'/org/org/search?page=$page&size=$size&keyword=${keyword??''}');
   }
+
+  /// 부서 검색 요청 수행
+  ///
+  Future<dynamic> searchDepartment({required int page, required int size}) {
+    return req(methodType: HttpMethodType.get, uri: '/org/dept/list?$page&size=$size');
+  }
+
   /// 조직원 검색 요청 수행
   ///
   /// - [orgId]: 기관아이디
