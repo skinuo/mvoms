@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
-
-import '../models/common_code.dart';
+import 'package:flutter/material.dart';
 
 /// 글로벌 프로바이더
 class GlobalProvider extends ChangeNotifier{

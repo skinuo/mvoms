@@ -36,6 +36,7 @@ abstract class ConstantValues {
   static const String kMessageOk = "확인";
   static const String kMessageInfo = "정보";
   static const String kMessageError = "오류";
+
   // http 상태
   static const Map<int, String> kHttpStatus = {
       461: "대상 객체가 존재하지 않음",

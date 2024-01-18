@@ -48,68 +48,8 @@ class _MVOMSEventDialogState extends State<MVOMSEventDialog> {
     // TODO: implement initState
     super.initState();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      // 시스템 조회
-      var systems = await _rest.getAllTargetSystems();
-      for(var sysJson in systems) {
-        var system = TargetSystem.fromJson(sysJson);
-        _targetSystems.add(system);
-      }
-
-      // 이벤트 아이디 있으면 상세조회 하여 세팅
-      if (widget.evntId != null) {
-        var eventMap = await _rest.getEventById(widget.evntId!);
-        _event = OperationEvent.fromJson(eventMap);
-      } else {
-        // 초기값
-        _event.targetSystem = _targetSystems[0];
-        _event.reqTpCd = _reqTypes[0].code;
-        _event.reqMthdCd = _reqMethods[0].code;
-      }
-
-      setState(() {});
-    });
-
-    // 다이얼로그 버튼 생성
-    _actions.add(
-        ElevatedButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: const Text('취소'))
-    );
-    // 수정 가능시 저장버튼 추가
-    if (!widget.readOnly) {
-      _actions.add(ElevatedButton(
-          onPressed: () async {
-            saveEvent();
-          },
-          child: const Text('저장')));
-      // 삭제
-      if (widget.evntId != null) {
-        _actions.add(ElevatedButton(
-          onPressed: () async {
-            CommonWidget.showMessageBox(context,
-                MessageLevel.question,
-                ConstantValues.kMessageAskRemove,
-                { "확인": (){
-                  // 삭제처리
-                  _rest.deleteEvent(widget.evntId!).then((v){
-                    CommonWidget.showMessageBox(context, MessageLevel.info, ConstantValues.kMessageRemoved,
-                        {"확인": ()=>Navigator.pop(context, true)});
-                  }, onError: (err) {
-                    // 오류
-                    CommonWidget.showMessageBox(context, MessageLevel.error, "${ConstantValues.kMessageErrored}[$err]", {
-                      ConstantValues.kMessageOk: null
-                    });
-                    print(err);
-                  });
-                },
-                  "취소": null
-                }
-            );
-          },
-          child: const Text('삭제')));
-      }
-    }
+    // 초기화
+    init();
   }
 
   @override
@@ -185,7 +125,11 @@ class _MVOMSEventDialogState extends State<MVOMSEventDialog> {
                                         // 최초 시간
                                         initialDate: DateTime.now(),
                                       );
-                                      setState(() => _event.evntTime = now!);
+                                      if (now != null) {
+                                        setState(() {
+                                          _event.evntTime = now;
+                                        });
+                                      }
                                     } : null,
                                     decoration: CommonWidget.makeDecoration(),
                                   ),
@@ -356,6 +300,69 @@ class _MVOMSEventDialogState extends State<MVOMSEventDialog> {
     );
   }
 
+  /// 다이얼로그 위젯 초기화
+  void init() async {
+    // 시스템 조회
+    var systems = await _rest.getAllTargetSystems();
+    for(var sysJson in systems) {
+      var system = TargetSystem.fromJson(sysJson);
+      _targetSystems.add(system);
+    }
+
+    // 이벤트 아이디 있으면 상세조회 하여 세팅
+    if (widget.evntId != null) {
+      var eventMap = await _rest.getEventById(widget.evntId!);
+      _event = OperationEvent.fromJson(eventMap);
+    } else {
+      // 초기값
+      _event.targetSystem = _targetSystems[0];
+      _event.reqTpCd = _reqTypes[0].code;
+      _event.reqMthdCd = _reqMethods[0].code;
+    }
+    setState(() {});
+
+    // 다이얼로그 버튼 생성
+    _actions.add(
+        ElevatedButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('취소'))
+    );
+    // 수정 가능시 저장버튼 추가
+    if (!widget.readOnly) {
+      _actions.add(ElevatedButton(
+          onPressed: () async {
+            saveEvent();
+          },
+          child: const Text('저장')));
+      // 삭제
+      if (widget.evntId != null) {
+        _actions.add(ElevatedButton(
+            onPressed: () async {
+              CommonWidget.showMessageBox(context,
+                  MessageLevel.question,
+                  ConstantValues.kMessageAskRemove,
+                  { "확인": (){
+                    // 삭제처리
+                    _rest.deleteEvent(widget.evntId!).then((v){
+                      CommonWidget.showMessageBox(context, MessageLevel.info, ConstantValues.kMessageRemoved,
+                          {"확인": ()=>Navigator.pop(context, true)});
+                    }, onError: (err) {
+                      // 오류
+                      CommonWidget.showMessageBox(context, MessageLevel.error, "${ConstantValues.kMessageErrored}[$err]", {
+                        ConstantValues.kMessageOk: null
+                      });
+                      print(err);
+                    });
+                  },
+                    "취소": null
+                  }
+              );
+            },
+            child: const Text('삭제')));
+      }
+    }
+  }
+
   /// 드랍다운 위젯 생성
   DropdownButtonFormField2 makeDropdown(List items, bool readonly, Function onChanged, Object value) {
     return DropdownButtonFormField2(
@@ -376,7 +383,7 @@ class _MVOMSEventDialogState extends State<MVOMSEventDialog> {
   }
 
   /// 멤버 조회 팝업 열기
-  /// 
+  ///
   /// - [callback]: 조회결과전달
   void showMemberPop(callback) {
     showDialog(
@@ -448,9 +455,5 @@ class _MVOMSEventDialogState extends State<MVOMSEventDialog> {
         });
       }
     }
-  }
-
-  void test(){
-    print('a');
   }
 }

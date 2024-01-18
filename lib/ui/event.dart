@@ -20,7 +20,6 @@ class MVOMSEvent extends StatefulWidget {
 }
 
 class _MVOMSEventState extends State<MVOMSEvent> {
-
   int _newEventCount = 0;
   int _notCompleteEventCount = 0;
   String _eventCountValue = "";
@@ -243,20 +242,6 @@ class _MVOMSEventState extends State<MVOMSEvent> {
   /// - [readOnly]: 조회만가능
   /// - [evntId]: 이벤트아이디(상세조회시사용)
   void showEventPop(BuildContext context, String title, bool readOnly, [String? evntId]) {
-    // 다이얼로그호출
-    showDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: ((context) => MVOMSEventDialog(evntId: evntId, readOnly: readOnly, title: title))
-    ).then((saved) {
-      if (saved ?? false) {
-        // 저장된 경우 리스트업
-        getEventList(page: _curPageNo);
-      }
-    });
-  }
-
-  void showEventPop2(BuildContext context, String title, bool readOnly, [String? evntId]) {
     // 다이얼로그호출
     showDialog(
         context: context,
